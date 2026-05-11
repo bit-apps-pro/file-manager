@@ -5,7 +5,7 @@ Tags: file manager, wp file manager, wordpress file manager, files, ftp
 Requires at least: 5.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 6.8.7
+Stable tag: 6.8.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -130,7 +130,7 @@ Use-case: Easily view Page Builder, WooCommerce, or LMS folder usage.
 ### Video & Audio Preview/Play
 
 Preview and play video/audio files without leaving WordPress.
-
+updated elfinder to 2.1.66
 ### File Search & Sort
 
 Efficiently search and sort to locate any file or folder.  
@@ -305,6 +305,9 @@ Yes, It is possible to edit writeable files in the wordpress directory using cod
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 6.8.8 =
+- fix: file manager not showing up due to version mismatch
 
 = 6.8.7 =
 - chore: updated elfinder to 2.1.66
