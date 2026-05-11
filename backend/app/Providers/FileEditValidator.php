@@ -41,7 +41,7 @@ class FileEditValidator
         if ($wpError instanceof WP_Error) {
             $message = $wpError->get_error_message();
 
-            throw new PreCommandException(wp_strip_all_tags($message));
+            throw new PreCommandException(esc_html($message));
         }
     }
 

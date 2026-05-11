@@ -218,7 +218,7 @@ class AccessControlProvider
         }
 
         if (\count($this->scannedResult) > 0) {
-            throw new PreCommandException(wp_strip_all_tags(implode('. >> ', $this->scannedResult)));
+            throw new PreCommandException(esc_html(implode('. >> ', $this->scannedResult)));
         }
     }
 
