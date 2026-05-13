@@ -63,7 +63,7 @@ class LogService
 
     public function deleteOlder()
     {
-        $logRetention = (int) (\defined('BFM_LOG_RETENTION') && BFM_LOG_RETENTION ? BFM_LOG_RETENTION : 30);
+        $logRetention = (int) (\defined('BITAPPS_FM_LOG_RETENTION') && BITAPPS_FM_LOG_RETENTION ? BITAPPS_FM_LOG_RETENTION : 30);
         if ($logRetention > 200) {
             $logRetention = 200;
         }

@@ -2,6 +2,11 @@
 
 namespace BitApps\FM\Http\Controllers;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 use BitApps\FM\Http\Requests\Permissions\AddUserPermissionRequest;
 use BitApps\FM\Http\Requests\Permissions\DeleteUserPermissionRequest;
 use BitApps\FM\Http\Requests\Permissions\PermissionsGetRequest;

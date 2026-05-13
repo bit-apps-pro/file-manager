@@ -52,7 +52,7 @@ class ClientOptions
      *
      * @var bool
      */
-    private $_cssAutoLoad = true;
+    private $_cssAutoLoad = false;
 
     /**
      * Remember last opened dir to open it after reload or in next session

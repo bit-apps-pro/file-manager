@@ -2,6 +2,10 @@
 
 namespace BitApps\FM;
 
+if (! \defined('ABSPATH')) {
+    exit;
+}
+
 use function BitApps\FM\Functions\fileSystemAdapter;
 use function BitApps\FM\Functions\view;
 
@@ -102,7 +106,7 @@ final class Plugin
         $this->_container['access_control']      = new AccessControlProvider();
         $this->_container['logger']              = new Logger();
         $this->_container['permissions']         = new PermissionsProvider();
-        $this->_container['mimes']               = new MimeProvider(BFM_FINDER_DIR . 'php/mime.types');
+        $this->_container['mimes']               = new MimeProvider(Config::getFinderDirectory() . DIRECTORY_SEPARATOR . 'php/mime.types');
         $this->_container['media_sync']          = new MediaSynchronizer();
         $this->_container['file_edit_validator'] = new FileEditValidator();
         $this->_container['preferences']         = new PreferenceProvider();
@@ -161,7 +165,7 @@ final class Plugin
     public function mimes()
     {
         if (!isset($this->_container['mimes'])) {
-            $this->_container['mimes'] = new MimeProvider(BFM_FINDER_DIR . 'php/mime.types');
+            $this->_container['mimes'] = new MimeProvider(Config::getFinderDirectory() . DIRECTORY_SEPARATOR . 'php/mime.types');
         }
 
         return $this->_container['mimes'];
@@ -228,8 +232,8 @@ final class Plugin
         $version = Config::VERSION;
 
         wp_register_script(
-            'bfm-finder-loader',
-            BFM_ROOT_URL . 'assets/js/finder-loader.js',
+            Config::SLUG . 'finder-loader',
+            Config::get('ASSET_JS_URI') . '/finder-loader.js',
             [Config::SLUG . 'elfinder-script', 'jquery'],
             $version
         );
@@ -242,37 +246,42 @@ final class Plugin
     public function registerFinderAssets()
     {
         wp_register_style(
-            'bfm-jquery-ui-css',
-            Hooks::applyFilter(
-                'fm_jquery_ui_theme_hook',
-                BFM_ROOT_URL . 'libs/js/jquery-ui/jquery-ui.min.css'
-            )
+            Config::SLUG . 'jquery-ui-css',
+            Config::get('ASSET_URI') . '/style/jquery-ui.min.css',
+            [],
+            Config::VERSION
+        );
+
+        wp_register_style(
+            Config::SLUG . 'jquery-ui-theme-css',
+            Config::get('ASSET_URI') . '/style/jquery-ui.theme.min.css',
+            [],
+            Config::VERSION
         );
 
         wp_register_style(
             Config::SLUG . 'elfinder-css',
-            BFM_FINDER_URL . 'css/elfinder.min.css',
+            Config::getFinderUrl() . '/css/elfinder.min.css',
+            [],
             Config::VERSION
         );
-
-        wp_register_style(Config::SLUG . 'theme-css', BFM_ROOT_URL . 'libs/js/jquery-ui/jquery-ui.theme.min.css');
 
         // elFinder Scripts depends on jQuery UI core, selectable, draggable, droppable, resizable, dialog and slider.
         wp_register_script(
             Config::SLUG . 'elfinder-script',
-            BFM_FINDER_URL . 'js/elfinder.min.js',
+            Config::getFinderUrl() . '/js/elfinder.min.js',
             ['jquery', 'jquery-ui-core', 'jquery-ui-selectable', 'jquery-ui-draggable', 'jquery-ui-droppable', 'jquery-ui-resizable', 'jquery-ui-dialog', 'jquery-ui-slider', 'jquery-ui-tabs']
         );
 
         wp_register_script(
             Config::SLUG . 'elfinder-editor-script',
-            BFM_FINDER_URL . 'js/extras/editors.default.min.js',
+            Config::getFinderUrl() . '/js/extras/editors.default.min.js',
             [Config::SLUG . 'elfinder-script']
         );
 
         wp_localize_script(
             Config::SLUG . 'elfinder-script',
-            'fm',
+            'bitapps_fm',
             $this->createConfigVariable()
         );
     }
@@ -283,8 +292,8 @@ final class Plugin
             Config::withPrefix('localized_script'),
             [
                 'ajaxURL'      => admin_url('admin-ajax.php'),
-                'js_url'       => BFM_FINDER_URL . 'js/',
-                'elfinder'     => BFM_FINDER_URL,
+                'js_url'       => Config::getFinderUrl() . '/js/',
+                'elfinder'     => Config::getFinderUrl(),
                 'translations' => $this->loadTranslations(),
             ]
         );
@@ -413,7 +422,7 @@ final class Plugin
      * */
     protected function setPhpIniVars()
     {
-        if (\defined('WP_DEBUG') && isset($_REQUEST['action']) && sanitize_text_field($_REQUEST['action']) === 'bit_fm_connector') {
+        if (\defined('WP_DEBUG') && isset($_REQUEST['action']) && sanitize_text_field($_REQUEST['action']) === 'bitapps_fm_connector') {
             ini_set('post_max_size', '128M');
             ini_set('upload_max_filesize', '128M');
         }
@@ -424,8 +433,8 @@ final class Plugin
      * */
     private function uploadFolder()
     {
-        if (!is_dir(FM_UPLOAD_BASE_DIR)) {
-            fileSystemAdapter()->mkdir(FM_UPLOAD_BASE_DIR, 0755);
+        if (!is_dir(Config::uploadBaseDir())) {
+            fileSystemAdapter()->mkdir(Config::uploadBaseDir(), 0755);
         }
     }
 }

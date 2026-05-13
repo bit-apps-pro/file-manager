@@ -2,6 +2,11 @@
 
 namespace BitApps\FM\Http\Rules;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 use BitApps\FM\Vendor\BitApps\WPValidator\Rule;
 
 class ValidUIOptionRule extends Rule

@@ -7,5 +7,5 @@ echo "Building elFinder from submodule.";
 pnpm i;
 rm -rf build;
 pnpm build;
-cp -r build/* "${base_path}/libs/elFinder/";
+cp -r build/* "${base_path}/vendor/studio-42/elfinder/";
 cd $base_path || exit;

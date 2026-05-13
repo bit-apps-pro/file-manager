@@ -28,8 +28,8 @@ class FinderConnector extends elFinderConnector
         // client disconnect should abort
         ignore_user_abort(false);
 
-        if ($this->header) {
-            self::sendHeader($this->header);
+        if (!empty($data['header'])) {
+            self::sendHeader($data['header']);
         }
 
         if (isset($data['pointer'])) {
@@ -55,7 +55,7 @@ class FinderConnector extends elFinderConnector
                 if (!empty($_SERVER['HTTP_RANGE'])) {
                     $size = $data['info']['size'];
                     $end  = $size - 1;
-                    if (preg_match('/bytes=(\d*)-(\d*)(,?)/i', $_SERVER['HTTP_RANGE'], $matches)) {
+                    if (preg_match('/bytes=(\d*)-(\d*)(,?)/i', sanitize_text_field(wp_unslash($_SERVER['HTTP_RANGE'])), $matches)) {
                         if (empty($matches[3])) {
                             if (empty($matches[1]) && $matches[1] !== '0') {
                                 $start = $size - $matches[2];
@@ -118,7 +118,7 @@ class FinderConnector extends elFinderConnector
                 } else {
                     $out = fopen('php://output', 'wb');
                     stream_copy_to_stream($fp, $out, $psize);
-                    // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
+                    // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Cannot use fclose here because $fp may be used in the next request if the connection is keep-alive.
                     fclose($out);
                 }
             }

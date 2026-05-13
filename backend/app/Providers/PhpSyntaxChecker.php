@@ -92,7 +92,7 @@ class PhpSyntaxChecker
         if (isset($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'])) {
             $headers['Authorization'] = 'Basic ' . base64_encode(
                 // phpcs:disable WordPress.Security.ValidatedSanitizedInput -- We need to sanitize the username, but the password should be left as-is.
-                sanitize_user(wp_unslash($_SERVER['PHP_AUTH_USER'])) . ':' . wp_unslash($_SERVER['PHP_AUTH_PW'])
+                sanitize_user(wp_unslash($_SERVER['PHP_AUTH_USER'])) . ':' . $_SERVER['PHP_AUTH_PW']
             );
         }
 

@@ -214,6 +214,7 @@ class AccessControlProvider
                 }
             }
         } elseif (isset($_REQUEST['content'])) {
+            // phpcs:ignore WordPress.Security.NonceVerification.Missing -- User needs to edit any type of files. nonce verification done in middleware NonceCheckerMiddleware.
             $this->scanForPattern($_REQUEST['content'], '');
         }
 

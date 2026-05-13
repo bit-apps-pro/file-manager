@@ -66,6 +66,10 @@ export default defineConfig(({ mode }) => {
           {
             src: normalizePath(path.resolve(__dirname, 'frontend/finder-loader.js')),
             dest: '.'
+          },
+          {
+            src: normalizePath(path.resolve(__dirname, 'frontend/style')),
+            dest: '../../assets'
           }
         ]
       })

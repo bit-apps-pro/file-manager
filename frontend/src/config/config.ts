@@ -1,6 +1,6 @@
 // eslint-disable-next-line camelcase, @typescript-eslint/ban-ts-comment
 // @ts-ignore
-const serverVariables = typeof fm === 'undefined' ? {} : fm // eslint-disable-line camelcase,
+const serverVariables = typeof window.bitapps_fm === 'undefined' ? {} : window.bitapps_fm // eslint-disable-line camelcase,
 const options = serverVariables?.options ?? {}
 export function getServerVariable(key: string, fallback?: unknown) {
   if (!(key in serverVariables) || !serverVariables[key]) {
@@ -11,7 +11,7 @@ export function getServerVariable(key: string, fallback?: unknown) {
 }
 
 export function getOptionVariable(key: string, fallback?: unknown) {
-  if (!(key in options) || !options[key]) {
+  if (!(key in options) || options[key] === undefined || options[key] === null) {
     console.error('🚥🚥🚥 Missing option: ', key) // eslint-disable-line no-console
     return fallback
   }
@@ -48,7 +48,7 @@ const config = {
   NONCE: getServerVariable('nonce', ''),
   ACTION: getServerVariable('action', ''),
   TELEMETRY: getServerVariable('telemetry', {}),
-  ROUTE_PREFIX: getServerVariable('routePrefix', 'bit_fm_'),
+  ROUTE_PREFIX: getServerVariable('routePrefix', 'bitapps_fm_'),
   BANNER: getServerVariable('adBanner', null),
   SYS_INFO: getServerVariable('sys_info', null),
   THEMES: getThemes(),

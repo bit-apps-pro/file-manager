@@ -11,4 +11,7 @@ dependencies
 assets/js
 locale.pot
 port
-languages
+languages.sisyphus/
+.phpunit*
+.sisyphus/
+.playwright-mcp/

@@ -2,6 +2,11 @@
 
 namespace BitApps\FM\Http\Controllers;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 use BitApps\FM\Config;
 use BitApps\FM\Exception\PreCommandException;
 
@@ -76,6 +81,8 @@ final class FileManagerController
             'upload',
             [Plugin::instance()->logger(), 'logUpload']
         );
+
+        $finderOptions->setCommonTempPath(Config::uploadBaseDir() . '/.tmp/');
 
         $allVolumes         = $this->getFileRoots();
         $volumeCount        = \count($allVolumes);
@@ -181,7 +188,7 @@ final class FileManagerController
         }
 
         if (fileSystemAdapter()->is_writable(stripslashes($preferences->getRootPath()) . DIRECTORY_SEPARATOR . '.tmbPath')) {
-            $baseRoot->setOption('tmbPath', '.tmb');
+            $baseRoot->setOption('tmbPath', Config::uploadBaseDir() . '/.tmb/');
         }
 
         $baseRoot->setAccessControl([$accessControlProvider, 'control']);

@@ -52,6 +52,16 @@ class MediaSynchronizer
         }
     }
 
+    /**
+     * Converts an absolute file path to a URL. User can upload files to any directory
+     * within the WordPress root, but only files within the wp-content/uploads directory
+     * will be added to the media library. This function helps to generate the correct
+     * URL for the uploaded file based on its absolute path.
+     *
+     * @param string $path The absolute file path to convert.
+     *
+     * @return string The corresponding URL for the given file path.
+     */
     private function abs_path_to_url($path = '')
     {
         $url = str_replace(

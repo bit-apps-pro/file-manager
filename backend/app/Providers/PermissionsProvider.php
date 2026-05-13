@@ -129,7 +129,7 @@ class PermissionsProvider
         $permissions['folder_options']           = 'common'; // common | role | user
         $permissions['by_role']['administrator'] = [
             'commands' => $this->allCommands(),
-            'path'     => FM_UPLOAD_BASE_DIR,
+            'path'     => Config::uploadBaseDir(),
         ];
 
         return $permissions;
@@ -164,7 +164,7 @@ class PermissionsProvider
             return $this->_preferences->getRootUrl();
         }
 
-        return home_url() . '/' . str_replace([ABSPATH, '\\'], ['', '/'], $this->getPath());
+        return Config::uploadBaseURL();
     }
 
     public function getVolumeAlias()
@@ -174,12 +174,12 @@ class PermissionsProvider
 
     public function getDefaultPublicRootPath()
     {
-        return FM_UPLOAD_BASE_DIR;
+        return Config::uploadBaseDir();
     }
 
     public function getDefaultPublicRootURL()
     {
-        return FM_UPLOAD_BASE_URL;
+        return Config::uploadBaseURL();
     }
 
     public function getPublicRootPath()
@@ -501,7 +501,7 @@ class PermissionsProvider
             $action = sanitize_key($_REQUEST['action']);
         }
 
-        return is_user_logged_in() && $action === 'bit_fm_connector';
+        return is_user_logged_in() && $action === 'bitapps_fm_connector';
     }
 
     public function isRequestForShortcode()

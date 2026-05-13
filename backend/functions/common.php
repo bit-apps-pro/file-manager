@@ -6,11 +6,12 @@ if (! \defined('ABSPATH')) {
     exit;
 }
 
+use BitApps\FM\Config;
 use BitApps\FM\Plugin;
 
 function view($path)
 {
-    $pathString = BFM_VIEW_DIR;
+    $pathString = Config::get('VIEW_DIR');
 
     foreach (explode('.', $path) as $dir) {
         $pathString = $pathString . DIRECTORY_SEPARATOR . $dir;
@@ -69,17 +70,13 @@ function validatePath($path, $for = '')
                 </div>
             </div><?php view('admin.sidebar'); ?>
         </div>
-        <?php view('admin.footer'); ?>
-<?php
+        <?php view('admin.footer');
         wp_die();
     }
 
     return $realPath;
 }
 
-/**
- * @return \WP_Filesystem_Base
- */
 function fileSystemAdapter()
 {
     global $wp_filesystem;

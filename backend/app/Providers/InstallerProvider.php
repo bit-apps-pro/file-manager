@@ -2,6 +2,11 @@
 
 namespace BitApps\FM\Providers;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 use BitApps\FM\Config;
 use BitApps\FM\Vendor\BitApps\WPKit\Installer;
 

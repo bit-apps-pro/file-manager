@@ -43,6 +43,31 @@ class VersionMigrationProvider
 
     private function migrateToLatest()
     {
+        $this->migrateTo689();
+    }
+
+    private function migrateTo689()
+    {
+        if ($this->_oldVersion >= 689) {
+            return;
+        }
+        $optionsToMigrate = [
+            'db_version',
+            'installed',
+            'version',
+            'preferences',
+            'permissions',
+            'log_deleted_at',
+        ];
+        foreach ($optionsToMigrate as $option) {
+            $oldOptionName = 'bit_fm_' . $option;
+            $optionValue   = get_option($oldOptionName, false);
+            if ($optionValue !== false) {
+                Config::addOption($option, $optionValue, true);
+                delete_option($oldOptionName);
+            }
+        }
+
         $this->migrateTo651();
     }
 
@@ -98,7 +123,7 @@ class VersionMigrationProvider
 
     private function migrateTo502()
     {
-        $logFile = FM_UPLOAD_BASE_DIR . DIRECTORY_SEPARATOR . 'log.txt';
+        $logFile = Config::uploadBaseDir() . DIRECTORY_SEPARATOR . 'log.txt';
         if (file_exists($logFile)) {
             fileSystemAdapter()->delete($logFile);
         }

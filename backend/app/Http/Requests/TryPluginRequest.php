@@ -2,6 +2,11 @@
 
 namespace BitApps\FM\Http\Requests;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 use BitApps\FM\Vendor\BitApps\WPKit\Http\Request\Request;
 
 class TryPluginRequest extends Request

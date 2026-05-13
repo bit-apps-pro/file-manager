@@ -2,6 +2,8 @@
 
 namespace BitApps\FM\Providers;
 
+use BitApps\FM\Config;
+
 \defined('ABSPATH') or exit();
 class MimeProvider
 {
@@ -12,7 +14,7 @@ class MimeProvider
         if ($mimePath) {
             $this->_mimePath = $mimePath;
         } else {
-            $this->_mimePath = BFM_FINDER_DIR . 'php' . DIRECTORY_SEPARATOR . 'mime.types';
+            $this->_mimePath = Config::getFinderDirectory() . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'mime.types';
         }
     }
 

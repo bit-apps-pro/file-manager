@@ -18,6 +18,7 @@ if (! \defined('ABSPATH')) {
  *  You can upload, delete, copy, move, rename, compress, extract files.
  *  You don't need to worry about ftp. It is really simple and easy to use.
  * */
-\define('BFM_MAIN_FILE', __FILE__);
+\define('BITAPPS_FM_MAIN_FILE', __FILE__);
+\define('BITAPPS_FM_BASEDIR', plugin_dir_path(__FILE__));
 
 require_once 'backend' . DIRECTORY_SEPARATOR . 'bootstrap.php';

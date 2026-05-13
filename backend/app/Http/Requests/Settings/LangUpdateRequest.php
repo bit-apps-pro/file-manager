@@ -2,6 +2,11 @@
 
 namespace BitApps\FM\Http\Requests\Settings;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 use BitApps\FM\Http\Rules\ValidateLangRule;
 use BitApps\FM\Vendor\BitApps\WPKit\Http\Request\Request;
 use BitApps\FM\Vendor\BitApps\WPKit\Utils\Capabilities;

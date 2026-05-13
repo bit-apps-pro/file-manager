@@ -10,13 +10,13 @@ const options = {
         'assets/**/*',
         'backend/**/*',
         'languages/**/*',
-        'libs/**/*',
         'vendor/**/*',
         '!vendor/typisttech/**/*',
         'views/**/*',
         'file-manager.php',
         'license.txt',
-        'readme.txt'
+        'readme.txt',
+        'composer.json',
     ]
 };
 

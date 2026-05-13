@@ -1,8 +1,11 @@
 <?php
+
+use BitApps\FM\Config;
+
 if (!\defined('ABSPATH')) {
     exit();
 }
-$assetUrl = esc_html(BFM_ASSET_URL);
+$assetUrl = esc_url(Config::get('ASSET_URI'));
 ?>
  <!-- Add Banner Here -->
 <br/>

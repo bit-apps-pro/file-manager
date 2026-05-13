@@ -19,11 +19,11 @@ class Config
 
     const TITLE = 'Bit File Manager';
 
-    const VAR_PREFIX = 'bit_fm_';
+    const VAR_PREFIX = 'bitapps_fm_';
 
-    const VERSION = '6.8.8';
+    const VERSION = '6.8.9';
 
-    const VERSION_ID = 688;
+    const VERSION_ID = 689;
 
     const DB_VERSION = '1.0';
 
@@ -32,8 +32,6 @@ class Config
     const REQUIRED_WP_VERSION = '5.0';
 
     const API_VERSION = '1.0';
-
-    const APP_BASE = BFM_MAIN_FILE;
 
     const SUPPORT_URL = 'https://www.bitapps.pro/contact';
 
@@ -51,7 +49,7 @@ class Config
     {
         switch ($type) {
             case 'MAIN_FILE':
-                return BFM_MAIN_FILE;
+                return BITAPPS_FM_MAIN_FILE;
 
             case 'BASENAME':
                 return plugin_basename(trim(self::get('MAIN_FILE')));
@@ -61,6 +59,9 @@ class Config
 
             case 'BACKEND_DIR':
                 return plugin_dir_path(self::get('MAIN_FILE')) . 'backend';
+
+            case 'VIEW_DIR':
+                return plugin_dir_path(self::get('MAIN_FILE')) . 'views';
 
             case 'SITE_URL':
                 $parsedUrl = wp_parse_url(get_admin_url());
@@ -81,7 +82,10 @@ class Config
                 ];
 
             case 'ROOT_URI':
-                return set_url_scheme(plugins_url('', self::get('MAIN_FILE')), wp_parse_url(home_url())['scheme']);
+                return plugins_url('', self::get('MAIN_FILE'));
+
+            case 'ASSET_DIR':
+                return self::get('BASEDIR') . DIRECTORY_SEPARATOR . 'assets';
 
             case 'ASSET_URI':
                 return self::get('ROOT_URI') . '/assets';
@@ -202,6 +206,35 @@ class Config
         }
 
         return $pluginToTry;
+    }
+
+    public static function getFinderDirectory()
+    {
+        return self::get('BASEDIR') . 'vendor/studio-42/elfinder';
+    }
+
+    public static function getFinderUrl()
+    {
+        return self::get('ROOT_URI') . '/vendor/studio-42/elfinder';
+    }
+
+    public static function uploadBaseDir()
+    {
+        $uploadDir = wp_upload_dir();
+
+        return $uploadDir['basedir'] . DIRECTORY_SEPARATOR . 'file-manager';
+    }
+    
+    public static function uploadBaseURL()
+    {
+        $uploadDir = wp_upload_dir();
+
+        return $uploadDir['baseurl'] . '/file-manager';
+    }
+
+    public static function getTrashDir()
+    {
+        return self::uploadBaseDir() . DIRECTORY_SEPARATOR . '.trash';
     }
 
     /**

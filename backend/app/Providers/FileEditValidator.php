@@ -32,7 +32,7 @@ class FileEditValidator
 
     public function checkSyntax($content, $realFile)
     {
-        if (\defined('BFM_DISABLE_SYNTAX_CHECK') && BFM_DISABLE_SYNTAX_CHECK) {
+        if (\defined('BITAPPS_FM_FM_DISABLE_SYNTAX_CHECK') && BITAPPS_FM_FM_DISABLE_SYNTAX_CHECK) {
             return;
         }
 

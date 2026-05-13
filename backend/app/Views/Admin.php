@@ -2,6 +2,10 @@
 
 namespace BitApps\FM\Views;
 
+if (! \defined('ABSPATH')) {
+    exit;
+}
+
 use BitApps\FM\Config;
 
 use function BitApps\FM\Functions\view;
@@ -25,6 +29,7 @@ class Admin
         Hooks::addAction('admin_menu', [$this, 'sideBarMenuItem']);
         Hooks::addAction('admin_notices', [$this, 'adminNotice']);
         Hooks::removeAction('admin_notices', [Plugin::instance()->telemetryReport(), 'adminNotice']);
+        Hooks::addAction('admin_enqueue_scripts', [$this, 'adminEnqueueAssets'], 20);
         Hooks::addFilter(Config::withPrefix('localized_script'), [$this, 'filterConfigVariable']);
         Hooks::addFilter('script_loader_tag', [$this, 'filterScriptTag'], 0, 3);
 
@@ -103,10 +108,10 @@ class Admin
             'baseURL'       => Config::get('ADMIN_URL') . 'admin.php?page=' . Config::SLUG . '#/home',
             'pluginSlug'    => Config::SLUG,
             'rootURL'       => Config::get('ROOT_URI'),
-            'assetsURL'     => Config::get('ASSET_URI'),
+            'assetsURL'     => Config::get('ASSET_URI') . '/',
             'routePrefix'   => Config::VAR_PREFIX,
-            'plugin_dir'    => BFM_ROOT_DIR,
-            'plugin_url'    => BFM_ROOT_URL,
+            'plugin_dir'    => Config::get('BASEDIR'),
+            'plugin_url'    => Config::get('ROOT_URI'),
             'action'        => Config::withPrefix('connector'),
             'options'       => Plugin::instance()->preferences()->finderOptions(),
             'telemetry'     => ['tryPlugin' => Config::tryPlugin()],
@@ -117,11 +122,9 @@ class Admin
     {
         $preferences = Plugin::instance()->preferences();
 
-        wp_enqueue_style('bfm-jquery-ui-css');
-        if (\in_array($preferences->getTheme(), ['default', 'bootstrap'])) {
-            wp_enqueue_style(Config::SLUG . 'elfinder-css');
-            wp_enqueue_style(Config::SLUG . 'theme-css');
-        }
+        wp_enqueue_style(Config::SLUG . 'jquery-ui-css');
+        wp_enqueue_style(Config::SLUG . 'jquery-ui-theme-css');
+        wp_enqueue_style(Config::SLUG . 'elfinder-css');
 
         wp_enqueue_script(Config::SLUG . 'elfinder-script');
         wp_enqueue_script(Config::SLUG . 'elfinder-editor-script');
@@ -153,9 +156,17 @@ class Admin
         }
     }
 
+    public function adminEnqueueAssets()
+    {
+        $page = sanitize_text_field(wp_unslash($_GET['page'] ?? ''));
+        if (empty($page) || strpos($page, Config::SLUG) === false) {
+            return;
+        }
+        $this->enqueueAssets();
+    }
+
     public function dashboard()
     {
-        $this->enqueueAssets();
         // phpcs:ignore
         echo "<div id='bit-fm-root'></div>";
     }

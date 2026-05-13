@@ -2,6 +2,11 @@
 
 namespace BitApps\FM\Http\Controllers;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 use BitApps\FM\Http\Requests\Settings\LangUpdateRequest;
 use BitApps\FM\Http\Requests\Settings\SettingsRequest;
 use BitApps\FM\Http\Requests\Settings\SettingsUpdateRequest;

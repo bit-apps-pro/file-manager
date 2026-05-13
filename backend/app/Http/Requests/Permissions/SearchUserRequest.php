@@ -2,6 +2,11 @@
 
 namespace BitApps\FM\Http\Requests\Permissions;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 use BitApps\FM\Vendor\BitApps\WPKit\Http\Request\Request;
 use BitApps\FM\Vendor\BitApps\WPKit\Utils\Capabilities;
 

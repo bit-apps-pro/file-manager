@@ -5,7 +5,7 @@ Tags: file manager, wp file manager, wordpress file manager, files, ftp
 Requires at least: 5.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 6.8.8
+Stable tag: 6.8.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -303,6 +303,30 @@ Yes, It is possible to edit writeable files in the wordpress directory using cod
 15. File Manager activity logs
 
 == Upgrade Notice ==
+
+== External services ==
+
+This plugin sends data to external services for certain features. Below is a summary of each service, what data is sent, and links to their terms and privacy policies.
+
+**Dropbox** — Cloud file storage integration via OAuth/API. Authentication tokens are sent to Dropbox during the OAuth connection flow. No file content is sent unless the user explicitly uploads or downloads files through the integration.
+* Terms: https://www.dropbox.com/terms
+* Privacy: https://www.dropbox.com/privacy
+
+**Box** — Cloud file storage integration via OAuth/API. Authentication tokens are sent to Box during the OAuth connection flow. No file content is sent unless the user explicitly uploads or downloads files through the integration.
+* Terms: https://www.box.com/legal/terms
+* Privacy: https://www.box.com/legal/privacypolicy
+
+**Zoho Office Integrator** — Online document editing service. File data is sent to Zoho servers when a user opens a document for editing through the integration.
+* Terms: https://www.zoho.com/terms.html
+* Privacy: https://www.zoho.com/privacy.html
+
+**OneDrive (Microsoft)** — Cloud file storage integration via OAuth/API. Authentication tokens are sent to Microsoft during the OAuth connection flow. No file content is sent unless the user explicitly uploads or downloads files through the integration.
+* Terms: https://www.microsoft.com/servicesagreement
+* Privacy: https://privacy.microsoft.com/
+
+**Online-Convert** — File format conversion API. File data is sent to Online-Convert servers when a user converts a file to a different format through the integration.
+* Terms: https://www.online-convert.com/terms
+* Privacy: https://www.online-convert.com/privacy
 
 == Changelog ==
 

@@ -75,7 +75,7 @@ class PreferenceProvider
         }
 
         $this->_availableThemes = [];
-        $themeBase              = BFM_ROOT_DIR . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'themes';
+        $themeBase              = Config::get('ASSET_DIR') . DIRECTORY_SEPARATOR . 'themes';
         $themeDirs              = scandir($themeBase);
 
         foreach ($themeDirs as $theme) {
@@ -96,7 +96,7 @@ class PreferenceProvider
                          . $variant
                          . '.json'
                     )) {
-                    $this->_availableThemes[$variant] = BFM_ASSET_URL . "themes/{$theme}/{$variant}/{$variant}.json";
+                    $this->_availableThemes[$variant] = Config::get('ASSET_URI') . "/themes/{$theme}/{$variant}/{$variant}.json";
                 }
             }
         }
@@ -387,7 +387,7 @@ class PreferenceProvider
                 'zu'    => __('Zulu', 'file-manager'),
             ];
 
-            $dirs = scandir(BFM_FINDER_DIR . 'js/i18n');
+            $dirs = scandir(Config::getFinderDirectory() . '/js/i18n');
             foreach ($dirs as $lang) {
                 if (\in_array($lang, ['.', '..', 'help'])) {
                     continue;
@@ -434,10 +434,10 @@ class PreferenceProvider
 
     public function getLangUrl()
     {
-        $langUrl = BFM_FINDER_URL . 'js/i18n/elfinder.' . $this->getLangCode() . '.js';
+        $langUrl = Config::getFinderUrl() . '/js/i18n/elfinder.' . $this->getLangCode() . '.js';
 
         if (file_exists($langUrl)) {
-            $langUrl = BFM_FINDER_URL . 'js/i18n/elfinder.en.js';
+            $langUrl = Config::getFinderUrl() . '/js/i18n/elfinder.en.js';
         }
 
         return esc_attr($langUrl);
