@@ -2,10 +2,9 @@
 
 namespace BitApps\FM\Http\Requests\Permissions;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+if (! \defined('ABSPATH')) {
+    exit;
 }
-
 
 use BitApps\FM\Http\Rules\ValidateCommandsRule;
 use BitApps\FM\Http\Rules\ValidPathRule;

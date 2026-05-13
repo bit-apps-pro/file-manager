@@ -2,7 +2,7 @@
 
 namespace BitApps\FM\Compatibility;
 
-defined('ABSPATH') || exit();
+\defined('ABSPATH') || exit();
 
 class Deprecated
 {

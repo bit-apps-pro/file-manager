@@ -273,7 +273,7 @@ class Options
 
         $options['roots'] = Hooks::applyFilter(Config::withPrefix('filter_volumes'), $this->getRoots());
 
-        // @deprecated since 6.8.9, use filter 'bitapps_fm_filter_options' instead
+        /** @deprecated since 6.8.9, use filter 'bitapps_fm_filter_options' instead */
         $filteredOptions = Hooks::applyFilter('fm_options_filter', $options);
 
         $filteredOptions = Hooks::applyFilter(Config::withPrefix('filter_options'), $filteredOptions);

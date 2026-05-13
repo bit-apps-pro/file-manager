@@ -4,10 +4,9 @@
 
 namespace BitApps\FM\Views;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+if (! \defined('ABSPATH')) {
+    exit;
 }
-
 
 use BitApps\FM\Config;
 

@@ -1,6 +1,6 @@
 <?php
 
-defined('ABSPATH') or exit();
+\defined('ABSPATH') or exit();
 
 require_once 'app' . DIRECTORY_SEPARATOR . 'Compatibility' . DIRECTORY_SEPARATOR . 'Deprecated.php';
 \BitApps\FM\Compatibility\Deprecated::init();

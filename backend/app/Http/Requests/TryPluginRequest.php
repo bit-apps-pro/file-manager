@@ -2,10 +2,9 @@
 
 namespace BitApps\FM\Http\Requests;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+if (! \defined('ABSPATH')) {
+    exit;
 }
-
 
 use BitApps\FM\Vendor\BitApps\WPKit\Http\Request\Request;
 

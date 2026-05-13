@@ -2,10 +2,9 @@
 
 namespace BitApps\FM\Model;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+if (! \defined('ABSPATH')) {
+    exit;
 }
-
 
 use BitApps\FM\Vendor\BitApps\WPDatabase\Model;
 

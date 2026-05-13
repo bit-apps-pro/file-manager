@@ -2,10 +2,9 @@
 
 namespace BitApps\FM\Http\Rules;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+if (! \defined('ABSPATH')) {
+    exit;
 }
-
 
 use BitApps\FM\Plugin;
 use BitApps\FM\Vendor\BitApps\WPValidator\Rule;

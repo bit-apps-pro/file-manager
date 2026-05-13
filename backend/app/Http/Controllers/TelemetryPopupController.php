@@ -2,10 +2,9 @@
 
 namespace BitApps\FM\Http\Controllers;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+if (! \defined('ABSPATH')) {
+    exit;
 }
-
 
 use Automatic_Upgrader_Skin;
 use BitApps\FM\Config;

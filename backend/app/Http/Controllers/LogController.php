@@ -2,10 +2,9 @@
 
 namespace BitApps\FM\Http\Controllers;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+if (! \defined('ABSPATH')) {
+    exit;
 }
-
 
 use BitApps\FM\Config;
 use BitApps\FM\Http\Requests\Log\DeleteLogRequest;

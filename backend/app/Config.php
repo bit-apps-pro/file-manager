@@ -224,7 +224,7 @@ class Config
 
         return $uploadDir['basedir'] . DIRECTORY_SEPARATOR . 'file-manager';
     }
-    
+
     public static function uploadBaseURL()
     {
         $uploadDir = wp_upload_dir();
