@@ -115,7 +115,9 @@ export default function TopNavigation() {
           variant="borderless"
           onChange={handleLanguageChange}
         >
-          {languages?.map(lang => <Select.Option key={lang.code}>{lang.name}</Select.Option>)}
+          {languages?.map(lang => (
+            <Select.Option key={lang.code}>{lang.name}</Select.Option>
+          ))}
         </Select>
       </Space>
     </Header>

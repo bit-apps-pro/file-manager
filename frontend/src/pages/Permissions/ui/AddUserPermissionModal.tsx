@@ -74,7 +74,6 @@ function AddUserPermissionModal({
   return (
     <Modal
       open={isModalOpen}
-      onClose={() => setIsModalOpen(false)}
       onCancel={() => setIsModalOpen(false)}
       centered
       footer={false}

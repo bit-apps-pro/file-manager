@@ -40,7 +40,7 @@ class PreferenceProvider
             'language'           => 'en',
             'size'               => [
                 'width'  => 'auto',
-                'height' => '500',
+                'height' => 'auto',
             ],
             'default_view_type'  => 'icons',
             'display_ui_options' => [
@@ -553,8 +553,13 @@ class PreferenceProvider
 
     public function getHeight()
     {
-        return isset($this->preferences['size']['height'])
-        ? esc_attr($this->preferences['size']['height']) : '500';
+        if (!isset($this->preferences['size']['height'])) {
+            return 'auto';
+        }
+
+        $height = esc_attr($this->preferences['size']['height']);
+
+        return $height === '500' ? 'auto' : $height;
     }
 
     public function setVisibilityOfHiddenFile($visibility)

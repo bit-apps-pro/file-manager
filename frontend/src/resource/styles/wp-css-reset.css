@@ -26,7 +26,8 @@
 
 #wpbody-content {
   position: sticky;
-  overflow: hidden;
+  z-index: 9999;
+  overflow: visible;
   /* height: calc(100vh - 32px); */
   min-height: calc(100vh - 32px);
   top: 32px;

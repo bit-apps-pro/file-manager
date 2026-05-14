@@ -124,7 +124,7 @@ export default function Root() {
             padding: 10
           }}
         >
-          <Breadcrumb items={currentPath} />
+          <Breadcrumb items={currentPath as any} />
           <Flex style={{ justifyContent: 'space-between' }}>
             <Flex style={{ gap: 15 }}>
               <Button

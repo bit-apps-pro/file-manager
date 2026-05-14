@@ -78,8 +78,8 @@
   --shadow-10: 0 2px 5px 0 hsl(0deg, 0%, 65%);
   --shadow-20: 0 4px 12px 0 hsl(0deg, 0%, 70%);
   --shadow-30: 0 5px 20px 0 hsl(0deg, 0%, 90%);
-  --shadow-menu: 0 3px 5px 0 rgba(0, 0, 0, 10%), 0 5px 8px 0 rgba(0, 0, 0, 10%),
-    0 8px 12px 0 rgba(0, 0, 0, 10%);
+  --shadow-menu:
+    0 3px 5px 0 rgba(0, 0, 0, 10%), 0 5px 8px 0 rgba(0, 0, 0, 10%), 0 8px 12px 0 rgba(0, 0, 0, 10%);
 }
 
 :root [color-scheme='dark'] {
@@ -125,6 +125,6 @@
   --shadow-10: 0 2px 5px 0 rgb(0, 0, 0);
   --shadow-20: 0 4px 12px 0 rgba(0, 0, 0, 12%);
   --shadow-30: 0 5px 20px 0 rgba(0, 0, 0, 50%);
-  --shadow-menu: 0 3px 5px 0 rgba(0, 0, 0, 20%), 0 5px 8px 0 rgba(0, 0, 0, 20%),
-    0 8px 12px 0 rgba(0, 0, 0, 20%);
+  --shadow-menu:
+    0 3px 5px 0 rgba(0, 0, 0, 20%), 0 5px 8px 0 rgba(0, 0, 0, 20%), 0 8px 12px 0 rgba(0, 0, 0, 20%);
 }

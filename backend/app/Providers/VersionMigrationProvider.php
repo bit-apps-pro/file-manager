@@ -68,7 +68,20 @@ class VersionMigrationProvider
             }
         }
 
+        $this->renameLogsTableTo689();
         $this->migrateTo651();
+    }
+
+    private function renameLogsTableTo689()
+    {
+        global $wpdb;
+        $oldTable = $wpdb->prefix . 'bit_fm_logs';
+        $newTable = $wpdb->prefix . 'bitapps_fm_logs';
+
+        if ($wpdb->get_var("SHOW TABLES LIKE '{$oldTable}'") === $oldTable
+            && $wpdb->get_var("SHOW TABLES LIKE '{$newTable}'") !== $newTable) {
+            $wpdb->query("RENAME TABLE `{$oldTable}` TO `{$newTable}`");
+        }
     }
 
     private function migrateTo651()

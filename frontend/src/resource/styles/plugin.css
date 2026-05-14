@@ -1,4 +1,128 @@
 /* stylelint-disable alpha-value-notation */
+.elfinder-dialog {
+  position: fixed !important;
+  z-index: 100000;
+}
+
+.elfinder-quicklook,
+.elfinder-quicklook.ui-draggable-dragging,
+.ui-dialog.elfinder-dialog.ui-draggable-dragging,
+.ui-dialog.elfinder-dialog.elfinder-dialog-edit,
+.ui-dialog.elfinder-dialog.elfinder-to-editing {
+  z-index: 100002 !important;
+}
+
+.elfinder-quicklook .ui-dialog-titlebar,
+.ui-dialog.elfinder-dialog.elfinder-dialog-edit .ui-dialog-titlebar,
+.ui-dialog.elfinder-dialog.elfinder-to-editing .ui-dialog-titlebar {
+  position: relative;
+  z-index: 100003 !important;
+}
+
+.ui-dialog.elfinder-dialog .ui-dialog-titlebar .elfinder-titlebar-button .ui-icon {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+.ui-dialog.elfinder-dialog.elfinder-dialog-edit .ui-dialog-titlebar .elfinder-titlebar-button,
+.ui-dialog.elfinder-dialog.elfinder-to-editing .ui-dialog-titlebar .elfinder-titlebar-button {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-radius: 4px !important;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.ui-dialog.elfinder-dialog.elfinder-dialog-edit .ui-dialog-titlebar .elfinder-titlebar-button:hover,
+.ui-dialog.elfinder-dialog.elfinder-to-editing .ui-dialog-titlebar .elfinder-titlebar-button:hover {
+  background: rgba(255, 255, 255, 0.28) !important;
+}
+
+.ui-dialog.elfinder-dialog.elfinder-dialog-edit .ui-dialog-titlebar .elfinder-titlebar-button .ui-icon,
+.ui-dialog.elfinder-dialog.elfinder-to-editing .ui-dialog-titlebar .elfinder-titlebar-button .ui-icon {
+  background-image: none !important;
+  position: relative;
+  text-indent: 0 !important;
+  overflow: visible !important;
+  opacity: 1 !important;
+}
+
+.ui-dialog.elfinder-dialog.elfinder-dialog-edit
+  .ui-dialog-titlebar
+  .ui-dialog-titlebar-close
+  .ui-icon::before,
+.ui-dialog.elfinder-dialog.elfinder-to-editing
+  .ui-dialog-titlebar
+  .ui-dialog-titlebar-close
+  .ui-icon::before {
+  content: '×';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.ui-dialog.elfinder-dialog.elfinder-dialog-edit
+  .ui-dialog-titlebar
+  .elfinder-titlebar-minimize
+  .ui-icon::before,
+.ui-dialog.elfinder-dialog.elfinder-to-editing
+  .ui-dialog-titlebar
+  .elfinder-titlebar-minimize
+  .ui-icon::before {
+  content: '\2013';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.ui-dialog.elfinder-dialog.elfinder-dialog-edit
+  .ui-dialog-titlebar
+  .elfinder-titlebar-full
+  .ui-icon::before,
+.ui-dialog.elfinder-dialog.elfinder-to-editing
+  .ui-dialog-titlebar
+  .elfinder-titlebar-full
+  .ui-icon::before {
+  content: '\26F6';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* emailto toolbar button: Material theme uses ::before with inherited color;
+   default theme uses SVG background (overrides the sprite). */
+.elfinder-button-icon-emailto {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23444444' d='M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z'/%3E%3C/svg%3E");
+  background-position: center center;
+  background-size: 16px 16px;
+  background-repeat: no-repeat;
+}
+
+.elfinder-button-icon-emailto:before {
+  content: '\2709';
+  font-family: Arial, Helvetica, sans-serif;
+}
+
 .elfinder-ltr .elfinder-path {
   opacity: 0;
 }
@@ -20,32 +144,11 @@
   left: 180px !important;
 }
 
-.elfinder-quicklook-titlebar-icon {
-  right: -90%;
-  font-size: 6px;
-  padding: 5px;
-  color: #faebd7 !important;
-}
-
-.elfinder-quicklook-titlebar-icon .ui-icon.ui-icon-closethick {
-  background-color: #e46962 !important;
-}
-
-.elfinder-quicklook-titlebar-icon .ui-icon.ui-icon-minusthick {
-  background-color: #4d6351 !important;
-}
-
-.elfinder-quicklook-titlebar-icon .ui-icon.ui-icon-plusthick {
-  background-color: #55885d !important;
-}
-
 .elfinder-dialog.elfinder-to-editing.elfinder-dialog-edit {
-  top: 32px !important;
-  height: max-content !important;
+  max-height: calc(100vh - 40px) !important;
 }
 
 .elfinder-to-editing.elfinder-dialog-edit.elfinder-maximized {
-  top: 32px !important;
   left: 165px !important;
   right: 20px;
   max-width: calc(100% - 180px) !important;
@@ -56,34 +159,37 @@
   right: 165px !important;
 }
 
-.ui-dialog:nth-child(7) {
-  width: 760px !important;
-  top: 10px !important;
-  left: 10px !important;
-}
-
 .elfinder-file-edit {
   height: 475px;
-}
-
-.ui-helper-reset:nth-child(9) {
-  position: absolute !important;
-  width: 760px !important;
-  height: auto !important;
-  top: 150px !important;
-  left: 190px !important;
 }
 
 .elfinder-quicklook-preview {
   height: 510px;
 }
 
-.elfinder-quicklook-navbar-icon:nth-child(2) {
-  display: none;
+.elfinder-quicklook-navbar-icon-close {
+  display: inline-block !important;
 }
 
-.ui-icon:nth-child(4) {
+.ui-dialog.elfinder-dialog-preference .ui-dialog-titlebar-close {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.ui-dialog.elfinder-dialog-preference .ui-dialog-titlebar-close .ui-icon {
   display: none !important;
+}
+
+.ui-dialog.elfinder-dialog-preference .ui-dialog-titlebar-close::before {
+  content: '×';
+  display: block;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
 }
 
 .ui-corner-all {
@@ -124,7 +230,6 @@
 
 @media (max-width: 700px) {
   .elfinder-to-editing.elfinder-dialog-edit.elfinder-maximized {
-    top: 32px !important;
     left: 40px !important;
     max-width: calc(100% - 45px) !important;
   }

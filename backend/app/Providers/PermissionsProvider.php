@@ -115,6 +115,7 @@ class PermissionsProvider
             'rename', // rename
             'archive', // archive
             'extract',// extract
+            'emailto', // client-only: open mailto link for selected file
         ];
     }
 
