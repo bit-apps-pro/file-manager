@@ -3,7 +3,7 @@ export interface ProductDetail {
   label: React.ReactNode // Change React.ReactHTMLElement to React.ReactNode for better compatibility
   title: string
 }
-// eslint-disable-next-line import/prefer-default-export
+
 export const items: Array<ProductDetail> = [
   {
     key: 'bit-form',

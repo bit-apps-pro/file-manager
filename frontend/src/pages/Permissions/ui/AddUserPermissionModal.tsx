@@ -40,7 +40,7 @@ function AddUserPermissionModal({
 
   type UserSelectOption = { value: number; user: User; label: string }
 
-  const handleChange = (_: number, option: UserSelectOption | UserSelectOption[]) => {
+  const handleChange = (_: number, option?: UserSelectOption | UserSelectOption[]) => {
     const selected = Array.isArray(option) ? option[0] : option
     if (selected?.user) {
       setSelectedUser(selected.user)

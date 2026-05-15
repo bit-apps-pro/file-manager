@@ -1,6 +1,6 @@
-// eslint-disable-next-line camelcase, @typescript-eslint/ban-ts-comment
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-const serverVariables = typeof window.bitapps_fm === 'undefined' ? {} : window.bitapps_fm // eslint-disable-line camelcase,
+const serverVariables = typeof window.bitapps_fm === 'undefined' ? {} : window.bitapps_fm
 const options = serverVariables?.options ?? {}
 export function getServerVariable(key: string, fallback?: unknown) {
   if (!(key in serverVariables) || !serverVariables[key]) {

@@ -234,7 +234,9 @@ class Config
 
     public static function getTrashDir()
     {
-        return self::uploadBaseDir() . DIRECTORY_SEPARATOR . '.trash';
+        $uploadDir = wp_upload_dir();
+
+        return $uploadDir['basedir'] . DIRECTORY_SEPARATOR . '.bitapps-fm-trash';
     }
 
     /**

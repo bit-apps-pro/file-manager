@@ -1,5 +1,4 @@
 /// <reference types="vite/client" />
-import commonjs from '@rollup/plugin-commonjs'
 import react from '@vitejs/plugin-react'
 import detectPort from 'detect-port'
 import fs from 'node:fs'
@@ -52,38 +51,34 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react({
         jsxImportSource: '@emotion/react',
-        babel: {
-          plugins: ['@emotion/babel-plugin']
-        },
         jsxRuntime: 'automatic'
         // @ts-ignore
         // fastRefresh: true,
       }),
-      commonjs(),
       setDevServerConfig(),
       viteStaticCopy({
         targets: [
           {
             src: normalizePath(path.resolve(__dirname, 'frontend/finder-loader.js')),
-            dest: '.'
+            dest: 'js'
           },
           {
             src: normalizePath(path.resolve(__dirname, 'frontend/style')),
             dest: '../../assets'
-          },
-          {
-            src: normalizePath(path.resolve(__dirname, 'vendor/studio-42/elfinder/js/extras/editors.default.min.js')),
-            dest: '.',
-            rename: 'elfinder-editors.js',
-            transform: {
-              encoding: 'utf8' as const,
-              handler: (content: string) => `(function($){${content}})(jQuery);`
-            }
           }
         ]
-      })
+      }),
+      {
+        name: 'generate-elfinder-editors',
+        writeBundle() {
+          const src = path.resolve(__dirname, 'vendor/studio-42/elfinder/js/extras/editors.default.min.js')
+          const dest = path.resolve(__dirname, 'assets/js/elfinder-editors.js')
+          const content = fs.readFileSync(src, 'utf8')
+          fs.writeFileSync(dest, `(function($){${content}})(jQuery);`)
+        }
+      }
     ],
-    esbuild: {
+    oxc: {
       drop: mode === 'development' ? [] : ['console', 'debugger']
     },
     css: {
@@ -101,13 +96,26 @@ export default defineConfig(({ mode }) => {
         input: path.resolve(__dirname, 'frontend/src/main.tsx'),
         output: {
           entryFileNames: `main.${getVersion()}.js`,
-          manualChunks: {
-            'react-vendor': ['react', 'react-dom'],
-            '@emotion/react': ['@emotion/react'],
-            '@tanstack/react-query': ['@tanstack/react-query'],
-            '@tanstack/react-query-devtools': ['@tanstack/react-query-devtools'],
-            'react-router-dom': ['react-router-dom'],
-            antd: ['antd']
+          manualChunks(id: string) {
+            if (id.includes('/node_modules/react/') || id.includes('/node_modules/react-dom/')) {
+              return 'react-vendor'
+            }
+            if (id.includes('/node_modules/@emotion/react/')) {
+              return '@emotion/react'
+            }
+            if (id.includes('/node_modules/@tanstack/react-query-devtools/')) {
+              return '@tanstack/react-query-devtools'
+            }
+            if (id.includes('/node_modules/@tanstack/react-query/')) {
+              return '@tanstack/react-query'
+            }
+            if (id.includes('/node_modules/react-router-dom/') || id.includes('/node_modules/react-router/')) {
+              return 'react-router-dom'
+            }
+            if (id.includes('/node_modules/antd/') || id.includes('/node_modules/rc-')) {
+              return 'antd'
+            }
+            return undefined
           },
           chunkFileNames: () => '[name]-[hash].js',
 

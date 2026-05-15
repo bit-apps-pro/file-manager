@@ -1,3 +1,4 @@
+import { type JSX } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 
 import { $appConfig } from '@common/globalStates'

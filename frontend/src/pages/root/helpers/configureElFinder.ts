@@ -475,7 +475,9 @@ export default function configureElFinder(finderRef: RefObject<HTMLDivElement>):
     finder.dblclick = (data: { file?: string }) => {
       const hash = data?.file
       if (hash) {
-        const file = finder.file(hash)
+        const file = finder.file(hash) as unknown as
+          | { mime: string; name: string; hash: string; [key: string]: unknown }
+          | undefined
         const mime: string = file?.mime ?? ''
         const editable =
           mime.startsWith('text/') ||
@@ -489,7 +491,7 @@ export default function configureElFinder(finderRef: RefObject<HTMLDivElement>):
           mime === 'application/x-python' ||
           mime === 'application/x-ruby'
         if (editable) {
-          finder.exec('edit', [hash])
+          finder.exec('edit', hash)
           return finder
         }
       }

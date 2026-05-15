@@ -1,12 +1,8 @@
-/* eslint-disable import/no-relative-parent-imports */
-
-/* eslint-disable no-nested-ternary */
 import type React from 'react'
 import { type ReactElement } from 'react'
 import { useState } from 'react'
 
 import request from '@common/helpers/request'
-import { type StepProps } from 'antd'
 import { Button, Modal, Steps } from 'antd'
 
 import changeLogs from '../../../changeLog'
@@ -17,10 +13,12 @@ type TelemetryPopupProps = {
   setIsTelemetryModalOpen: (value: boolean) => void
 }
 
-interface CustomStepProps extends StepProps {
+interface CustomStepProps {
   id?: string
   'data-modaltitle': string
   content: ReactElement
+  title?: string
+  label?: string
 }
 
 function TelemetryPopup({ isTelemetryModalOpen, setIsTelemetryModalOpen }: TelemetryPopupProps) {
@@ -48,7 +46,7 @@ function TelemetryPopup({ isTelemetryModalOpen, setIsTelemetryModalOpen }: Telem
 
   const steps: CustomStepProps[] = [
     {
-      title: '',
+      label: '',
       'data-modaltitle': 'Bit File Manager 2024 Updates',
       content: (
         <>

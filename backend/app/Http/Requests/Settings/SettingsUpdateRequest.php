@@ -6,6 +6,7 @@ if (! \defined('ABSPATH')) {
     exit;
 }
 
+use BitApps\FM\Http\Rules\BooleanRule;
 use BitApps\FM\Http\Rules\ValidPathRule;
 use BitApps\FM\Http\Rules\ValidUIOptionRule;
 use BitApps\FM\Vendor\BitApps\WPKit\Http\Request\Request;
@@ -21,13 +22,13 @@ class SettingsUpdateRequest extends Request
     public function rules()
     {
         return [
-            'show_url_path'               => ['sanitize:text', 'nullable','boolean'],
-            'show_hidden_files'           => ['sanitize:text', 'nullable','boolean'],
-            'wp_media_sync'               => ['sanitize:text', 'nullable','boolean'],
-            'create_trash_files_folders'  => ['sanitize:text', 'nullable','boolean'],
-            'create_hidden_files_folders' => ['sanitize:text', 'nullable','boolean'],
-            'remember_last_dir'           => ['sanitize:text', 'nullable','boolean'],
-            'clear_history_on_reload'     => ['sanitize:text', 'nullable','boolean'],
+            'show_url_path'               => ['nullable', BooleanRule::class],
+            'show_hidden_files'           => ['nullable', BooleanRule::class],
+            'wp_media_sync'               => ['nullable', BooleanRule::class],
+            'create_trash_files_folders'  => ['nullable', BooleanRule::class],
+            'create_hidden_files_folders' => ['nullable', BooleanRule::class],
+            'remember_last_dir'           => ['nullable', BooleanRule::class],
+            'clear_history_on_reload'     => ['nullable', BooleanRule::class],
             'root_folder_name'            => ['sanitize:text', 'required','string'],
             'theme'                       => ['sanitize:text', 'required','string'],
             'language'                    => ['sanitize:text', 'required','string'],

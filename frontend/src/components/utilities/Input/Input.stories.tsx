@@ -1,6 +1,4 @@
 /* eslint-disable react/jsx-props-no-spreading */
-
-/* eslint-disable import/no-extraneous-dependencies */
 import { type Meta, type StoryFn } from '@storybook/react'
 
 import Input from './Input'

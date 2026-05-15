@@ -92,6 +92,10 @@ final class FileManagerController
         $allVolumes         = $this->getFileRoots();
         $volumeCount        = \count($allVolumes);
         $invalidVolumeCount = 0;
+
+        $isTrashAllowed = Plugin::instance()->preferences()->isTrashAllowed();
+        $trashVolumes   = [];
+
         foreach ($allVolumes as $root) {
             if (!$root->isReadable()) {
                 $invalidVolumeCount++;
@@ -99,11 +103,36 @@ final class FileManagerController
                 continue;
             }
 
+            if ($isTrashAllowed) {
+                // Each volume gets its own trash folder so deletions are isolated.
+                // Trash driver uses id 't'; Nth trash volume root hash = "t{N}_Lw"
+                // (base64('/') = 'Lw', the encoded root-relative path '/').
+                $trashSeq  = \count($trashVolumes) + 1;
+                $trashHash = 't' . $trashSeq . '_Lw';
+                $trashDir  = Config::getTrashDir() . DIRECTORY_SEPARATOR . $trashSeq;
+
+                $root->setTrashHash($trashHash);
+                $trashVolumes[] = $trashDir;
+            }
+
             $finderOptions->setRoot($root);
         }
 
         if ($volumeCount === $invalidVolumeCount) {
             throw new PreCommandException(esc_html__('There is no readable volume. Please select an readable folder from settings', 'file-manager'));
+        }
+
+        foreach ($trashVolumes as $trashSeq => $trashDir) {
+            if (!is_dir($trashDir)) {
+                wp_mkdir_p($trashDir);
+            }
+
+            if (is_dir($trashDir)) {
+                $trashRoot = new FileRoot($trashDir, '', 'Trash', 'Trash');
+                // Explicitly set id so the volume hash is predictable: t{trashSeq}_Lw
+                $trashRoot->setOption('id', $trashSeq + 1);
+                $finderOptions->setRoot($trashRoot);
+            }
         }
 
         return $finderOptions;

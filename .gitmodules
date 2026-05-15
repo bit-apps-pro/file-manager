@@ -1,6 +1,3 @@
-[submodule "submodule/sources/elFinder"]
-	path = submodule/sources/elFinder
-	url = git@github.com:Bit-Apps-Pro/elFinder.git
 [submodule "submodule/sources/elFinder-Material-Theme"]
 	path = submodule/sources/elFinder-Material-Theme
 	url = git@github.com:RobiNN1/elFinder-Material-Theme.git

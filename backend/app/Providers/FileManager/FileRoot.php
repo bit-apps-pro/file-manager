@@ -2,6 +2,8 @@
 
 namespace BitApps\FM\Providers\FileManager;
 
+use function BitApps\FM\Functions\fileSystemAdapter;
+
 use Exception;
 
 \defined('ABSPATH') || exit();
@@ -527,7 +529,7 @@ class FileRoot
      */
     public function isReadable()
     {
-        return is_readable($this->_path);
+        return fileSystemAdapter()->is_readable($this->_path);
     }
 
     /**

@@ -6,6 +6,7 @@ if (! \defined('ABSPATH')) {
     exit;
 }
 
+use BitApps\FM\Http\Rules\BooleanRule;
 use BitApps\FM\Http\Rules\ValidateCommandsRule;
 use BitApps\FM\Http\Rules\ValidateRolesRule;
 use BitApps\FM\Http\Rules\ValidateUsersRule;
@@ -23,7 +24,7 @@ class PermissionsUpdateRequest extends Request
     public function rules()
     {
         return [
-            'do_not_use_for_admin' => ['sanitize:text', 'nullable','boolean'],
+            'do_not_use_for_admin' => ['nullable', BooleanRule::class],
             'fileType'             => ['nullable','array'],
             'file_size'            => ['sanitize:text', 'nullable','Integer'],
             'root_folder'          => ['sanitize:text', 'nullable', ValidPathRule::class],
@@ -36,7 +37,7 @@ class PermissionsUpdateRequest extends Request
             'by_role.*.path'       => ['nullable', ValidPathRule::class],
             'by_role.*.commands'   => ['nullable', ValidateCommandsRule::class],
             'guest.path'           => ['sanitize:text', 'nullable','string', ValidPathRule::class],
-            'guest.can_download'   => ['sanitize:text', 'nullable', 'boolean'],
+            'guest.can_download'   => ['nullable', BooleanRule::class],
         ];
     }
 }

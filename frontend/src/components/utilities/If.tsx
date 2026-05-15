@@ -1,3 +1,5 @@
+import { type JSX } from 'react'
+
 interface IfProps {
   children: JSX.Element | string
   // Else?: JSX.Element | string

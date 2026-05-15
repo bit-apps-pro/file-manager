@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import SearchIcon from '@icons/SearchIcon'
 import { type Meta, type StoryFn } from '@storybook/react'
 

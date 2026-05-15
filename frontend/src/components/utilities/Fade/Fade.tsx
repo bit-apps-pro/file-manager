@@ -1,3 +1,5 @@
+import { type JSX } from 'react'
+
 import { AnimatePresence, motion } from 'framer-motion'
 
 interface PropsTypes {

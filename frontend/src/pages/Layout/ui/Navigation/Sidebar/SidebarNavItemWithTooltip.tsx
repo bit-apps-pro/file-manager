@@ -1,4 +1,4 @@
-import { type ReactElement } from 'react'
+import { type JSX, type ReactElement } from 'react'
 
 import { $appConfig } from '@common/globalStates'
 import { Tooltip } from 'antd'

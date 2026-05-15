@@ -8,7 +8,7 @@ export default function useInterval(
   immediate = false
 ): UseIntervalType {
   const [timer, setTimer] = useState(immediate ? delay : null)
-  const intervalRef = useRef<NodeJS.Timeout>()
+  const intervalRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const savedCallback = useRef(callback)
   const isRunning = timer !== null
 
@@ -20,7 +20,9 @@ export default function useInterval(
     if (typeof timer === 'number') {
       intervalRef.current = setInterval(savedCallback.current, timer)
     }
-    return () => intervalRef.current && clearInterval(intervalRef.current)
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current)
+    }
   }, [timer])
 
   const startInterval = () => setTimer(delay)

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { type RefObject, useEffect, useRef, useState } from 'react'
 
 import $finder, { $finderCurrentPath, $finderViewType } from '@common/globalStates/$finder'
 import { type BreadcrumbItemType } from '@common/globalStates/GlobalStates'
@@ -59,9 +59,9 @@ export default function Root() {
 
   useEffect(() => {
     if (finderRef) {
-      const finder = configureElFinder(finderRef)
+      const finder = configureElFinder(finderRef as RefObject<HTMLDivElement>)
       setFinder(finder)
-      initThemeChangeHandler(finderRef)
+      initThemeChangeHandler(finderRef as RefObject<HTMLDivElement>)
 
       finder.bind('open searchend parents', () => {
         generateFullPath(finder)

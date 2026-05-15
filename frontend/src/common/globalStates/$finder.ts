@@ -1,7 +1,6 @@
 import { type FinderInstance } from 'elfinder'
 import { atom } from 'jotai'
 
-// eslint-disable-next-line import/extensions
 import { type BreadcrumbItemType } from './GlobalStates'
 
 const $finder = atom<FinderInstance>({} as FinderInstance)

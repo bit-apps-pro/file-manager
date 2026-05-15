@@ -1,3 +1,5 @@
+import { type JSX } from 'react'
+
 import CheckCircle from './CheckCircle'
 import CloseIcn from './CloseIcn'
 import DashboardIcn from './DashboardIcn'

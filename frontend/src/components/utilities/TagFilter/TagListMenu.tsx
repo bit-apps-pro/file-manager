@@ -32,7 +32,9 @@ const TagListMenu = ({ isAddable, handleOnAdd, token }: TagListMenuProps) =>
         >
           Tags
         </Typography.Title>
-        {cloneElement(menu as React.ReactElement, { style: { boxShadow: 'none' } })}
+        {cloneElement(menu as React.ReactElement<React.HTMLAttributes<HTMLElement>>, {
+          style: { boxShadow: 'none' }
+        })}
         {isAddable && (
           <div className="p-2" css={{ borderTop: `1px solid ${token.colorSplit}` }}>
             <Button

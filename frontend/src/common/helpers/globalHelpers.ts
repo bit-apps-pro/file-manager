@@ -170,7 +170,7 @@ const cipher = (salt: string) => {
     const str = `0${Number(n).toString(16)}`
     return str.substring(str.length - 2)
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const applySaltToChar = (code: any) => textToChars(salt).reduce((a: number, b: number) => a ^ b, code) // eslint-disable-line no-bitwise
 
   // eslint-disable-next-line newline-per-chained-call
@@ -179,7 +179,7 @@ const cipher = (salt: string) => {
 
 const decipher = (salt: string) => {
   const textToChars = (text: string) => text.split('').map(c => c.charCodeAt(0))
-  // eslint-disable-next-line no-bitwise, @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line no-bitwise
   const applySaltToChar = (code: any) => textToChars(salt).reduce((a, b) => a ^ b, code)
   return (encoded: string) =>
     encoded

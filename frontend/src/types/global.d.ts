@@ -1,5 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-
 // interface cls { [key: string]: string; }
 // declare module '*.module.css' {
 //   const classes: { [key: string]: string }

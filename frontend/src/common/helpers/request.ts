@@ -1,7 +1,6 @@
 import config from '@config/config'
 
 /* eslint-disable no-restricted-syntax */
-/* eslint-disable no-undef */
 
 type MethodType = 'POST' | 'GET'
 
@@ -72,7 +71,7 @@ export default async function request<T>({
     .then(res => {
       try {
         return JSON.parse(res)
-      } catch (error) {
+      } catch {
         const parsedRes = res.match(/{"code":(?:[^{}]*)*}/)
         return parsedRes ? JSON.parse(parsedRes[0]) : { code: 'ERROR', data: res }
       }

@@ -14,7 +14,8 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "ESNext",
-    "resolveJsonModule": false,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
@@ -40,6 +41,5 @@
     }
   },
   "include": ["frontend/src", "frontend/src/types", "vite.config.mts", "vite.config.wp.ts"],
-  "exclude": ["node_modules"],
-  "types": ["cypress", "node", "@4tw/cypress-drag-drop", "vite/client"]
+  "exclude": ["node_modules", "frontend/**/*.js"]
 }
