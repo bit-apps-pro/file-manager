@@ -118,8 +118,12 @@ class PhpSyntaxChecker
             'code' => 'json_parse_error',
         ];
 
-        // Check admin URL for whitescreen.
-        $url    = add_query_arg($scrapeParams, admin_url());
+        // Use plugin-editor.php as the loopback target — identical to what WordPress core
+        // uses when saving plugin files (wp-admin/includes/file.php). The scrape mechanism
+        // fires from wp-settings.php before any page-specific code, so the URL doesn't
+        // affect which PHP errors are caught. Using plugin-editor.php avoids 403 responses
+        // that some server configurations return for requests to the generic admin_url().
+        $url    = add_query_arg($scrapeParams, admin_url('plugin-editor.php'));
         $r      = wp_remote_get($url, compact('cookies', 'headers', 'timeout', 'sslverify'));
         $body   = wp_remote_retrieve_body($r);
         $pos    = strpos($body, $needleStart);

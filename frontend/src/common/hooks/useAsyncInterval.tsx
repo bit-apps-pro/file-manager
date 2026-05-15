@@ -48,6 +48,7 @@ export default function useInterval(
     intervalIndexRef.current = intervalIndex
 
     return () => clearAsyncInterval(intervalIndexRef.current)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timer])
 
   return [isRunning, startInterval, stopInterval]

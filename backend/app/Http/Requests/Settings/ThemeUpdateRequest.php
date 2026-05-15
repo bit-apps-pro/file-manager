@@ -14,7 +14,7 @@ class ThemeUpdateRequest extends Request
 {
     public function authorize()
     {
-        return Capabilities::filter('bitapps_fm__can_change_theme');
+        return Capabilities::filter('bitapps_fm_can_change_theme');
     }
 
     public function rules()

@@ -436,8 +436,8 @@ class PreferenceProvider
     {
         $langUrl = Config::getFinderUrl() . '/js/i18n/elfinder.' . $this->getLangCode() . '.js';
 
-        if (file_exists($langUrl)) {
-            $langUrl = Config::getFinderUrl() . '/js/i18n/elfinder.en.js';
+        if (!file_exists($langUrl)) {
+            $langUrl = Config::getFinderUrl() . '/js/i18n/elfinder.LANG.js';
         }
 
         return esc_attr($langUrl);

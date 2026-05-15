@@ -14,6 +14,7 @@ class FinderConnector extends elFinderConnector
      *  which is used in this function
      *
      * @param  array  data to output
+     * @param mixed $cmd
      *
      * @throws elFinderAbortException
      *
@@ -21,6 +22,18 @@ class FinderConnector extends elFinderConnector
      *
      * @author Dmitry (dio) Levashov
      */
+    /**
+     * WordPress nonce verification (NonceCheckerMiddleware) already provides CSRF
+     * protection for every connector request. elFinder's session-based CSRF check
+     * is redundant here and breaks when the server strips the Cookie header on
+     * write requests (causing a 403 before our code runs). Disabling it removes
+     * the session dependency without weakening security.
+     */
+    protected function csrfProtectedCommand($cmd)
+    {
+        return false;
+    }
+
     protected function output(array $data)
     {
         // unlock session data for multiple access

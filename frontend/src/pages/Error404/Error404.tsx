@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { __ } from '@common/helpers/i18nwrap'
 import space from '@resource/img/space.svg'
@@ -7,7 +7,6 @@ import space from '@resource/img/space.svg'
 export default function Error404() {
   const [sec, setsec] = useState(9)
   const navigate = useNavigate()
-  const location = useLocation()
 
   useEffect(() => {
     setTimeout(() => {
@@ -18,7 +17,6 @@ export default function Error404() {
     }, 1000)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sec])
-  console.log('location', location)
   return (
     <div className="error-404">
       <div>

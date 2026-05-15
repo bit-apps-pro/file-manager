@@ -42,7 +42,7 @@ final class FileManagerController
 
     public function getFinderOptions()
     {
-        $finderOptions = new Options(is_user_logged_in() && \defined('WP_DEBUG') && WP_DEBUG);
+        $finderOptions = new Options(Config::isDev() ?? false);
 
         $finderOptions->setBind(
             'put.pre',
@@ -81,7 +81,13 @@ final class FileManagerController
             [Plugin::instance()->logger(), 'logUpload']
         );
 
-        $finderOptions->setCommonTempPath(Config::uploadBaseDir() . '/.tmp/');
+        if (fileSystemAdapter()->is_writable(Config::uploadBaseDir() . '/.tmp/')) {
+            $finderOptions->setCommonTempPath(Config::uploadBaseDir() . '/.tmp/');
+        }
+
+        if (fileSystemAdapter()->is_writable(Config::uploadBaseDir() . '/.tmb/')) {
+            $finderOptions->setThumbPath(Config::uploadBaseDir() . '/.tmb/');
+        }
 
         $allVolumes         = $this->getFileRoots();
         $volumeCount        = \count($allVolumes);
@@ -116,7 +122,7 @@ final class FileManagerController
 
     public function getUrlByPath($path)
     {
-        return home_url(str_replace(ABSPATH, '', trailingslashit($path)));
+        return set_url_scheme(home_url(str_replace(ABSPATH, '', trailingslashit($path))), is_ssl() ? 'https' : 'http');
     }
 
     /**

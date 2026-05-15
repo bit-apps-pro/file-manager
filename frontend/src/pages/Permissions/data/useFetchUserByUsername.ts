@@ -4,8 +4,6 @@ import { type QueryFunctionContext, useInfiniteQuery } from '@tanstack/react-que
 
 export default function useFetchUserByUsername(search: string) {
   async function sendRequest({ pageParam = 1, signal }: QueryFunctionContext<string[], number>) {
-    console.log({ pageParam })
-
     const response = await request<FetchUsersType>({
       action: 'permissions/user/get',
       method: 'GET',

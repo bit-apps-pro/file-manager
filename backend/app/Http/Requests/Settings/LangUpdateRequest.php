@@ -14,7 +14,7 @@ class LangUpdateRequest extends Request
 {
     public function authorize()
     {
-        return Capabilities::filter('bitapps_fm__can_change_language');
+        return Capabilities::filter('bitapps_fm_can_change_language');
     }
 
     public function rules()

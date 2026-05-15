@@ -69,6 +69,13 @@ class Options
      */
     private $_commonTempPath;
 
+    /*
+     * Thumbnail path.
+     *
+     * Default value: file-manager upload directory + '/.tmb'
+     */
+    private $_tmbPath;
+
     /**
      * Connection flag files path that connection check of current request.
      *  A file is created every time an access is made to this location and it is deleted at the end of the request.
@@ -198,6 +205,13 @@ class Options
         return $this;
     }
 
+    public function setThumbPath($path)
+    {
+        $this->_tmbPath = $path;
+
+        return $this;
+    }
+
     public function getRoots()
     {
         $roots = [];
@@ -241,6 +255,10 @@ class Options
 
         if (isset($this->_commonTempPath)) {
             $options['commonTempPath'] = $this->_commonTempPath;
+        }
+
+        if (isset($this->_tmbPath)) {
+            $options['tmbPath'] = $this->_tmbPath;
         }
 
         if (isset($this->_connectionFlagsPath)) {

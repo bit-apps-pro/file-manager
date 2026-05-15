@@ -330,6 +330,16 @@ This plugin sends data to external services for certain features. Below is a sum
 
 == Changelog ==
 
+= 6.8.9 =
+- Fix: Minimized editor windows now appear as a floating dock at the bottom of the screen
+- Fix: Double-clicking a file now opens it in the code editor
+- Fix: Editor dialog z-index layering and viewport height
+- Fix: ESC key handling
+- Fix: PHP syntax check via loopback request to prevent saving files with fatal errors
+- Fix: WordPress.org plugin review team issues
+- Refactor: Consistent function, constant, and option name prefixes across the codebase
+- Refactor: Introduced Compatibility and Deprecated classes for deprecation handling
+
 = 6.8.8 =
 - fix: file manager not showing up due to version mismatch
 

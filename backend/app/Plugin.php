@@ -275,8 +275,9 @@ final class Plugin
 
         wp_register_script(
             Config::SLUG . 'elfinder-editor-script',
-            Config::getFinderUrl() . '/js/extras/editors.default.min.js',
-            [Config::SLUG . 'elfinder-script']
+            Config::get('ASSET_JS_URI') . '/elfinder-editors.js',
+            [Config::SLUG . 'elfinder-script', 'jquery'],
+            Config::VERSION
         );
 
         wp_localize_script(

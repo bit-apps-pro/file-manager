@@ -8,7 +8,7 @@ import config from '@config/config'
 import LucideIcn from '@icons/LucideIcn'
 import useUpdateViewType from '@pages/Settings/data/useUpdateViewType'
 import TelemetryPopup from '@utilities/TelemetryPopup/TelemetryPopup'
-import { Breadcrumb, Button, Flex, Image, Space, Spin } from 'antd'
+import { Breadcrumb, type BreadcrumbProps, Button, Flex, Image, Space, Spin } from 'antd'
 import { type FinderInstance } from 'elfinder'
 import { useAtom } from 'jotai'
 
@@ -93,10 +93,11 @@ export default function Root() {
       } */
       setFinder({} as FinderInstance)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
-    request({ action: 'telemetry_popup_disable_check', method: 'GET' }).then((res: any) => {
+    request({ action: 'telemetry_popup_disable_check', method: 'GET' }).then(res => {
       setIsTelemetryModalOpen(!res.data)
     })
   }, [])
@@ -124,7 +125,7 @@ export default function Root() {
             padding: 10
           }}
         >
-          <Breadcrumb items={currentPath as any} />
+          <Breadcrumb items={currentPath as BreadcrumbProps['items']} />
           <Flex style={{ justifyContent: 'space-between' }}>
             <Flex style={{ gap: 15 }}>
               <Button

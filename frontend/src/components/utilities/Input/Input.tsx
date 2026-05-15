@@ -24,6 +24,7 @@ export default function Input({
 
   useEffect(() => {
     onRender?.()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

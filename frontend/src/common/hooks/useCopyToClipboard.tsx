@@ -27,6 +27,7 @@ export default function useCopyToClipboard() {
       document.execCommand('copy')
       setCopiedAndReset()
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error('Unable to copy to clipboard', err)
     }
     document.body.removeChild(textArea)

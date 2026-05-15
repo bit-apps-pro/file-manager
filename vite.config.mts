@@ -70,6 +70,15 @@ export default defineConfig(({ mode }) => {
           {
             src: normalizePath(path.resolve(__dirname, 'frontend/style')),
             dest: '../../assets'
+          },
+          {
+            src: normalizePath(path.resolve(__dirname, 'vendor/studio-42/elfinder/js/extras/editors.default.min.js')),
+            dest: '.',
+            rename: 'elfinder-editors.js',
+            transform: {
+              encoding: 'utf8' as const,
+              handler: (content: string) => `(function($){${content}})(jQuery);`
+            }
           }
         ]
       })

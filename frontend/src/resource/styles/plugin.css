@@ -139,11 +139,6 @@
   text-align: left;
 }
 
-.elfinder div.elfinder-bottomtray {
-  bottom: 40px !important;
-  left: 180px !important;
-}
-
 .elfinder-dialog.elfinder-to-editing.elfinder-dialog-edit {
   max-height: calc(100vh - 40px) !important;
 }

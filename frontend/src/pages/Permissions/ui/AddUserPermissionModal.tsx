@@ -38,11 +38,14 @@ function AddUserPermissionModal({
     fetchNextPage()
   }
 
-  const handleChange = (_: number, option: any) => {
-    if (option?.user) {
-      setSelectedUser(option?.user)
+  type UserSelectOption = { value: number; user: User; label: string }
+
+  const handleChange = (_: number, option: UserSelectOption | UserSelectOption[]) => {
+    const selected = Array.isArray(option) ? option[0] : option
+    if (selected?.user) {
+      setSelectedUser(selected.user)
       form.resetFields()
-      form.setFieldValue('id', option?.user?.id)
+      form.setFieldValue('id', selected.user.ID)
     }
   }
   const handleSubmit = (changedValues: UserPermissionType) => {

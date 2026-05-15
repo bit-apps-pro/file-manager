@@ -4,6 +4,7 @@ import config, { getOptionVariable } from '@config/config'
 import { type FinderInstance } from 'elfinder'
 
 type JQueryWithUi = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (target: unknown): any
   ui?: {
     dialog?: {
@@ -21,6 +22,7 @@ type ElFinderConstructor = {
 }
 
 type FinderWithDialog = FinderInstance & {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dialog: (content: unknown, options?: unknown) => any
   theme?: {
     name?: string
@@ -29,31 +31,33 @@ type FinderWithDialog = FinderInstance & {
   storage: (key: string, value?: unknown) => FinderWithDialog
   resize: (width: number | string, height: number | string) => void
   bind: (events: string, handler: (...args: unknown[]) => void) => FinderWithDialog
+  dblclick?: (data: { file?: string }) => unknown
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function elevateDialogLayers(jq: JQueryWithUi, dialogLike?: any): void {
   const getActiveFinderRect = (): DOMRect | null => {
     const candidates = Array.from(document.querySelectorAll('.elfinder')) as HTMLElement[]
     let bestRect: DOMRect | null = null
     let bestArea = 0
 
-    for (const candidate of candidates) {
+    candidates.forEach(candidate => {
       const styles = window.getComputedStyle(candidate)
       if (styles.display === 'none' || styles.visibility === 'hidden') {
-        continue
+        return
       }
 
       const rect = candidate.getBoundingClientRect()
       const area = rect.width * rect.height
       if (rect.width < 200 || rect.height < 120 || area <= 0) {
-        continue
+        return
       }
 
       if (area > bestArea) {
         bestArea = area
         bestRect = rect
       }
-    }
+    })
 
     return bestRect
   }
@@ -111,6 +115,7 @@ function elevateDialogLayers(jq: JQueryWithUi, dialogLike?: any): void {
       clampFloatingLayerPosition(this)
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const draggableApi = ($quicklook as any).draggable
     if (typeof draggableApi === 'function') {
       $quicklook.draggable('option', 'containment', false)
@@ -128,6 +133,7 @@ function elevateDialogLayers(jq: JQueryWithUi, dialogLike?: any): void {
 
   dialogs.each(function moveDialogToBody(this: HTMLElement) {
     const $dialog = jq(this)
+    if ($dialog.hasClass('elfinder-dialog-minimized')) return
     if ($dialog.parent()[0] !== document.body) {
       $dialog.appendTo('body')
     }
@@ -142,18 +148,17 @@ function elevateDialogLayers(jq: JQueryWithUi, dialogLike?: any): void {
       this.setAttribute('data-elfinder-initial-pos', '1')
 
       if (this.getAttribute('data-elfinder-reclamp-bound') !== '1') {
-        const dialogEl = this
         let reclampInFlight = false
         const reclamp = (): void => {
           if (reclampInFlight) return
           reclampInFlight = true
-          clampFloatingLayerPosition(dialogEl)
+          clampFloatingLayerPosition(this)
           queueMicrotask(() => {
             reclampInFlight = false
           })
         }
         const observer = new MutationObserver(reclamp)
-        observer.observe(dialogEl, { attributes: true, attributeFilter: ['style'] })
+        observer.observe(this, { attributes: true, attributeFilter: ['style'] })
         window.addEventListener('resize', reclamp)
         $dialog.one('remove', () => {
           observer.disconnect()
@@ -206,9 +211,143 @@ function elevateDialogLayers(jq: JQueryWithUi, dialogLike?: any): void {
     })
 }
 
+function injectDockStyles(): void {
+  const id = 'elfinder-dock-style'
+  if (document.getElementById(id)) return
+  const style = document.createElement('style')
+  style.id = id
+  style.textContent = `
+    .elfinder-bottomtray {
+      position: fixed !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      width: 100% !important;
+      max-width: none !important;
+      height: auto !important;
+      background: rgba(22, 22, 24, 0.88) !important;
+      backdrop-filter: blur(14px) saturate(180%);
+      -webkit-backdrop-filter: blur(14px) saturate(180%);
+      display: flex !important;
+      flex-direction: row;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 6px 16px 8px;
+      z-index: 100001 !important;
+      box-sizing: border-box !important;
+      box-shadow: 0 -1px 0 rgba(255,255,255,0.06), 0 -4px 24px rgba(0,0,0,0.6);
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .elfinder-bottomtray:empty { display: none !important; }
+    .elfinder-bottomtray .elfinder-dialog-minimized {
+      position: static !important;
+      float: none !important;
+      display: flex !important;
+      align-items: center;
+      width: auto !important;
+      max-width: 200px !important;
+      min-width: 90px;
+      height: 34px !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      background: rgba(255,255,255,0.10) !important;
+      border: 1px solid rgba(255,255,255,0.18) !important;
+      border-radius: 999px !important;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.12) !important;
+      overflow: hidden;
+      cursor: pointer;
+      transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+    }
+    .elfinder-bottomtray .elfinder-dialog-minimized:hover {
+      background: rgba(255,255,255,0.18) !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.18) !important;
+      transform: translateY(-2px);
+    }
+    .elfinder-bottomtray .elfinder-dialog-minimized:active { transform: translateY(0); }
+    .elfinder-bottomtray .elfinder-dialog-minimized .ui-dialog-titlebar {
+      display: flex !important;
+      align-items: center;
+      width: 100% !important;
+      height: 34px !important;
+      padding: 0 10px 0 14px !important;
+      margin: 0 !important;
+      background: transparent !important;
+      border: none !important;
+      border-radius: 0 !important;
+      gap: 6px;
+    }
+    .elfinder-bottomtray .elfinder-dialog-minimized .ui-dialog-title,
+    .elfinder-bottomtray .elfinder-dialog-minimized .elfinder-dialog-title {
+      order: 1;
+      color: rgba(255,255,255,0.92) !important;
+      font-size: 11.5px !important;
+      font-weight: 500 !important;
+      letter-spacing: 0.01em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+      min-width: 0;
+      line-height: 34px !important;
+      text-shadow: none !important;
+    }
+    .elfinder-bottomtray .elfinder-dialog-minimized .ui-dialog-titlebar-close {
+      order: 2;
+      flex-shrink: 0;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 18px !important;
+      height: 18px !important;
+      min-width: 18px !important;
+      min-height: 18px !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      background: rgba(255,255,255,0.12) !important;
+      border: none !important;
+      border-radius: 50% !important;
+      opacity: 0.7;
+      transition: background 0.12s, opacity 0.12s;
+    }
+    .elfinder-bottomtray .elfinder-dialog-minimized .ui-dialog-titlebar-close:hover {
+      background: rgba(255, 75, 75, 0.75) !important;
+      opacity: 1;
+    }
+    .elfinder-bottomtray .elfinder-dialog-minimized .ui-dialog-titlebar-close .ui-icon {
+      width: 10px !important;
+      height: 10px !important;
+    }
+  `
+  document.head.appendChild(style)
+}
+
+function elevateBottomTray(): void {
+  const tray = document.querySelector<HTMLElement>('.elfinder-bottomtray')
+  if (!tray || tray.parentElement === document.body) return
+  document.body.appendChild(tray)
+}
+
+function watchForBottomTray(): void {
+  elevateBottomTray()
+  if (document.querySelector('.elfinder-bottomtray')?.parentElement === document.body) return
+  const finderEl = document.querySelector('.elfinder')
+  if (!finderEl) return
+  const obs = new MutationObserver(() => {
+    if (document.querySelector('.elfinder-bottomtray')) {
+      obs.disconnect()
+      elevateBottomTray()
+    }
+  })
+  obs.observe(finderEl, { childList: true })
+}
+
 export default function configureElFinder(finderRef: RefObject<HTMLDivElement>): FinderInstance {
   const jq = (window as typeof window & { jQuery: JQueryWithUi }).jQuery
-  const { AJAX_URL, NONCE, LANG, THEME, ViewType, ACTION } = config
+  const { AJAX_URL: rawAjaxUrl, NONCE, LANG, THEME, ViewType, ACTION } = config
+  // Normalize scheme to match the current page — prevents "Insecure download blocked"
+  // when WordPress is behind an SSL-terminating reverse proxy that doesn't set HTTPS headers.
+  const AJAX_URL = rawAjaxUrl.replace(/^https?:/, window.location.protocol)
   const themes = getOptionVariable('themes', [])
   themes.default = {
     name: 'Default'
@@ -220,29 +359,31 @@ export default function configureElFinder(finderRef: RefObject<HTMLDivElement>):
 
   const elFinderCtor = (window as typeof window & { elFinder?: ElFinderConstructor }).elFinder
   if (elFinderCtor) {
-    elFinderCtor.prototype.commands.emailto = function (this: any) {
-      const self = this
-      const fm = self.fm
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    elFinderCtor.prototype.commands.emailto = function emailtoCommand(this: any) {
+      const { fm } = this
       const filter = (files: Array<{ mime: string }>) => files.filter(f => f.mime !== 'directory')
 
-      this.exec = function (hashes: string[]) {
+      this.exec = (hashes: string[]) => {
         const url = String(fm.url(hashes[0], 0))
         const filename = url.split('/').pop() ?? ''
+        // eslint-disable-next-line no-alert
         const emailTo = prompt('Please enter mail address')
         if (emailTo == null) return
         if (
-          !/^(([^<>()[\]\.,;:\s@"]+(\.[^<>()[\]\.,;:\s@"]+)*)|(".+"))@(([^<>()[\]\.,;:\s@"]+\.)+[^<>()[\]\.,;:\s@"]{2,})$/i.test(
+          !/^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i.test(
             emailTo
           )
         ) {
+          // eslint-disable-next-line no-alert
           alert('Please enter a valid email address')
           return
         }
         window.open(`mailto:${emailTo}?subject=${filename}&body=${url}`)
       }
 
-      this.getstate = function (select: unknown) {
-        const sel: Array<{ mime: string }> = self.files(select)
+      this.getstate = (select: unknown) => {
+        const sel: Array<{ mime: string }> = this.files(select)
         return sel.length && filter(sel).length === sel.length ? 0 : -1
       }
     }
@@ -314,7 +455,7 @@ export default function configureElFinder(finderRef: RefObject<HTMLDivElement>):
   })[0].elfinder as FinderWithDialog
 
   const originalDialog = finder.dialog.bind(finder)
-  finder.dialog = function (content: unknown, options?: unknown) {
+  finder.dialog = function overrideDialog(content: unknown, options?: unknown) {
     const normalizedOptions =
       options && typeof options === 'object' && !Array.isArray(options)
         ? { ...(options as Record<string, unknown>), appendTo: 'body', zIndex: 100000 }
@@ -325,6 +466,36 @@ export default function configureElFinder(finderRef: RefObject<HTMLDivElement>):
   }
 
   elevateDialogLayers(jq)
+  injectDockStyles()
+  finder.bind('load', watchForBottomTray)
+
+  // Intercept dblclick: open text/code files in the editor instead of downloading
+  const origDblclick = finder.dblclick?.bind(finder)
+  if (origDblclick) {
+    finder.dblclick = (data: { file?: string }) => {
+      const hash = data?.file
+      if (hash) {
+        const file = finder.file(hash)
+        const mime: string = file?.mime ?? ''
+        const editable =
+          mime.startsWith('text/') ||
+          mime === 'application/javascript' ||
+          mime === 'application/x-javascript' ||
+          mime === 'application/json' ||
+          mime === 'application/xml' ||
+          mime === 'application/x-php' ||
+          mime === 'application/x-sh' ||
+          mime === 'application/x-perl' ||
+          mime === 'application/x-python' ||
+          mime === 'application/x-ruby'
+        if (editable) {
+          finder.exec('edit', [hash])
+          return finder
+        }
+      }
+      return origDblclick(data)
+    }
+  }
 
   if (heightIsAuto) {
     const fitToViewport = (): void => {

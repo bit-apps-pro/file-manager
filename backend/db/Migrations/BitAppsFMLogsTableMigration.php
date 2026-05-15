@@ -10,7 +10,7 @@ if (! \defined('ABSPATH')) {
     exit;
 }
 
-final class BFMLogsTableMigration extends Migration
+final class BitAppsFMLogsTableMigration extends Migration
 {
     public function up()
     {
