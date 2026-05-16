@@ -49,7 +49,7 @@ const config = {
   ACTION: getServerVariable('action', ''),
   TELEMETRY: getServerVariable('telemetry', {}),
   ROUTE_PREFIX: getServerVariable('routePrefix', 'bitapps_fm_'),
-  BANNER: getServerVariable('adBanner', null),
+  BANNER: null, // getOptionVariable('banner', null),
   SYS_INFO: getServerVariable('sys_info', null),
   THEMES: getThemes(),
   THEME: getOptionVariable('theme', 'default'),

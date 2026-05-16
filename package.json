@@ -5,8 +5,6 @@
   "author": "Bit Apps",
   "license": "GPL-2.0-or-later",
   "scripts": {
-    "build:elfinder": "./tools/build_elfinder.sh",
-    "elfinder:watch": "pnpm build:elfinder && onchange 'submodule/sources/elFinder/**/*' -- pnpm build:elfinder",
     "build:copy": "node tools/build_copy.js",
     "build:zip": "node tools/zip_build.js",
     "build:theme": "./tools/copy_themes.js",
@@ -16,7 +14,7 @@
     "i18n:php": "[ ! -d \"languages/\" ] && mkdir languages/;node ./tools/pot-to-php.mjs locale.pot languages/generatedString.php file-manager;wp i18n make-pot ./backend languages/file-manager.pot --include=*.php --skip-js --slug=file-manager --headers='{\"Last-Translator\":\"\",\"Language-Team\":\"support@bitapps.pro\",\"PO-Revision-Date\":\"\",\"Report-Msgid-Bugs-To\":\"\"}'",
     "i18n": "pnpm i18n:parse-js && pnpm i18n:php",
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && vite build --mode loader",
     "production": "composer i -o --no-dev && pnpm i && pnpm build && pnpm  i18n",
     "pretty": "npx prettier ./frontend/src --check",
     "pretty:fix": "npx prettier ./frontend/src --check --write",

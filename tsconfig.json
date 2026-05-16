@@ -37,9 +37,10 @@
       "@mutations/*": ["./frontend/src/api/mutations/*"],
       "@resource/*": ["./frontend/src/resource/*"],
       "@pages/*": ["./frontend/src/pages/*"],
-      "@static/*": ["./frontend/src/static/*"]
+      "@static/*": ["./frontend/src/static/*"],
+      "@lib/*": ["./frontend/src/lib/*"]
     }
   },
-  "include": ["frontend/src", "frontend/src/types", "vite.config.mts", "vite.config.wp.ts"],
+  "include": ["frontend/src", "frontend/src/types", "frontend/finder-loader.ts", "vite.config.mts", "vite.config.wp.ts"],
   "exclude": ["node_modules", "frontend/**/*.js"]
 }

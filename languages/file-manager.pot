@@ -7,94 +7,94 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-11T03:30:51+00:00\n"
+"POT-Creation-Date: 2026-05-16T04:06:04+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: file-manager\n"
 
-#: app/Config.php:217
-#: app/Views/Admin.php:335
+#: app/Config.php:252
+#: app/Views/Admin.php:346
 msgid "Support"
 msgstr ""
 
-#: app/Config.php:221
-#: app/Views/Admin.php:316
+#: app/Config.php:256
+#: app/Views/Admin.php:327
 msgid "Settings"
 msgstr ""
 
-#: app/Config.php:225
-#: app/Views/Admin.php:299
+#: app/Config.php:260
+#: app/Views/Admin.php:310
 msgid "Home"
 msgstr ""
 
-#: app/Http/Controllers/FileManagerController.php:94
+#: app/Http/Controllers/FileManagerController.php:122
 msgid "There is no readable volume. Please select an readable folder from settings"
 msgstr ""
 
-#: app/Http/Controllers/PermissionsController.php:81
+#: app/Http/Controllers/PermissionsController.php:85
 msgid "Permission granted to user"
 msgstr ""
 
-#: app/Http/Controllers/PermissionsController.php:84
+#: app/Http/Controllers/PermissionsController.php:88
 msgid "Unable to add user permission"
 msgstr ""
 
-#: app/Http/Controllers/PermissionsController.php:90
+#: app/Http/Controllers/PermissionsController.php:94
 msgid "User permission revoked"
 msgstr ""
 
-#: app/Http/Controllers/PermissionsController.php:93
+#: app/Http/Controllers/PermissionsController.php:97
 msgid "Unable to revoke user permission"
 msgstr ""
 
-#: app/Http/Controllers/SettingsController.php:86
+#: app/Http/Controllers/SettingsController.php:90
 msgid "Theme updated successfully"
 msgstr ""
 
-#: app/Http/Controllers/SettingsController.php:89
+#: app/Http/Controllers/SettingsController.php:93
 msgid "Failed to update theme"
 msgstr ""
 
-#: app/Http/Controllers/SettingsController.php:103
+#: app/Http/Controllers/SettingsController.php:107
 msgid "Language updated successfully"
 msgstr ""
 
-#: app/Http/Controllers/SettingsController.php:106
+#: app/Http/Controllers/SettingsController.php:110
 msgid "Failed to update language"
 msgstr ""
 
-#: app/Http/Middleware/CapCheckerMiddleware.php:15
+#: app/Http/Middleware/CapCheckerMiddleware.php:19
 msgid "You are not authorized to access this endpoint"
 msgstr ""
 
-#: app/Http/Middleware/NonceCheckerMiddleware.php:21
-#: app/Http/Middleware/NonceCheckerMiddleware.php:23
+#: app/Http/Middleware/NonceCheckerMiddleware.php:25
+#: app/Http/Middleware/NonceCheckerMiddleware.php:27
 msgid "Token expired. please reload the page"
 msgstr ""
 
-#: app/Http/Rules/ValidateCommandsRule.php:34
-#: app/Http/Rules/ValidateRolesRule.php:34
-#: app/Http/Rules/ValidPathRule.php:17
+#: app/Http/Rules/ValidateCommandsRule.php:38
+#: app/Http/Rules/ValidateRolesRule.php:38
+#: app/Http/Rules/ValidPathRule.php:21
 msgid "Folder Path Must be within WordPress root directory"
 msgstr ""
 
-#: app/Http/Rules/ValidateLangRule.php:19
+#: app/Http/Rules/ValidateLangRule.php:23
 msgid "Language code is not valid"
 msgstr ""
 
-#: app/Http/Rules/ValidateThemeRule.php:20
+#: app/Http/Rules/ValidateThemeRule.php:24
 msgid "Theme variant is not valid"
 msgstr ""
 
-#: app/Http/Rules/ValidateUsersRule.php:29
+#: app/Http/Rules/ValidateUsersRule.php:33
 msgid "User is not valid"
 msgstr ""
 
-#: app/Http/Rules/ValidPathRule.php:19
+#: app/Http/Rules/ValidPathRule.php:23
 msgid "Please provide a readable folder path"
 msgstr ""
 
-#: app/Http/Rules/ValidUIOptionRule.php:22
+#: app/Http/Rules/ValidUIOptionRule.php:26
 msgid "UI option must be valid"
 msgstr ""
 
@@ -117,7 +117,7 @@ msgid "Failed to process this file %s"
 msgstr ""
 
 #. translators: 1: file name
-#: app/Providers/AccessControlProvider.php:259
+#: app/Providers/AccessControlProvider.php:260
 #, php-format
 msgid "This file %s contains JS code. Please remove the code and try again. Or allow js mimetype"
 msgstr ""
@@ -130,7 +130,7 @@ msgstr ""
 msgid "Not Authorized to edit file"
 msgstr ""
 
-#: app/Providers/PermissionsProvider.php:155
+#: app/Providers/PermissionsProvider.php:156
 msgid "please check root folder for file manager, from file manager settings"
 msgstr ""
 
@@ -907,68 +907,59 @@ msgstr ""
 msgid "Zulu"
 msgstr ""
 
-#: app/Views/Admin.php:199
+#: app/Views/Admin.php:210
 msgid "is set to"
 msgstr ""
 
-#: app/Views/Admin.php:201
+#: app/Views/Admin.php:212
 msgid "You will not be able to edit files with"
 msgstr ""
 
-#: app/Views/Admin.php:203
+#: app/Views/Admin.php:214
 msgid "Please set"
 msgstr ""
 
-#: app/Views/Admin.php:204
+#: app/Views/Admin.php:215
 msgid "to"
 msgstr ""
 
-#: app/Views/Admin.php:287
 #: app/Views/Admin.php:298
+#: app/Views/Admin.php:309
 msgid "Dashboard | Bit File Manager"
 msgstr ""
 
-#: app/Views/Admin.php:288
+#: app/Views/Admin.php:299
 msgid "Bit File Manager"
 msgstr ""
 
-#: app/Views/Admin.php:307
+#: app/Views/Admin.php:318
 msgid "Logs"
 msgstr ""
 
-#: app/Views/Admin.php:309
+#: app/Views/Admin.php:320
 msgid "Logs | Bit File Manager"
 msgstr ""
 
-#: app/Views/Admin.php:317
+#: app/Views/Admin.php:328
 msgid "Settings | Bit File Manager"
 msgstr ""
 
-#: app/Views/Admin.php:324
+#: app/Views/Admin.php:335
 msgid "Permissions"
 msgstr ""
 
-#: app/Views/Admin.php:325
+#: app/Views/Admin.php:336
 msgid "Permissions - Sets permission for specific user or by user role | Bit File Manager"
 msgstr ""
 
-#: app/Views/Admin.php:336
+#: app/Views/Admin.php:347
 msgid "Support | Bit File Manager"
 msgstr ""
 
-#: app/Views/Admin.php:346
+#: app/Views/Admin.php:357
 msgid "System Information"
 msgstr ""
 
-#: app/Views/Admin.php:347
+#: app/Views/Admin.php:358
 msgid "System Information | Bit File Manager"
-msgstr ""
-
-#: config/app.php:84
-msgid ""
-"<h1>File Manager</h1>\n"
-"                        <b>Your uploads folder is not writable. Please make\n"
-"                        <code style=\"color: red;\">wp-content/uploads</code>\n"
-"                         folder writable to create trash folder.\n"
-"                        </b>"
 msgstr ""

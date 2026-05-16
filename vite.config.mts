@@ -43,11 +43,31 @@ const getVersion = () => {
 
 // @ts-ignore
 export default defineConfig(({ mode }) => {
+  if (mode === 'loader') {
+    return {
+      resolve: { alias: readAliasFromTsConfig() },
+      build: {
+        lib: {
+          entry: path.resolve(__dirname, 'frontend/finder-loader.ts'),
+          name: 'BitappsFmLoader',
+          formats: ['iife'],
+          fileName: () => 'finder-loader.js'
+        },
+        outDir: path.resolve(__dirname, 'assets/js'),
+        emptyOutDir: false,
+        rollupOptions: {
+          external: ['jquery'],
+          output: {
+            globals: { jquery: 'jQuery' }
+          }
+        }
+      }
+    }
+  }
   // const isProd = mode === 'production'
-  const folderName = path.basename(process.cwd())
   return {
     root: 'frontend/src',
-    base: mode === 'development' ? `/wp-content/plugins/${folderName}/frontend/src/` : '',
+    base: '',
     plugins: [
       react({
         jsxImportSource: '@emotion/react',
@@ -58,10 +78,6 @@ export default defineConfig(({ mode }) => {
       setDevServerConfig(),
       viteStaticCopy({
         targets: [
-          {
-            src: normalizePath(path.resolve(__dirname, 'frontend/finder-loader.js')),
-            dest: 'js'
-          },
           {
             src: normalizePath(path.resolve(__dirname, 'frontend/style')),
             dest: '../../assets'

@@ -3,12 +3,11 @@ import { type RefObject, useEffect, useRef, useState } from 'react'
 import $finder, { $finderCurrentPath, $finderViewType } from '@common/globalStates/$finder'
 import { type BreadcrumbItemType } from '@common/globalStates/GlobalStates'
 import { __ } from '@common/helpers/i18nwrap'
-import request from '@common/helpers/request'
 import config from '@config/config'
 import LucideIcn from '@icons/LucideIcn'
 import useUpdateViewType from '@pages/Settings/data/useUpdateViewType'
 import TelemetryPopup from '@utilities/TelemetryPopup/TelemetryPopup'
-import { Breadcrumb, type BreadcrumbProps, Button, Flex, Image, Space, Spin } from 'antd'
+import { Breadcrumb, type BreadcrumbProps, Button, Flex, Spin } from 'antd'
 import { type FinderInstance } from 'elfinder'
 import { useAtom } from 'jotai'
 
@@ -96,11 +95,11 @@ export default function Root() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useEffect(() => {
-    request({ action: 'telemetry_popup_disable_check', method: 'GET' }).then(res => {
-      setIsTelemetryModalOpen(!res.data)
-    })
-  }, [])
+  // useEffect(() => {
+  //   request({ action: 'telemetry_popup_disable_check', method: 'GET' }).then(res => {
+  //     setIsTelemetryModalOpen(!res.data)
+  //   })
+  // }, [])
 
   return (
     <>
@@ -162,7 +161,8 @@ export default function Root() {
             </Flex>
           </Flex>
         </Flex>
-        {config.BANNER !== null && (
+        {/**
+        config.BANNER !== null && (
           <Space style={{ width: '50%' }}>
             <a
               href={`${config.BANNER.url}/?utm_source=fm&utm_campaign=special_offer`}
@@ -172,7 +172,7 @@ export default function Root() {
               <Image alt="adBanner" src={config.BANNER.img} preview={false} />
             </a>
           </Space>
-        )}
+        )*/}
       </Flex>
       <div id="file-manager" ref={finderRef} style={{ height: '100%' }} />
 
