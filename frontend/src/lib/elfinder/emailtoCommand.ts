@@ -1,6 +1,6 @@
 import { type ElFinderConstructor, type FinderWithDialog } from '@lib/elfinder/types'
 
-export function registerEmailtoCommand(): void {
+export default function registerEmailtoCommand(): void {
   const elFinderCtor = (window as typeof window & { elFinder?: ElFinderConstructor }).elFinder
   if (!elFinderCtor) return
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -23,7 +23,9 @@ export function registerEmailtoCommand(): void {
         alert('Please enter a valid email address')
         return
       }
-      window.open(`mailto:${emailTo}?subject=${encodeURIComponent(filename)}&body=${encodeURIComponent(url)}`)
+      window.open(
+        `mailto:${emailTo}?subject=${encodeURIComponent(filename)}&body=${encodeURIComponent(url)}`
+      )
     }
 
     this.getstate = (select: unknown) => {

@@ -24,8 +24,8 @@ export function installAutoHeight(
   finder: FinderWithDialog
 ): void {
   const fitToViewport = (): void => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const el: HTMLElement | null = typeof $el.get === 'function' ? ($el.get(0) as HTMLElement | null) : null
+    const el: HTMLElement | null =
+      typeof $el.get === 'function' ? ($el.get(0) as HTMLElement | null) : null
     const elTop = el ? Math.round(el.getBoundingClientRect().top) : 0
     const target = Math.max(320, window.innerHeight - elTop - 8)
     $el.height(target)

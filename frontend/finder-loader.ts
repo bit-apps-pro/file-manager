@@ -1,7 +1,12 @@
 import { installAutoHeight, resolveInitialHeight } from '@lib/elfinder/autoHeight'
 import { elevateDialogLayers, injectDockStyles, watchForBottomTray } from '@lib/elfinder/dialogElevation'
-import { registerEmailtoCommand } from '@lib/elfinder/emailtoCommand'
-import { applyAppendToBodyDefault, patchElfinderDialogPlugin, patchFmDialog, patchToFront } from '@lib/elfinder/patches'
+import registerEmailtoCommand from '@lib/elfinder/emailtoCommand'
+import {
+  applyAppendToBodyDefault,
+  patchElfinderDialogPlugin,
+  patchFmDialog,
+  patchToFront
+} from '@lib/elfinder/patches'
 import { type BitappsFmGlobals, type FinderWithDialog, type JQueryWithUi } from '@lib/elfinder/types'
 
 const w = window as typeof window & { jQuery: JQueryWithUi; bitapps_fm: BitappsFmGlobals }
@@ -55,7 +60,6 @@ w.jQuery(document).ready(() => {
     }
   })
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const fm = finderResult?.[0]?.elfinder as FinderWithDialog | undefined
   if (!fm) return
 

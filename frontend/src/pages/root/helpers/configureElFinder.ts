@@ -3,8 +3,13 @@ import { type RefObject } from 'react'
 import config, { getOptionVariable } from '@config/config'
 import { installAutoHeight, resolveInitialHeight } from '@lib/elfinder/autoHeight'
 import { elevateDialogLayers, injectDockStyles, watchForBottomTray } from '@lib/elfinder/dialogElevation'
-import { registerEmailtoCommand } from '@lib/elfinder/emailtoCommand'
-import { applyAppendToBodyDefault, patchElfinderDialogPlugin, patchFmDialog, patchToFront } from '@lib/elfinder/patches'
+import registerEmailtoCommand from '@lib/elfinder/emailtoCommand'
+import {
+  applyAppendToBodyDefault,
+  patchElfinderDialogPlugin,
+  patchFmDialog,
+  patchToFront
+} from '@lib/elfinder/patches'
 import { type FinderWithDialog, type JQueryWithUi } from '@lib/elfinder/types'
 import { type FinderInstance } from 'elfinder'
 

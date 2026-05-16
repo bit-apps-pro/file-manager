@@ -172,7 +172,7 @@ export default function Root() {
               <Image alt="adBanner" src={config.BANNER.img} preview={false} />
             </a>
           </Space>
-        )*/}
+        ) */}
       </Flex>
       <div id="file-manager" ref={finderRef} style={{ height: '100%' }} />
 

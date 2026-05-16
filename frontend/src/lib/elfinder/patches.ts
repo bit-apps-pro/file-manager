@@ -1,5 +1,5 @@
-import { type FinderWithDialog, type JQueryWithUi } from '@lib/elfinder/types'
 import { elevateDialogLayers } from '@lib/elfinder/dialogElevation'
+import { type FinderWithDialog, type JQueryWithUi } from '@lib/elfinder/types'
 
 export function applyAppendToBodyDefault(jq: JQueryWithUi): void {
   if (jq.ui?.dialog?.prototype?.options) {
@@ -8,16 +8,18 @@ export function applyAppendToBodyDefault(jq: JQueryWithUi): void {
 }
 
 export function patchToFront(finder: FinderWithDialog): void {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const finderAny = finder as any
+  const finderAny = finder as FinderWithDialog & {
+    toFront?: (target: unknown) => void
+  }
   if (typeof finderAny.toFront === 'function') {
     const originalToFront = finderAny.toFront.bind(finder)
-    finderAny.toFront = function (target: unknown) {
+    finderAny.toFront = function patchedToFront(target: unknown) {
       originalToFront(target)
       // toFront() computes z-index from node.children('.ui-front') inside .elfinder,
       // but elevated dialogs live in <body>. Fix z-index only on the target element.
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const el: HTMLElement | undefined = (target as any)?.[0] ?? (target instanceof HTMLElement ? target : undefined)
+      const el: HTMLElement | undefined =
+        (target as { 0?: HTMLElement } | null)?.[0] ??
+        (target instanceof HTMLElement ? target : undefined)
       if (el?.parentElement === document.body) {
         el.style.zIndex = '100000'
       }
@@ -42,26 +44,37 @@ export function patchFmDialog(finder: FinderWithDialog, jq: JQueryWithUi): void 
   }
 }
 
+const BITFM_PATCHED = Symbol('bitfmPatched')
+
+type ElfinderdialogFn = ((...args: unknown[]) => unknown) & {
+  defaults?: unknown
+  [BITFM_PATCHED]?: boolean
+}
+
 export function patchElfinderDialogPlugin(jq: JQueryWithUi): void {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const jqAny = jq as any
-  const origElfDialog = jqAny.fn.elfinderdialog as ((...args: unknown[]) => unknown) | undefined
-  if (origElfDialog && !(origElfDialog as any).__bitfmPatched) {
-    const patched = function (this: unknown, opts: unknown, fm: unknown, ...rest: unknown[]) {
-      if (typeof opts === 'string' && fm == null) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const $this = this as any
-        const stored =
-          $this.data?.('elfinder-fm') ||
-          $this.closest?.('.ui-dialog')?.data?.('elfinder-fm')
-        if (stored) fm = stored
+  const jqAny = jq as JQueryWithUi & { fn: Record<string, ElfinderdialogFn> }
+  const origElfDialog = jqAny.fn.elfinderdialog as ElfinderdialogFn | undefined
+  if (origElfDialog && !origElfDialog[BITFM_PATCHED]) {
+    const patched: ElfinderdialogFn = function patchedElfinderdialog(
+      this: unknown,
+      opts: unknown,
+      fm: unknown,
+      ...rest: unknown[]
+    ) {
+      let resolvedFm = fm
+      if (typeof opts === 'string' && resolvedFm == null) {
+        const $this = this as {
+          data?: (key: string) => unknown
+          closest?: (selector: string) => { data?: (key: string) => unknown }
+        }
+        resolvedFm = $this.data?.('elfinder-fm') || $this.closest?.('.ui-dialog')?.data?.('elfinder-fm')
       }
-      return origElfDialog.call(this, opts, fm, ...rest)
+      return origElfDialog.call(this, opts, resolvedFm, ...rest)
     }
     // Preserve .defaults so Object.assign({}, $.fn.elfinderdialog.defaults, opts)
     // inside the original plugin still receives the correct defaults object.
-    ;(patched as typeof jqAny.fn.elfinderdialog).defaults = (origElfDialog as typeof jqAny.fn.elfinderdialog).defaults
-    ;(patched as any).__bitfmPatched = true
+    patched.defaults = origElfDialog.defaults
+    patched[BITFM_PATCHED] = true
     jqAny.fn.elfinderdialog = patched
   }
 }

@@ -144,14 +144,19 @@
 }
 
 .elfinder-to-editing.elfinder-dialog-edit.elfinder-maximized {
-  left: 165px !important;
-  right: 20px;
-  max-width: calc(100% - 180px) !important;
-  height: 81% !important;
+  top: 20px !important;
+  left: 20px !important;
+  right: 20px !important;
+  bottom: 20px !important;
+  width: calc(100vw - 40px) !important;
+  max-width: calc(100vw - 40px) !important;
+  height: calc(100vh - 40px) !important;
+  max-height: calc(100vh - 40px) !important;
 }
 
 .elfinder-rtl > .elfinder-to-editing.elfinder-dialog-edit.elfinder-maximized {
-  right: 165px !important;
+  right: 20px !important;
+  left: 20px !important;
 }
 
 .elfinder-file-edit {
@@ -225,8 +230,14 @@
 
 @media (max-width: 700px) {
   .elfinder-to-editing.elfinder-dialog-edit.elfinder-maximized {
-    left: 40px !important;
-    max-width: calc(100% - 45px) !important;
+    top: 10px !important;
+    left: 10px !important;
+    right: 10px !important;
+    bottom: 10px !important;
+    width: calc(100vw - 20px) !important;
+    max-width: calc(100vw - 20px) !important;
+    height: calc(100vh - 20px) !important;
+    max-height: calc(100vh - 20px) !important;
   }
 }
 
