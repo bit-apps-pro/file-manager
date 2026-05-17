@@ -60,6 +60,7 @@ module.exports = [
       'node_modules/**',
       'build/**',
       'coverage/**',
+      'frontend/libs/**',
       'frontend/finder-loader.js',
       'frontend/elfinder-editors.js',
       'frontend/src/config/devHotModule.js',
