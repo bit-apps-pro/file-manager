@@ -1,5 +1,6 @@
 allowBuilds:
   '@parcel/watcher': true
+  canvas: set this to true or false
   esbuild: true
   lefthook: true
   unrs-resolver: true

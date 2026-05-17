@@ -81,6 +81,10 @@ export default defineConfig(({ mode }) => {
           {
             src: normalizePath(path.resolve(__dirname, 'frontend/style')),
             dest: '../../assets'
+          },
+          {
+            src: normalizePath(path.resolve(__dirname, 'frontend/libs')),
+            dest: '../../assets'
           }
         ]
       }),

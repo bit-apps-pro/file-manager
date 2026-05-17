@@ -57,6 +57,7 @@ export interface BitappsFmOptions {
   dragUploadAllow?: unknown
   fileModeStyle?: unknown
   resizable?: unknown
+  cdns?: Record<string, string>
 }
 
 export interface BitappsFmGlobals {

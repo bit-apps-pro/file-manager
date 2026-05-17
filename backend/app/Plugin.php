@@ -262,7 +262,7 @@ final class Plugin
         wp_register_style(
             Config::SLUG . 'elfinder-css',
             Config::getFinderUrl() . '/css/elfinder.min.css',
-            [],
+            ['wp-codemirror'],
             Config::VERSION
         );
 
@@ -276,7 +276,7 @@ final class Plugin
         wp_register_script(
             Config::SLUG . 'elfinder-editor-script',
             Config::get('ASSET_JS_URI') . '/elfinder-editors.js',
-            [Config::SLUG . 'elfinder-script', 'jquery'],
+            [Config::SLUG . 'elfinder-script', 'jquery', 'wp-codemirror'],
             Config::VERSION
         );
 

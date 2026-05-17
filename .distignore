@@ -1,6 +1,5 @@
 build
 composer.lock
-elFinder
 .eslintignore
 .eslintrc.js
 frontend
@@ -32,7 +31,4 @@ tsconfig.node.json
 vite.config.mts
 .vscode
 vendor/typisttech
-libs/elFinder/php/.tmp/.htaccess
-libs/elFinder/files/.trash/.gitignore
-libs/elFinder/files/.gitignore
 .github

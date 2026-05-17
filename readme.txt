@@ -328,6 +328,14 @@ This plugin sends data to external services for certain features. Below is a sum
 * Terms: https://www.online-convert.com/terms
 * Privacy: https://www.online-convert.com/privacy
 
+**Photopea** — Online image editor opened in an iframe. When a user clicks Edit on a supported image file and chooses the Photopea editor, the image is sent to Photopea's hosted service for editing and the result returned. No file data is sent unless the user explicitly opens an image with this editor.
+* Terms: https://www.photopea.com/api/accounts
+* Privacy: https://www.photopea.com/api/accounts
+
+**Pixo** — Online image editor opened in an iframe. Requires a Pixo API key configured by the site admin. When a user clicks Edit on a supported image and chooses Pixo, the image is sent to Pixo's hosted service for editing and the result returned. No file data is sent unless the user explicitly opens an image with this editor.
+* Terms: https://pixoeditor.com/terms-of-service/
+* Privacy: https://pixoeditor.com/privacy-policy/
+
 == Changelog ==
 
 = 6.8.9 =

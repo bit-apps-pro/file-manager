@@ -395,6 +395,13 @@ class ClientOptions
     private $_soundPath;
 
     /**
+     * CDN URLs for elFinder editors and libraries
+     *
+     * @var array
+     */
+    private $_cdns = [];
+
+    /**
      * Constructs Finder frontend options
      *
      * @param mixed $debug
@@ -449,6 +456,7 @@ class ClientOptions
             'dragUploadAllow',
             'fileModeStyle',
             'resizable',
+            'cdns',
         ];
         foreach ($optionsToAdd as $option) {
             if (isset($this->{"_{$option}"})) {

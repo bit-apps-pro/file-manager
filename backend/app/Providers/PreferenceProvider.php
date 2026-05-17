@@ -693,8 +693,40 @@ class PreferenceProvider
             'contextmenu',
             $this->finderContextMenu()
         );
+        $options->setOption('cdns', $this->finderCdns());
 
         return $options->getOptions();
+    }
+
+    public function finderCdns()
+    {
+        $base = Config::get('ASSET_URI') . '/libs/';
+        return [
+            'ace'        => $base . 'ace',
+            'codemirror' => includes_url('js/codemirror'),
+            'ckeditor'   => '',
+            'ckeditor5'  => '',
+            'tinymce'    => includes_url('js/tinymce'),
+            'simplemde'  => $base . 'simplemde',
+            'fabric'     => $base . 'fabric',
+            'fabric16'   => '',
+            'tui'        => $base . 'tui',
+            'hls'        => $base . 'hls/hls.min.js',
+            'dash'       => '',
+            'flv'        => $base . 'flv/flv.min.js',
+            'videojs'    => '',
+            'prettify'   => $base . 'prettify/run_prettify.js',
+            'psd'        => $base . 'psd/psd.min.js',
+            'rar'        => $base . 'rar/rar.js',
+            'zlibUnzip'  => $base . 'zlib/unzip.min.js',
+            'zlibGunzip' => $base . 'zlib/gunzip.min.js',
+            'bzip2'      => $base . 'bzip2/bzip2.js',
+            'marked'     => $base . 'marked/marked.min.js',
+            'sparkmd5'   => $base . 'spark-md5/spark-md5.min.js',
+            'jssha'      => $base . 'jssha/sha.min.js',
+            'amr'        => $base . 'amr/opencore-amr.min.js',
+            'tiff'       => $base . 'tiff/tiff.min.js',
+        ];
     }
 
     public function finderContextMenu()
@@ -731,6 +763,13 @@ class PreferenceProvider
             $commandOptions['info']['hideItems'][] = 'link';
             $commandOptions['info']['hideItems'][] = 'path';
         }
+
+        // Restrict TinyMCE to plugins/toolbar that WP core ships — prevents 404s for
+        // plugins like preview, searchreplace, codesample, table etc. that are absent.
+        $commandOptions['edit']['extraOptions']['tinymce'] = [
+            'plugins' => 'directionality fullscreen image link media charmap lists textcolor paste',
+            'toolbar' => 'formatselect | bold italic strikethrough forecolor backcolor | link image media | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | charmap | removeformat | fullscreen',
+        ];
 
         return $commandOptions;
     }

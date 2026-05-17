@@ -3,6 +3,7 @@ import { elevateDialogLayers, injectDockStyles, watchForBottomTray } from '@lib/
 import registerEmailtoCommand from '@lib/elfinder/emailtoCommand'
 import {
   applyAppendToBodyDefault,
+  patchCodeMirror,
   patchElfinderDialogPlugin,
   patchFmDialog,
   patchToFront
@@ -50,6 +51,7 @@ w.jQuery(document).ready(() => {
     dragUploadAllow: fmConfig.options.dragUploadAllow,
     fileModeStyle: fmConfig.options.fileModeStyle,
     resizable: fmConfig.options.resizable,
+    cdns: fmConfig.options.cdns,
     handlers: {
       dblclick() {
         const disabled = fmConfig?.options?.disabled ?? []
@@ -66,6 +68,7 @@ w.jQuery(document).ready(() => {
   patchToFront(fm)
   patchFmDialog(fm, jq)
   patchElfinderDialogPlugin(jq)
+  patchCodeMirror(fm)
   elevateDialogLayers(jq)
   injectDockStyles()
   fm.bind('load', watchForBottomTray)

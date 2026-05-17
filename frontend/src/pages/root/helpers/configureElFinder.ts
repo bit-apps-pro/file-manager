@@ -6,6 +6,7 @@ import { elevateDialogLayers, injectDockStyles, watchForBottomTray } from '@lib/
 import registerEmailtoCommand from '@lib/elfinder/emailtoCommand'
 import {
   applyAppendToBodyDefault,
+  patchCodeMirror,
   patchElfinderDialogPlugin,
   patchFmDialog,
   patchToFront
@@ -71,6 +72,7 @@ export default function configureElFinder(finderRef: RefObject<HTMLDivElement>):
     dragUploadAllow: getOptionVariable('dragUploadAllow'),
     fileModeStyle: getOptionVariable('fileModeStyle'),
     resizable: getOptionVariable('resizable'),
+    cdns: getOptionVariable('cdns'),
     handlers: {
       dblclick() {
         const disabled: Array<string> = getOptionVariable('disabled')
@@ -88,6 +90,7 @@ export default function configureElFinder(finderRef: RefObject<HTMLDivElement>):
   patchToFront(finder)
   patchFmDialog(finder, jq)
   patchElfinderDialogPlugin(jq)
+  patchCodeMirror(finder)
   elevateDialogLayers(jq)
   injectDockStyles()
   finder.bind('load', watchForBottomTray)
