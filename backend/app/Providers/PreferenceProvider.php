@@ -701,6 +701,7 @@ class PreferenceProvider
     public function finderCdns()
     {
         $base = Config::get('ASSET_URI') . '/libs/';
+
         return [
             'ace'        => $base . 'ace',
             'codemirror' => includes_url('js/codemirror'),

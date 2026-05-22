@@ -3,7 +3,7 @@
 Contributors: bitpressadmin, akaioum, aihimel
 Tags: file manager, wp file manager, wordpress file manager, files, ftp
 Requires at least: 5.0
-Tested up to: 6.9
+Tested up to: 7.0
 Requires PHP: 7.4
 Stable tag: 6.8.9
 License: GPLv2 or later
@@ -347,6 +347,9 @@ This plugin sends data to external services for certain features. Below is a sum
 - Fix: WordPress.org plugin review team issues
 - Refactor: Consistent function, constant, and option name prefixes across the codebase
 - Refactor: Introduced Compatibility and Deprecated classes for deprecation handling
+- Chore: Tested with WordPress 7.0
+- Chore: Updated elfinder to 2.1.67
+- Chore: Updated php packages
 
 = 6.8.8 =
 - fix: file manager not showing up due to version mismatch
