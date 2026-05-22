@@ -7,7 +7,6 @@ if (! \defined('ABSPATH')) {
 }
 
 use BitApps\FM\Config;
-use BitApps\FM\Plugin;
 
 function view($path)
 {
