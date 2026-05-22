@@ -13,10 +13,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 1
-       
+
       - name: Setup PHP
         id: setup-php
         uses: shivammathur/setup-php@v2
@@ -25,12 +25,12 @@ jobs:
           tools: composer:v2, wp-cli
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6.4.0
         with:
           node-version: 22
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6.0.8
         with:
           run_install: false
 
@@ -44,7 +44,7 @@ jobs:
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache/restore@v5.0.5
         name: Restore package cache
         id: restore-package-cache
         with:
@@ -61,7 +61,7 @@ jobs:
           composer install --prefer-dist --no-progress
           pnpm install
       
-      - uses: actions/cache/save@v4
+      - uses: actions/cache/save@v5.0.5
         name: Save package cache
         if: always() && steps.restore-package-cache.outputs.cache-hit != 'true'
         with:

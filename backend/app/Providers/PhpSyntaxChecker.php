@@ -71,6 +71,13 @@ class PhpSyntaxChecker
     private function loopbackRequest()
     {
         $scrapeKey   = md5(wp_rand());
+        // The transient key, query parameter names and needle markers below are
+        // dictated by WordPress core's scrape handshake — see
+        // wp_start_scraping_edited_file_errors() and wp_finalize_scraping_edited_file_errors()
+        // in wp-includes/load.php. Renaming any of these breaks the handshake:
+        // core would never validate our nonce and the fatal-error check would
+        // silently fail. These names are part of a core API contract we invoke,
+        // not identifiers owned by this plugin.
         $transient   = 'scrape_key_' . $scrapeKey;
         $scrapeNonce = (string) wp_rand();
         // Transient expires after 60 seconds — enough for both loopback requests.

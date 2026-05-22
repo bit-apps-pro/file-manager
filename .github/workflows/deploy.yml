@@ -12,8 +12,8 @@ jobs:
       PLUGIN_SLUG: file-manager
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-       
+        uses: actions/checkout@v6.0.2
+
       - name: Setup PHP
         id: setup-php
         uses: shivammathur/setup-php@v2
@@ -22,12 +22,12 @@ jobs:
           tools: composer:v2, wp-cli
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6.4.0
         with:
           node-version: 22
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6.0.8
         with:
           run_install: false
 
@@ -41,7 +41,7 @@ jobs:
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5.0.5
         name: Setup package cache
         with:
           path: |
