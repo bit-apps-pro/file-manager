@@ -511,6 +511,63 @@ class PermissionsProvider
         return $disabledCommand;
     }
 
+    public function isPathUnderUserPermission(string $absPath): bool
+    {
+        if (!is_user_logged_in() || !$this->isCurrentUserHasPermission()) {
+            return false;
+        }
+
+        $userPath = $this->permissionsForCurrentUser()['path'];
+        if (!\is_string($userPath) || $userPath === '') {
+            return false;
+        }
+
+        $boundary = realpath($userPath);
+        $target   = realpath($absPath);
+        if ($boundary === false) {
+            return false;
+        }
+
+        // If the target does not exist yet (e.g. mkdir destination is the parent),
+        // fall back to the raw path; the parent still normalizes its own realpath.
+        $target = $target === false ? $absPath : $target;
+
+        return self::isSubPath($target, $boundary);
+    }
+
+    public function getEnabledCommandsForPath(string $absPath): array
+    {
+        if (!is_user_logged_in()) {
+            return $this->getGuestPermissions()['commands'];
+        }
+
+        if ($this->isPathUnderUserPermission($absPath)) {
+            return $this->permissionsForCurrentUser()['commands'];
+        }
+
+        return $this->permissionsForCurrentRole()['commands'];
+    }
+
+    public function getEnabledCommandsUnion(): array
+    {
+        return array_values(array_unique(array_merge(
+            $this->permissionsForCurrentUser()['commands'],
+            $this->permissionsForCurrentRole()['commands']
+        )));
+    }
+
+    public function getDisabledCommandFor(array $enabledCommands): array
+    {
+        $disabled = [];
+        foreach ($this->allCommands() as $command) {
+            if (!\in_array($command, $enabledCommands, true)) {
+                $disabled[] = $command;
+            }
+        }
+
+        return $disabled;
+    }
+
     public function updatePermissionSetting($permissions)
     {
         return Config::updateOption('permissions', $permissions, 'yes');
