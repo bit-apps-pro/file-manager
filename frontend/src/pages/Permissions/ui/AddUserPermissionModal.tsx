@@ -6,8 +6,7 @@ import { type User, type UserPermissionType } from '@pages/Permissions/Permissio
 import useFetchPermissionsSettings from '@pages/Permissions/data/useFetchPermissionsSettings'
 import useFetchUserByUsername from '@pages/Permissions/data/useFetchUserByUsername'
 import useUpdateUserPermission from '@pages/Permissions/data/useUpdateUserPermission'
-import { QuestionCircleOutlined } from '@ant-design/icons'
-import { Button, Card, Form, Input, Modal, Select, Space, Spin, Tooltip, Typography, notification } from 'antd'
+import { Button, Card, Form, Input, Modal, Select, Space, Spin, Typography, notification } from 'antd'
 
 function AddUserPermissionModal({
   isModalOpen,
@@ -116,14 +115,10 @@ function AddUserPermissionModal({
                 </Form.Item>
                 <Form.Item
                   name="commands"
-                  label={
-                    <Space size={4}>
-                      {__('Enabled Commands')}
-                      <Tooltip title={__('These commands control what the user can do inside Bit File Manager only. They don\'t grant or change WordPress capabilities or the user\'s role.')}>
-                        <QuestionCircleOutlined />
-                      </Tooltip>
-                    </Space>
-                  }
+                  label={__('Enabled Commands')}
+                  tooltip={__(
+                    "These commands control what the user can do inside Bit File Manager only. They don't grant or change WordPress capabilities or the user's role."
+                  )}
                 >
                   <Select mode="multiple">
                     {commands?.map(command => (

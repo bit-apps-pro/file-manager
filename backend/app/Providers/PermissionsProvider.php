@@ -306,20 +306,10 @@ class PermissionsProvider
 
     public static function isSubPath(string $path, string $boundary): bool
     {
-        if ($boundary === '') {
-            return false;
-        }
+        $path     = rtrim(str_replace('\\', '/', $path), '/');
+        $boundary = rtrim(str_replace('\\', '/', $boundary), '/');
 
-        $normalize = static function (string $value): string {
-            $value = str_replace('\\', '/', $value);
-
-            return rtrim($value, '/');
-        };
-
-        $path     = $normalize($path);
-        $boundary = $normalize($boundary);
-
-        if ($boundary === '') { // boundary was only separators
+        if ($boundary === '') { // empty or separator-only boundary matches nothing
             return false;
         }
 
@@ -499,16 +489,7 @@ class PermissionsProvider
             return [];
         }
 
-        $enabledCommands = $this->getEnabledCommand();
-
-        $disabledCommand = [];
-        foreach ($this->allCommands() as $command) {
-            if (!\in_array($command, $enabledCommands)) {
-                $disabledCommand[] = $command;
-            }
-        }
-
-        return $disabledCommand;
+        return $this->getDisabledCommandFor($this->getEnabledCommand());
     }
 
     public function isPathUnderUserPermission(string $absPath): bool

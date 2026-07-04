@@ -245,23 +245,25 @@ final class FileManagerController
     {
         $permissions = Plugin::instance()->permissions();
 
-        $roleCommands  = $permissions->getByRole($permissions->currentUserRole())['commands'];
-        $userCommands  = $permissions->permissionsForCurrentUser()['commands'];
-        $unionCommands = $permissions->getEnabledCommandsUnion();
+        $role             = $permissions->currentUserRole();
+        $permissionByRole = $permissions->getByRole($role);
+        $roleCommands     = $permissionByRole['commands'];
+        $userCommands     = $permissions->permissionsForCurrentUser()['commands'];
+        $unionCommands    = $permissions->getEnabledCommandsUnion();
+        $publicPath       = $permissions->getPathByFolderOption();
 
         // Public volume may nest the per-user folder: use the least-restrictive hint
         // so nothing legitimate is hidden; the runtime gate enforces per path.
         $roots[] = $this->processFileRoot(
-            $permissions->getPathByFolderOption(),
+            $publicPath,
             'Public',
-            $this->getUrlByPath($permissions->getPathByFolderOption()),
+            $this->getUrlByPath($publicPath),
             $permissions->getDisabledCommandFor($unionCommands)
         );
 
-        $permissionByRole = $permissions->getByRole($permissions->currentUserRole());
-        $roots[]          = $this->processFileRoot(
+        $roots[] = $this->processFileRoot(
             $permissionByRole['path'],
-            $permissions->currentUserRole(),
+            $role,
             $this->getUrlByPath($permissionByRole['path']),
             $permissions->getDisabledCommandFor($roleCommands)
         );
