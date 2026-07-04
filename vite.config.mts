@@ -41,6 +41,7 @@ const getVersion = () => {
   return version
 }
 
+
 // @ts-ignore
 export default defineConfig(({ mode }) => {
   if (mode === 'loader') {
@@ -106,7 +107,16 @@ export default defineConfig(({ mode }) => {
         plugins: [csso()]
       }
     },
-    resolve: { alias: readAliasFromTsConfig() },
+    resolve: {
+      alias: [
+        ...readAliasFromTsConfig(),
+        // Vitest only: antd's CJS lib/ build uses es/ subpaths that fail under Node's ESM
+        // resolver (extensionless imports like @rc-component/util/es/ref). Force the ESM
+        // es/ build so every import goes through __vite_ssr_import__ and Vite's resolver,
+        // which adds the .js extension and handles the whole chain without patches.
+        ...(process.env.VITEST ? [{ find: /^antd$/, replacement: 'antd/es/index' }] : []),
+      ],
+    },
 
     build: {
       outDir: '../../assets/js',
@@ -158,11 +168,13 @@ export default defineConfig(({ mode }) => {
       }
     },
     test: {
-      // globals: true,
       environment: 'jsdom',
-      setupFiles: './config/test.setup.ts'
-      // since parsing CSS is slow
-      // css: true,
+      setupFiles: './config/test.setup.ts',
+      server: {
+        deps: {
+          inline: ['antd', /@rc-component/, /@ant-design\/icons/]
+        }
+      }
     },
     server: {
       cors: true, // required to load scripts from custom host
