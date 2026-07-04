@@ -10,7 +10,10 @@ const commonThemeToken: Partial<AliasToken> = {
   borderRadiusXS: 4,
   colorPrimary: '#006afe',
   colorSuccess: '#00ff7d',
-  colorWarning: '#ffc041'
+  colorWarning: '#ffc041',
+  // Lift all antd popups above the WP admin shell: #wpbody-content is a z-index:9999
+  // sticky stacking context that otherwise buries the default z-index:1000 popups.
+  zIndexPopupBase: 10000
 }
 
 export default commonThemeToken
