@@ -88,17 +88,30 @@ class AccessControlProvider
             $cmd = 'edit';
         }
 
-        if (
-            $this->isNotRequiredCommandForAllPermission($cmd, $permissionProvider)
-             && !$permissionProvider->currentUserCanRun($cmd)) {
-            $error = wp_sprintf(
-                // translators: 1: elFInder Command
-                __(
-                    'You are not authorized to run this command [ %s ] on file manager',
-                    'file-manager'
-                ),
-                $cmd
-            );
+        if ($this->isNotRequiredCommandForAllPermission($cmd, $permissionProvider)) {
+            $elfinder = isset($args[1])    && $args[1] instanceof elFinder ? $args[1] : null;
+            $paths    = $elfinder !== null && isset($args[0]) && \is_array($args[0])
+                ? $this->resolveInvolvedPaths($args[0], $elfinder)
+                : [];
+
+            if (!empty($paths)) {
+                // Path-aware check is authoritative when targets resolve.
+                $authorized = $this->isCommandAllowedForPaths($cmd, $paths, $permissionProvider);
+            } else {
+                // No resolvable target (early connector call / target-less command): coarse union.
+                $authorized = $permissionProvider->currentUserCanRun($cmd);
+            }
+
+            if (!$authorized) {
+                $error = wp_sprintf(
+                    // translators: 1: elFInder Command
+                    __(
+                        'You are not authorized to run this command [ %s ] on file manager',
+                        'file-manager'
+                    ),
+                    $cmd
+                );
+            }
         }
 
         if ($command == 'file' && $this->isFileAllowedToOpen($args)) {
