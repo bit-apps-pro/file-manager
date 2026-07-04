@@ -304,6 +304,28 @@ class PermissionsProvider
         return $settings;
     }
 
+    public static function isSubPath(string $path, string $boundary): bool
+    {
+        if ($boundary === '') {
+            return false;
+        }
+
+        $normalize = static function (string $value): string {
+            $value = str_replace('\\', '/', $value);
+
+            return rtrim($value, '/');
+        };
+
+        $path     = $normalize($path);
+        $boundary = $normalize($boundary);
+
+        if ($boundary === '') { // boundary was only separators
+            return false;
+        }
+
+        return $path === $boundary || strpos($path, $boundary . '/') === 0;
+    }
+
     public function getGuestPermissions()
     {
         $settings = [
