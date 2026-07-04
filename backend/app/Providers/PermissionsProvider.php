@@ -504,14 +504,21 @@ class PermissionsProvider
         }
 
         $boundary = realpath($userPath);
-        $target   = realpath($absPath);
         if ($boundary === false) {
             return false;
         }
 
-        // If the target does not exist yet (e.g. mkdir destination is the parent),
-        // fall back to the raw path; the parent still normalizes its own realpath.
-        $target = $target === false ? $absPath : $target;
+        $target = realpath($absPath);
+        if ($target === false) {
+            // Target does not exist yet (e.g. a create destination). Canonicalize via the
+            // parent so a raw '..' cannot string-match the boundary; reject if the parent
+            // itself does not resolve.
+            $parent = realpath(\dirname($absPath));
+            if ($parent === false) {
+                return false;
+            }
+            $target = $parent . DIRECTORY_SEPARATOR . basename($absPath);
+        }
 
         return self::isSubPath($target, $boundary);
     }
