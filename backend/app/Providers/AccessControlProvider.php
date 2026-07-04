@@ -253,6 +253,13 @@ class AccessControlProvider
                 }
             }
         }
+        if (isset($cmdArgs['upload_path']) && \is_array($cmdArgs['upload_path'])) {
+            foreach ($cmdArgs['upload_path'] as $uploadPath) {
+                if (\is_string($uploadPath)) {
+                    $hashes[] = $uploadPath;
+                }
+            }
+        }
 
         $paths = [];
         foreach (array_unique($hashes) as $hash) {

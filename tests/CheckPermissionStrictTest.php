@@ -108,4 +108,35 @@ class CheckPermissionStrictTest extends TestCase
             $paths
         );
     }
+
+    public function testResolveInvolvedPathsIncludesUploadPathDestinations(): void
+    {
+        $access = $this->accessControl();
+
+        $volume = new class {
+            public function getPath($hash)
+            {
+                return '/resolved/' . $hash;
+            }
+        };
+        $elfinder = new class($volume) {
+            private $volume;
+            public function __construct($volume)
+            {
+                $this->volume = $volume;
+            }
+            public function getVolume($hash)
+            {
+                return $this->volume;
+            }
+        };
+
+        $paths = $access->resolveInvolvedPaths(
+            ['target' => 'h1', 'upload_path' => ['h2', 'h3']],
+            $elfinder
+        );
+
+        sort($paths);
+        $this->assertSame(['/resolved/h1', '/resolved/h2', '/resolved/h3'], $paths);
+    }
 }
