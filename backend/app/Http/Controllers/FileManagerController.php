@@ -243,26 +243,38 @@ final class FileManagerController
 
     private function getUserVolumes()
     {
-        $permissions           = Plugin::instance()->permissions();
+        $permissions = Plugin::instance()->permissions();
 
+        $roleCommands  = $permissions->getByRole($permissions->currentUserRole())['commands'];
+        $userCommands  = $permissions->permissionsForCurrentUser()['commands'];
+        $unionCommands = $permissions->getEnabledCommandsUnion();
+
+        // Public volume may nest the per-user folder: use the least-restrictive hint
+        // so nothing legitimate is hidden; the runtime gate enforces per path.
         $roots[] = $this->processFileRoot(
             $permissions->getPathByFolderOption(),
             'Public',
-            $this->getUrlByPath($permissions->getPathByFolderOption())
+            $this->getUrlByPath($permissions->getPathByFolderOption()),
+            $permissions->getDisabledCommandFor($unionCommands)
         );
 
-        $permissionByRole   = $permissions->getByRole($permissions->currentUserRole());
-        $roots[]            = $this->processFileRoot(
+        $permissionByRole = $permissions->getByRole($permissions->currentUserRole());
+        $roots[]          = $this->processFileRoot(
             $permissionByRole['path'],
             $permissions->currentUserRole(),
-            $this->getUrlByPath($permissionByRole['path'])
+            $this->getUrlByPath($permissionByRole['path']),
+            $permissions->getDisabledCommandFor($roleCommands)
         );
 
-        $permissionByUser   = $permissions->getByUser($permissions->currentUserID());
-        $roots[]            = $this->processFileRoot(
+        $permissionByUser = $permissions->getByUser($permissions->currentUserID());
+        $userHint         = $permissions->isCurrentUserHasPermission()
+            ? $permissions->getDisabledCommandFor($userCommands)
+            : $permissions->getDisabledCommandFor($roleCommands);
+        $roots[]          = $this->processFileRoot(
             $permissionByUser['path'],
             $permissions->currentUser()->display_name,
-            $this->getUrlByPath($permissionByUser['path'])
+            $this->getUrlByPath($permissionByUser['path']),
+            $userHint
         );
 
         return $roots;
@@ -289,13 +301,14 @@ final class FileManagerController
     /**
      * Create Instance of FileRoot
      *
-     * @param string $path
-     * @param string $alias
-     * @param string $url
+     * @param string     $path
+     * @param string     $alias
+     * @param string     $url
+     * @param array|null $disabledCommands Per-volume disabled-command hint; falls back to global when null.
      *
      * @return FileRoot
      */
-    private function processFileRoot($path, $alias, $url)
+    private function processFileRoot($path, $alias, $url, ?array $disabledCommands = null)
     {
         $permissions           = Plugin::instance()->permissions();
         $accessControlProvider = Plugin::instance()->accessControl();
@@ -308,7 +321,7 @@ final class FileManagerController
         $this->setAllowedFileType($volume);
         $volume->setAccessControl([$accessControlProvider, 'control']);
         $volume->setAcceptedName([$accessControlProvider, 'validateName']);
-        $volume->setDisabled($permissions->getDisabledCommand());
+        $volume->setDisabled($disabledCommands ?? $permissions->getDisabledCommand());
         $volume->setWinHashFix(DIRECTORY_SEPARATOR !== '/');
 
         if (Capabilities::filter(Config::VAR_PREFIX . 'user_can_manage_options')) {
