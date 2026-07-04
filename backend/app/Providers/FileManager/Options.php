@@ -163,6 +163,18 @@ class Options
     }
 
     /**
+     * Normalize bind keys by collapsing all whitespace runs to single spaces
+     *
+     * @param string $commandType
+     *
+     * @return string
+     */
+    public static function normalizeBindKey(string $commandType): string
+    {
+        return trim((string) preg_replace('/\s+/', ' ', $commandType));
+    }
+
+    /**
      * Sets bind for command actions
      *
      * @param string   $commandType
@@ -172,7 +184,7 @@ class Options
      */
     public function setBind($commandType, callable $callback)
     {
-        $this->_bind[$commandType][] = $callback;
+        $this->_bind[self::normalizeBindKey((string) $commandType)][] = $callback;
 
         return $this;
     }
