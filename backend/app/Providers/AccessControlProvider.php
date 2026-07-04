@@ -94,11 +94,11 @@ class AccessControlProvider
                 ? $this->resolveInvolvedPaths($args[0], $elfinder)
                 : [];
 
-            if (!empty($paths)) {
-                // Path-aware check is authoritative when targets resolve.
+            if (!empty($paths) && \in_array($cmd, $permissionProvider->allCommands(), true)) {
+                // Path-aware check is authoritative for managed commands when targets resolve.
                 $authorized = $this->isCommandAllowedForPaths($cmd, $paths, $permissionProvider);
             } else {
-                // No resolvable target (early connector call / target-less command): coarse union.
+                // Non-managed command or no resolvable target: coarse union (admin + capability filter).
                 $authorized = $permissionProvider->currentUserCanRun($cmd);
             }
 
