@@ -223,6 +223,51 @@ class AccessControlProvider
         }
     }
 
+    public function resolveInvolvedPaths(array $cmdArgs, $elfinder): array
+    {
+        $hashes = [];
+
+        if (isset($cmdArgs['target']) && \is_string($cmdArgs['target'])) {
+            $hashes[] = $cmdArgs['target'];
+        }
+        if (isset($cmdArgs['dst']) && \is_string($cmdArgs['dst'])) {
+            $hashes[] = $cmdArgs['dst'];
+        }
+        if (isset($cmdArgs['targets']) && \is_array($cmdArgs['targets'])) {
+            foreach ($cmdArgs['targets'] as $target) {
+                if (\is_string($target)) {
+                    $hashes[] = $target;
+                }
+            }
+        }
+
+        $paths = [];
+        foreach (array_unique($hashes) as $hash) {
+            $volume = $elfinder->getVolume($hash);
+            if (!\is_object($volume) || !method_exists($volume, 'getPath')) {
+                continue;
+            }
+            $path = $volume->getPath($hash);
+            if (\is_string($path) && $path !== '') {
+                $paths[] = $path;
+            }
+        }
+
+        return $paths;
+    }
+
+    public function isCommandAllowedForPaths($cmd, array $paths, PermissionsProvider $permissions)
+    {
+        foreach ($paths as $path) {
+            $enabled = $permissions->getEnabledCommandsForPath($path);
+            if (!\in_array($cmd, $enabled, true) && !\in_array('*', $enabled, true)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private function isFileAllowedToOpen($args)
     {
         if (isset($args[1]) && $args[1] instanceof elFinder) {
