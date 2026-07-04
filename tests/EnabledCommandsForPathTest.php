@@ -98,4 +98,35 @@ class EnabledCommandsForPathTest extends TestCase
 
         $this->assertSame(['edit'], $provider->getEnabledCommandsForPath(__DIR__ . '/x'));
     }
+
+    public function testNonexistentChildUnderUserFolderStaysUser(): void
+    {
+        WP_Mock::userFunction('is_user_logged_in', ['return' => true]);
+
+        $provider = $this->provider([
+            'getGuestPermissions'        => ['commands' => [], 'path' => ''],
+            'isCurrentUserHasPermission' => true,
+            'permissionsForCurrentUser'  => ['commands' => ['download'], 'path' => __DIR__],
+            'permissionsForCurrentRole'  => ['commands' => ['edit'], 'path' => '/role'],
+        ]);
+
+        // Nonexistent child of the real tests/ dir -> parent realpaths to __DIR__ -> under F.
+        $this->assertSame(['download'], $provider->getEnabledCommandsForPath(__DIR__ . '/no-such-file.txt'));
+    }
+
+    public function testTraversalOutOfUserFolderFallsBackToRole(): void
+    {
+        WP_Mock::userFunction('is_user_logged_in', ['return' => true]);
+
+        $provider = $this->provider([
+            'getGuestPermissions'        => ['commands' => [], 'path' => ''],
+            'isCurrentUserHasPermission' => true,
+            'permissionsForCurrentUser'  => ['commands' => ['download'], 'path' => __DIR__],
+            'permissionsForCurrentRole'  => ['commands' => ['edit'], 'path' => '/role'],
+        ]);
+
+        // Raw '..' path whose real parent (repo root, dirname(dirname(__DIR__))) is OUTSIDE F.
+        $escaping = __DIR__ . '/../../no-such-file.txt';
+        $this->assertSame(['edit'], $provider->getEnabledCommandsForPath($escaping));
+    }
 }
