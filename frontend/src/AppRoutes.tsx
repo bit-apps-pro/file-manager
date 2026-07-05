@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom'
 import { StyleProvider } from '@ant-design/cssinjs'
 import { $appConfig } from '@common/globalStates'
 import { removeUnwantedCSS, setAppBgFromAdminBg } from '@common/helpers/globalHelpers'
+import useSyncAdminMenu from '@common/hooks/useSyncAdminMenu'
 import { darkThemeComponentToken, darkThemeToken } from '@config/themes/theme.dark'
 import { lightThemeComponentToken, lightThemeToken } from '@config/themes/theme.light'
 import loadable from '@loadable/component'
@@ -25,6 +26,8 @@ export default function AppRoutes() {
   const themeTokens = isDarkTheme ? darkThemeToken : lightThemeToken
   const componentTokens = isDarkTheme ? darkThemeComponentToken : lightThemeComponentToken
   const themeAlgorithm = isDarkTheme ? darkAlgorithm : defaultAlgorithm
+
+  useSyncAdminMenu()
 
   useEffect(() => {
     removeUnwantedCSS()

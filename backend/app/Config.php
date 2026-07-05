@@ -21,7 +21,7 @@ class Config
 
     const VAR_PREFIX = 'bitapps_fm_';
 
-    const VERSION = '6.8.9';
+    const VERSION = '6.9';
 
     const VERSION_ID = 689;
 

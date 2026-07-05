@@ -5,7 +5,7 @@ Tags: file manager, wp file manager, wordpress file manager, files, ftp
 Requires at least: 5.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 6.8.9
+Stable tag: 6.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -337,6 +337,12 @@ This plugin sends data to external services for certain features. Below is a sum
 * Privacy: https://pixoeditor.com/privacy-policy/
 
 == Changelog ==
+
+= 6.9 =
+- New: Per-user permissions are now enforced per target path across all volumes, with clearer file-manager-only scope hints
+- Fix: WordPress admin submenu now stays highlighted on the active page (Home, Logs, Settings, Permissions, etc.)
+- Fix: File manager no longer overwrites the browser URL, so in-app navigation stays intact
+- Fix: Popup dialogs now layer above the WordPress admin menu and toolbar
 
 = 6.8.9 =
 - Fix: Minimized editor windows now appear as a floating dock at the bottom of the screen
