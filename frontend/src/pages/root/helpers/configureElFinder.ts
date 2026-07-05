@@ -39,6 +39,9 @@ export default function configureElFinder(finderRef: RefObject<HTMLDivElement>):
     theme: THEME,
     lang: LANG,
     cssAutoLoad: getOptionVariable('cssAutoLoad'),
+    // Keep elFinder off the URL hash — the SPA HashRouter owns it. Its own
+    // toolbar back/forward uses an internal history stack, so it stays intact.
+    useBrowserHistory: false,
     contextmenu: getOptionVariable('contextmenu'),
     requestType: getOptionVariable('requestType'),
     themes,
