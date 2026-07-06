@@ -549,7 +549,7 @@ class PermissionsProvider
             return false;
         }
 
-        $userPath = $this->permissionsForCurrentUser()['path'];
+        $userPath = $this->permissionsForCurrentUser()['path'] ?? null;
         if (!\is_string($userPath) || $userPath === '') {
             return false;
         }

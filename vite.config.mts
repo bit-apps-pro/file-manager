@@ -217,10 +217,13 @@ function setDevServerConfig(): Plugin {
           }
         })
 
-        // Clean up the port file on real process exit, not on the server 'close'
-        // event — that also fires on server.restart() and would race-delete the
-        // restarted server's port file. Watcher left to vite (closing it orphans HMR).
+        // Clean up the port file on shutdown so the plugin falls back to prod
+        // assets. 'exit' misses Ctrl+C/kill, so SIGINT/SIGTERM go through
+        // process.exit() (which fires 'exit'). Not on 'close' — that also fires
+        // on server.restart() and would race-delete the fresh port file.
         process.once('exit', removeStoredPort)
+        process.once('SIGINT', () => process.exit())
+        process.once('SIGTERM', () => process.exit())
       }
     }
   }
