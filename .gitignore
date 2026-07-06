@@ -7,6 +7,7 @@ css/style*
 build
 .wordpress-ripo
 .php-cs-fixer.cache
+*.tsbuildinfo
 dependencies
 assets/js
 assets/libs
