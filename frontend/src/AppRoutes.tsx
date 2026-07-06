@@ -5,6 +5,7 @@ import { StyleProvider } from '@ant-design/cssinjs'
 import { $appConfig } from '@common/globalStates'
 import { removeUnwantedCSS, setAppBgFromAdminBg } from '@common/helpers/globalHelpers'
 import useSyncAdminMenu from '@common/hooks/useSyncAdminMenu'
+import { setNotificationInstance } from '@common/notificationInstance'
 import { darkThemeComponentToken, darkThemeToken } from '@config/themes/theme.dark'
 import { lightThemeComponentToken, lightThemeToken } from '@config/themes/theme.light'
 import loadable from '@loadable/component'
@@ -21,6 +22,10 @@ const SystemInformation = loadable(() => import('@pages/SystemInformation'), { f
 
 const { defaultAlgorithm, darkAlgorithm } = theme
 
+const NOTIFICATION_PLACEMENT = 'bottomRight'
+// Configure the static notification instance (used by callers outside the tree) once.
+notification.config({ placement: NOTIFICATION_PLACEMENT })
+
 export default function AppRoutes() {
   const { isDarkTheme } = useAtomValue($appConfig)
   const themeTokens = isDarkTheme ? darkThemeToken : lightThemeToken
@@ -34,8 +39,17 @@ export default function AppRoutes() {
     setAppBgFromAdminBg()
   }, [])
 
-  const [, contextHolder] = notification.useNotification()
-  notification.config({ placement: 'bottomRight', maxCount: 3 })
+  // No maxCount: it force-destroys the oldest notice, which silently evicts a
+  // persistent error the moment transient toasts arrive. `stack` keeps the pile
+  // tidy without dropping anything.
+  const [notificationApi, contextHolder] = notification.useNotification({
+    placement: NOTIFICATION_PLACEMENT
+  })
+
+  useEffect(() => {
+    setNotificationInstance(notificationApi)
+    return () => setNotificationInstance(null)
+  }, [notificationApi])
   return (
     <ConfigProvider
       theme={{

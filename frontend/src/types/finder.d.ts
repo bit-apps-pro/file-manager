@@ -29,14 +29,6 @@ declare module 'elfinder' {
     addCommand(commandName: string, commandOptions?: CommandOptions): void
     removeCommand(commandName: string): void
     exec(cmd: string, files?: Array<File> | string, opts?, dstHash?): void
-    toast({
-      mode,
-      msg,
-      hideDuration
-    }: {
-      mode: 'error' | 'warnning' | 'success'
-      msg: string
-      hideDuration: number
-    }): void
+    toast(options: Record<string, unknown>): unknown
   }
 }

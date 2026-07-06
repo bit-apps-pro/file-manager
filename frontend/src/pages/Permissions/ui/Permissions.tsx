@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { DeleteFilled } from '@ant-design/icons'
 import { __, sprintf } from '@common/helpers/i18nwrap'
+import { resolveNotification } from '@common/notificationInstance'
 import { type PermissionsSettingsType, type User } from '@pages/Permissions/PermissionsSettingsTypes'
 import useDeleteUserPermission from '@pages/Permissions/data/useDeleteUserPermission'
 import useFetchPermissionsSettings from '@pages/Permissions/data/useFetchPermissionsSettings'
@@ -17,8 +18,7 @@ import {
   Space,
   Switch,
   Tooltip,
-  Typography,
-  notification
+  Typography
 } from 'antd'
 
 import AddUserPermissionModal from './AddUserPermissionModal'
@@ -40,7 +40,7 @@ function Permissions() {
   const handleSubmit = (changedValues: PermissionsSettingsType) => {
     updatePermission(changedValues).then(response => {
       if (response.code === 'SUCCESS') {
-        notification.success({ message: response.message })
+        resolveNotification().success({ message: response.message })
         const updatedFields = form.getFieldsError().map(field => {
           if (field.errors) {
             field.errors = []
@@ -55,7 +55,9 @@ function Permissions() {
             name: field.split('.'),
             errors: response.data[field] as string[]
           })
-          notification.error({ message: response?.message ?? __('Failed to update permission') })
+          resolveNotification().error({
+            message: response?.message ?? __('Failed to update permission')
+          })
         })
         form.setFields(fieldErrors)
       }
@@ -65,10 +67,10 @@ function Permissions() {
   const handleDelete = (user: User) => {
     deletePermission(user.ID).then(response => {
       if (response.code === 'SUCCESS') {
-        notification.success({ message: response?.message ?? __('User permission removed') })
+        resolveNotification().success({ message: response?.message ?? __('User permission removed') })
         refetch()
       } else {
-        notification.error({ message: response?.message ?? __('Failed to remove permission') })
+        resolveNotification().error({ message: response?.message ?? __('Failed to remove permission') })
       }
     })
   }

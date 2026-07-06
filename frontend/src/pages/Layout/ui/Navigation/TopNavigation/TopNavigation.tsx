@@ -1,11 +1,12 @@
 import { $appConfig } from '@common/globalStates'
 import $finder from '@common/globalStates/$finder'
 import { __ } from '@common/helpers/i18nwrap'
+import { resolveNotification } from '@common/notificationInstance'
 import config from '@config/config'
 import AntIconWrapper from '@icons/AntIconWrapper'
 import LogoIcn from '@icons/LogoIcn'
 import LogoText from '@icons/LogoText'
-import { Button, Layout, Select, Space, Typography, notification, theme } from 'antd'
+import { Button, Layout, Select, Space, Typography, theme } from 'antd'
 import { useAtomValue } from 'jotai'
 
 import cls from './TopNavigation.module.css'
@@ -41,9 +42,9 @@ export default function TopNavigation() {
           window.location.reload()
         }
       } else if (response?.message) {
-        notification.error({ message: response.message })
+        resolveNotification().error({ message: response.message })
       } else {
-        response?.data?.theme?.map(error => notification.error({ message: error }))
+        response?.data?.theme?.map(error => resolveNotification().error({ message: error }))
       }
     })
   }
@@ -56,7 +57,7 @@ export default function TopNavigation() {
         // @ts-expect-error
         jQuery(`#${finder.id}`).elfinder('reload')
       } else {
-        notification.error({ message: response?.message ?? __('Failed to update language') })
+        resolveNotification().error({ message: response?.message ?? __('Failed to update language') })
       }
     })
   }

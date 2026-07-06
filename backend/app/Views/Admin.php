@@ -130,9 +130,9 @@ class Admin
         wp_enqueue_script(Config::SLUG . 'elfinder-editor-script');
         wp_enqueue_script(Config::SLUG . 'elfinder-lang', $preferences->getLangUrl(), [Config::SLUG . 'elfinder-script']);
 
-        if (Config::isDev()) {
-            $port   = file_get_contents(Config::get('BASEDIR') . '/port');
-            $devUrl = 'http://localhost:' . $port;
+        $devPort = Config::devPort();
+        if ($devPort > 0) {
+            $devUrl = 'http://localhost:' . $devPort;
             wp_enqueue_script(
                 Config::SLUG . '-MODULE-vite-client-helper',
                 $devUrl . '/config/devHotModule.js',

@@ -21,7 +21,10 @@ class MediaSynchronizer
     {
         $targetPath = $volume->getPath($args['target']);
 
-        if (strpos($targetPath, $this->wpUploadBaseDirectory) !== false && Plugin::instance()->preferences()->isWpMediaSyncEnabled()) {
+        if (
+            PermissionsProvider::realpathWithin($targetPath, $this->wpUploadBaseDirectory) !== null
+            && Plugin::instance()->preferences()->isWpMediaSyncEnabled()
+        ) {
             $images = [];
             for ($file = 0; $file < \count($args['FILES']['upload']['name']); $file++) {
                 $images[] = [

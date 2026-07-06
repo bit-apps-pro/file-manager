@@ -41,7 +41,6 @@ const getVersion = () => {
   return version
 }
 
-
 // @ts-ignore
 export default defineConfig(({ mode }) => {
   if (mode === 'loader') {
@@ -218,10 +217,10 @@ function setDevServerConfig(): Plugin {
           }
         })
 
-        server.httpServer.close(() => {
-          server.watcher.close()
-          removeStoredPort()
-        })
+        // Clean up the port file on real process exit, not on the server 'close'
+        // event — that also fires on server.restart() and would race-delete the
+        // restarted server's port file. Watcher left to vite (closing it orphans HMR).
+        process.once('exit', removeStoredPort)
       }
     }
   }

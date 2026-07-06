@@ -1,10 +1,11 @@
 import { useEffect } from 'react'
 
 import { __ } from '@common/helpers/i18nwrap'
+import { resolveNotification } from '@common/notificationInstance'
 import useFetchSettings from '@pages/Settings/data/useFetchSettings'
 import useUpdateSettings from '@pages/Settings/data/useUpdateSettings'
 import { type SettingsType } from '@pages/Settings/settingsTypes'
-import { Button, Card, Form, Input, Select, Space, Switch, notification } from 'antd'
+import { Button, Card, Form, Input, Select, Space, Switch } from 'antd'
 
 export default function Settings() {
   const { useForm } = Form
@@ -30,7 +31,7 @@ export default function Settings() {
   const handleSubmit = (changedValues: SettingsType) => {
     updateSettings(changedValues).then(response => {
       if (response.code === 'SUCCESS') {
-        notification.success({ message: response.message })
+        resolveNotification().success({ message: response.message })
         const updatedFields = form.getFieldsError().map(field => {
           if (field.errors) {
             field.errors = []

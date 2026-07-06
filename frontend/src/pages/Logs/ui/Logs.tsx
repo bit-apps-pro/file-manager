@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import { __ } from '@common/helpers/i18nwrap'
+import { resolveNotification } from '@common/notificationInstance'
 import useDeleteLog from '@pages/Logs/data/useDeleteLog'
 import {
   type LogQueryType,
@@ -8,7 +9,7 @@ import {
   type LoggedFileDetailsType
 } from '@pages/Logs/data/useFetchLogs'
 import useFetchLogs from '@pages/Logs/data/useFetchLogs'
-import { Button, Flex, type TableColumnsType, type TableProps, Typography, notification } from 'antd'
+import { Button, Flex, type TableColumnsType, type TableProps, Typography } from 'antd'
 import { Col, Row, Space, Table } from 'antd'
 
 type TableRowSelection<T extends object = object> = TableProps<T>['rowSelection']
@@ -66,9 +67,9 @@ export default function Logs() {
       if (res.code === 'SUCCESS') {
         setSelectedRowKeys([])
         refetch()
-        notification.success({ message: res?.message || 'Log deleted successfully' })
+        resolveNotification().success({ message: res?.message || 'Log deleted successfully' })
       } else {
-        notification.error({ message: res?.message || 'Failed to delete logs' })
+        resolveNotification().error({ message: res?.message || 'Failed to delete logs' })
       }
     })
   }

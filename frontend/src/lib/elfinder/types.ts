@@ -19,7 +19,25 @@ export type ElFinderConstructor = {
   prototype: { commands: Record<string, () => void> }
 }
 
-export type FinderWithDialog = FinderInstance & {
+export type ElFinderToastMode = 'success' | 'info' | 'warning' | 'error'
+
+export interface ElFinderToastOptions {
+  mode?: ElFinderToastMode
+  msg?: string
+  hideDuration?: number
+  timeOut?: number
+  extNode?: unknown
+  button?: unknown
+  onShown?: unknown
+  onHidden?: unknown
+  [key: string]: unknown
+}
+
+export interface ElFinderEvent {
+  data?: { error?: unknown; opts?: unknown; [key: string]: unknown }
+}
+
+export type FinderWithDialog = Omit<FinderInstance, 'toast'> & {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dialog: (content: unknown, options?: unknown) => any
   toFront: (target: unknown) => void
@@ -27,7 +45,13 @@ export type FinderWithDialog = FinderInstance & {
   changeTheme: (theme: string) => FinderWithDialog
   storage: (key: string, value?: unknown) => FinderWithDialog
   resize: (width: number | string, height: number | string) => void
-  bind: (events: string, handler: (...args: unknown[]) => void) => FinderWithDialog
+  i18n: (message: unknown) => string
+  toast: (options: ElFinderToastOptions) => unknown
+  bind: (
+    events: string,
+    handler: (...args: unknown[]) => unknown,
+    priorityFirst?: boolean
+  ) => FinderWithDialog
   dblclick?: (data: { file?: string }) => unknown
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   file: (hash: string) => any

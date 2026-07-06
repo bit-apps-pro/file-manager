@@ -2,11 +2,12 @@ import { useState } from 'react'
 
 import { __ } from '@common/helpers/i18nwrap'
 import useDebounce from '@common/hooks/useDebounce'
+import { resolveNotification } from '@common/notificationInstance'
 import { type User, type UserPermissionType } from '@pages/Permissions/PermissionsSettingsTypes'
 import useFetchPermissionsSettings from '@pages/Permissions/data/useFetchPermissionsSettings'
 import useFetchUserByUsername from '@pages/Permissions/data/useFetchUserByUsername'
 import useUpdateUserPermission from '@pages/Permissions/data/useUpdateUserPermission'
-import { Button, Card, Form, Input, Modal, Select, Space, Spin, Typography, notification } from 'antd'
+import { Alert, Button, Card, Form, Input, Modal, Select, Space, Spin } from 'antd'
 
 function AddUserPermissionModal({
   isModalOpen,
@@ -51,7 +52,7 @@ function AddUserPermissionModal({
   const handleSubmit = (changedValues: UserPermissionType) => {
     updateUserPermission(changedValues).then(response => {
       if (response.code === 'SUCCESS') {
-        notification.success({ message: response?.message ?? __('User permission deleted') })
+        resolveNotification().success({ message: response?.message ?? __('User permission deleted') })
         refetch()
         const updatedFields = form.getFieldsError().map(field => {
           if (field.errors) {
@@ -67,7 +68,7 @@ function AddUserPermissionModal({
             name: field.split('.'),
             errors: response.data[field] as string[]
           })
-          notification.error({ message: response?.message ?? __('Failed to save permission') })
+          resolveNotification().error({ message: response?.message ?? __('Failed to save permission') })
         })
         form.setFields(fieldErrors)
       }
@@ -83,7 +84,14 @@ function AddUserPermissionModal({
       title="Set Permission for selected user"
     >
       <Space direction="vertical" style={{ display: 'flex' }} className="px-2">
-        <Typography.Text type="secondary">{__('Only affects actions inside File Manager')}</Typography.Text>
+        <Alert
+          type="info"
+          showIcon
+          title={__('Scope of these permissions')}
+          description={__(
+            'Controls what this user can do inside Bit File Manager only. Files reachable through the server (FTP, SSH, or other tools) are not affected.'
+          )}
+        />
         <Select
           showSearch
           style={{ width: '100%' }}

@@ -99,24 +99,57 @@ class PermissionsProvider
         return isset($users[$id]) ? $users[$id]->display_name : 'guest';
     }
 
+    private const ALL_COMMANDS = [
+        'download', // file, zipdl
+        'cut',// only for frontend. send cmd as paste
+        'copy',// only for frontend. send cmd as paste
+        'edit', // put
+        'rm', // rm
+        'upload',// upload
+        'duplicate', // duplicate
+        'paste', // paste
+        'mkfile',// mkfile
+        'mkdir',// mkdir
+        'rename', // rename
+        'archive', // archive
+        'extract',// extract
+        'emailto', // client-only: open mailto link for selected file
+    ];
+
     public function allCommands()
     {
-        return [
-            'download', // file, zipdl
-            'cut',// only for frontend. send cmd as paste
-            'copy',// only for frontend. send cmd as paste
-            'edit', // put
-            'rm', // rm
-            'upload',// upload
-            'duplicate', // duplicate
-            'paste', // paste
-            'mkfile',// mkfile
-            'mkdir',// mkdir
-            'rename', // rename
-            'archive', // archive
-            'extract',// extract
-            'emailto', // client-only: open mailto link for selected file
+        return self::ALL_COMMANDS;
+    }
+
+    /**
+     * Human-readable action phrase for a command, for user-facing errors.
+     * Kept here so command names and their labels share one owner; labels can't
+     * live on the ALL_COMMANDS const because __() can't run in a const context.
+     *
+     * @param string $cmd normalized elFinder command
+     *
+     * @return string empty when the command has no friendly label
+     */
+    public function commandLabel($cmd)
+    {
+        $labels = [
+            'download'  => __('download files', 'file-manager'),
+            'cut'       => __('move items', 'file-manager'),
+            'copy'      => __('copy items', 'file-manager'),
+            'edit'      => __('edit files', 'file-manager'),
+            'rm'        => __('delete items', 'file-manager'),
+            'upload'    => __('upload files', 'file-manager'),
+            'duplicate' => __('duplicate items', 'file-manager'),
+            'paste'     => __('paste items', 'file-manager'),
+            'mkfile'    => __('create files', 'file-manager'),
+            'mkdir'     => __('create folders', 'file-manager'),
+            'rename'    => __('rename items', 'file-manager'),
+            'archive'   => __('create archives', 'file-manager'),
+            'extract'   => __('extract archives', 'file-manager'),
+            'emailto'   => __('email files', 'file-manager'),
         ];
+
+        return $labels[$cmd] ?? '';
     }
 
     public function defaultPermissions()
@@ -314,6 +347,24 @@ class PermissionsProvider
         }
 
         return $path === $boundary || strpos($path, $boundary . '/') === 0;
+    }
+
+    /**
+     * Canonicalize $path and return it only when it resolves inside $boundary.
+     *
+     * @return string|null resolved target path, or null when either side fails to
+     *                     resolve or the target escapes the boundary
+     */
+    public static function realpathWithin(string $path, string $boundary): ?string
+    {
+        $boundaryReal = realpath($boundary);
+        $target       = realpath($path);
+
+        if ($boundaryReal === false || $target === false || !self::isSubPath($target, $boundaryReal)) {
+            return null;
+        }
+
+        return $target;
     }
 
     public function getGuestPermissions()
@@ -554,6 +605,30 @@ class PermissionsProvider
         }
 
         return $disabled;
+    }
+
+    /**
+     * Disabled-command hint for the Public volume. Least-restrictive (user ∪ role) so a
+     * nested per-user folder never hides legitimate commands; the runtime gate enforces
+     * the real per-path policy.
+     */
+    public function getPublicVolumeDisabledCommands(): array
+    {
+        return $this->getDisabledCommandFor($this->getEnabledCommandsUnion());
+    }
+
+    public function getRoleVolumeDisabledCommands(): array
+    {
+        return $this->getDisabledCommandFor($this->permissionsForCurrentRole()['commands']);
+    }
+
+    public function getUserVolumeDisabledCommands(): array
+    {
+        $commands = $this->isCurrentUserHasPermission()
+            ? $this->permissionsForCurrentUser()['commands']
+            : $this->permissionsForCurrentRole()['commands'];
+
+        return $this->getDisabledCommandFor($commands);
     }
 
     public function updatePermissionSetting($permissions)
