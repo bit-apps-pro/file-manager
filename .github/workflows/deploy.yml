@@ -12,7 +12,7 @@ jobs:
       PLUGIN_SLUG: file-manager
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v7.0.0
 
       - name: Setup PHP
         id: setup-php
@@ -27,7 +27,7 @@ jobs:
           node-version: 22
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v6.0.8
+        uses: pnpm/action-setup@v6.0.9
         with:
           run_install: false
 
@@ -41,7 +41,7 @@ jobs:
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-      - uses: actions/cache@v5.0.5
+      - uses: actions/cache@v6.1.0
         name: Setup package cache
         with:
           path: |
@@ -99,8 +99,9 @@ jobs:
 
       - name: Upload release asset
         if: steps.build-plugin.outputs.free_exists == 'true'
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          tag_name: ${{ github.event.release.tag_name }}
           files: ${{ steps.deploy.outputs['zip-path'] }}
