@@ -32,7 +32,7 @@ export default function useSyncAdminMenu() {
       anchor.closest('li')?.classList.remove(CURRENT_CLASS)
     })
 
-    const matched = anchors.find(anchor => anchor.hash === activeHash)
+    const matched = anchors.find(anchor => (anchor.hash || '#/home') === activeHash)
     if (matched) {
       matched.classList.add(CURRENT_CLASS)
       matched.setAttribute('aria-current', 'page')
