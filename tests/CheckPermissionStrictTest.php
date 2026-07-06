@@ -75,17 +75,17 @@ class CheckPermissionStrictTest extends TestCase
         $this->assertTrue($access->isCommandAllowedForPaths('rm', [], $perms));
     }
 
-    public function testResolveInvolvedPathsCollectsTargetTargetsAndDst(): void
+    /** elFinder stub whose getVolume() resolves any hash to "/resolved/{hash}". */
+    private function elfinderStub(): object
     {
-        $access = $this->accessControl();
-
         $volume = new class {
             public function getPath($hash)
             {
                 return '/resolved/' . $hash;
             }
         };
-        $elfinder = new class($volume) {
+
+        return new class($volume) {
             private $volume;
             public function __construct($volume)
             {
@@ -96,10 +96,15 @@ class CheckPermissionStrictTest extends TestCase
                 return $this->volume;
             }
         };
+    }
+
+    public function testResolveInvolvedPathsCollectsTargetTargetsAndDst(): void
+    {
+        $access = $this->accessControl();
 
         $paths = $access->resolveInvolvedPaths(
             ['target' => 'h1', 'targets' => ['h2', 'h3'], 'dst' => 'h4'],
-            $elfinder
+            $this->elfinderStub()
         );
 
         sort($paths);
@@ -113,27 +118,9 @@ class CheckPermissionStrictTest extends TestCase
     {
         $access = $this->accessControl();
 
-        $volume = new class {
-            public function getPath($hash)
-            {
-                return '/resolved/' . $hash;
-            }
-        };
-        $elfinder = new class($volume) {
-            private $volume;
-            public function __construct($volume)
-            {
-                $this->volume = $volume;
-            }
-            public function getVolume($hash)
-            {
-                return $this->volume;
-            }
-        };
-
         $paths = $access->resolveInvolvedPaths(
             ['target' => 'h1', 'upload_path' => ['h2', 'h3']],
-            $elfinder
+            $this->elfinderStub()
         );
 
         sort($paths);

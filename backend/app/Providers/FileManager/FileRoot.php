@@ -836,7 +836,10 @@ class FileRoot
 
     public function getOptions()
     {
-        $options['tmbPath']            = $this->getOption('_tmbPath');
+        // Thumbnails disabled: elFinder caches them under the web-served volume
+        // root, leaking downscaled copies past the permission gate. '' not null —
+        // null is isset()-false, so elFinder falls back to its '.tmb' default.
+        $options['tmbPath']            = '';
         $options['id']                 = $this->getOption('_id');
         $options['alias']              = $this->getOption('_alias');
         $options['driver']             = $this->getOption('_driver');

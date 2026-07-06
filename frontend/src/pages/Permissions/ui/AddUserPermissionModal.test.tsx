@@ -22,6 +22,10 @@ describe('AddUserPermissionModal', () => {
 
   it('shows the file-manager-only subtitle when open', () => {
     render(<AddUserPermissionModal isModalOpen setIsModalOpen={vi.fn()} commands={['download']} />)
-    expect(screen.getByText('Only affects actions inside File Manager')).toBeTruthy()
+    expect(
+      screen.getByText(
+        'Controls what this user can do inside Bit File Manager only. Files reachable through the server (FTP, SSH, or other tools) are not affected.'
+      )
+    ).toBeTruthy()
   })
 })

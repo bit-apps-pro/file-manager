@@ -167,6 +167,19 @@ class Config
         return is_readable(Config::get('BASEDIR') . '/port');
     }
 
+    public static function devPort(): int
+    {
+        if (!self::isDev()) {
+            return 0;
+        }
+
+        $port = (int) file_get_contents(Config::get('BASEDIR') . '/port');
+
+        // Reject privileged/out-of-range ports so a planted port file can't aim
+        // script loads at other services.
+        return ($port >= 1024 && $port <= 65535) ? $port : 0;
+    }
+
     public static function adBanner()
     {
         $hideAT  = new DateTimeImmutable('2024-03-31');

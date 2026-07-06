@@ -16,7 +16,10 @@ final class CapCheckerMiddleware
         if (!$cap || !Capabilities::filter($cap)) {
             echo wp_json_encode(
                 [
-                    'message' => __('You are not authorized to access this endpoint', 'file-manager'),
+                    'message' => __(
+                        "You don't have permission to access this. Please contact your site administrator.",
+                        'file-manager'
+                    ),
                     'code'    => 'NOT_AUTHORIZED',
                     'status'  => 'error',
                 ]

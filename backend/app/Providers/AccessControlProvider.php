@@ -103,14 +103,14 @@ class AccessControlProvider
             }
 
             if (!$authorized) {
-                $error = wp_sprintf(
-                    // translators: 1: elFInder Command
-                    __(
-                        'You are not authorized to run this command [ %s ] on file manager',
-                        'file-manager'
-                    ),
-                    $cmd
-                );
+                $action = $permissionProvider->commandLabel($cmd);
+                $error  = $action !== ''
+                    ? wp_sprintf(
+                        // translators: 1: human-readable action, e.g. "edit files"
+                        __("You don't have permission to %s here.", 'file-manager'),
+                        $action
+                    )
+                    : __("You don't have permission to do that here.", 'file-manager');
             }
         }
 
@@ -240,23 +240,17 @@ class AccessControlProvider
     {
         $hashes = [];
 
-        if (isset($cmdArgs['target']) && \is_string($cmdArgs['target'])) {
-            $hashes[] = $cmdArgs['target'];
-        }
-        if (isset($cmdArgs['dst']) && \is_string($cmdArgs['dst'])) {
-            $hashes[] = $cmdArgs['dst'];
-        }
-        if (isset($cmdArgs['targets']) && \is_array($cmdArgs['targets'])) {
-            foreach ($cmdArgs['targets'] as $target) {
-                if (\is_string($target)) {
-                    $hashes[] = $target;
-                }
+        foreach (['target', 'dst'] as $key) {
+            if (isset($cmdArgs[$key]) && \is_string($cmdArgs[$key])) {
+                $hashes[] = $cmdArgs[$key];
             }
         }
-        if (isset($cmdArgs['upload_path']) && \is_array($cmdArgs['upload_path'])) {
-            foreach ($cmdArgs['upload_path'] as $uploadPath) {
-                if (\is_string($uploadPath)) {
-                    $hashes[] = $uploadPath;
+        foreach (['targets', 'upload_path'] as $key) {
+            if (isset($cmdArgs[$key]) && \is_array($cmdArgs[$key])) {
+                foreach ($cmdArgs[$key] as $hash) {
+                    if (\is_string($hash)) {
+                        $hashes[] = $hash;
+                    }
                 }
             }
         }

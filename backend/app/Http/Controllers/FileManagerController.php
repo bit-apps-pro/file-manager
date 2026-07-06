@@ -85,10 +85,6 @@ final class FileManagerController
             $finderOptions->setCommonTempPath(Config::uploadBaseDir() . '/.tmp/');
         }
 
-        if (fileSystemAdapter()->is_writable(Config::uploadBaseDir() . '/.tmb/')) {
-            $finderOptions->setThumbPath(Config::uploadBaseDir() . '/.tmb/');
-        }
-
         $allVolumes         = $this->getFileRoots();
         $volumeCount        = \count($allVolumes);
         $invalidVolumeCount = 0;
@@ -221,10 +217,6 @@ final class FileManagerController
             $this->setAllowedFileType($baseRoot);
         }
 
-        if (fileSystemAdapter()->is_writable(stripslashes($preferences->getRootPath()) . DIRECTORY_SEPARATOR . '.tmbPath')) {
-            $baseRoot->setOption('tmbPath', Config::uploadBaseDir() . '/.tmb/');
-        }
-
         $baseRoot->setAccessControl([$accessControlProvider, 'control']);
         $baseRoot->setAcceptedName([$accessControlProvider, 'validateName']);
         $baseRoot->setDisabled([]);
@@ -247,36 +239,28 @@ final class FileManagerController
 
         $role             = $permissions->currentUserRole();
         $permissionByRole = $permissions->getByRole($role);
-        $roleCommands     = $permissionByRole['commands'];
-        $userCommands     = $permissions->permissionsForCurrentUser()['commands'];
-        $unionCommands    = $permissions->getEnabledCommandsUnion();
+        $permissionByUser = $permissions->getByUser($permissions->currentUserID());
         $publicPath       = $permissions->getPathByFolderOption();
 
-        // Public volume may nest the per-user folder: use the least-restrictive hint
-        // so nothing legitimate is hidden; the runtime gate enforces per path.
         $roots[] = $this->processFileRoot(
             $publicPath,
             'Public',
             $this->getUrlByPath($publicPath),
-            $permissions->getDisabledCommandFor($unionCommands)
+            $permissions->getPublicVolumeDisabledCommands()
         );
 
         $roots[] = $this->processFileRoot(
             $permissionByRole['path'],
             $role,
             $this->getUrlByPath($permissionByRole['path']),
-            $permissions->getDisabledCommandFor($roleCommands)
+            $permissions->getRoleVolumeDisabledCommands()
         );
 
-        $permissionByUser = $permissions->getByUser($permissions->currentUserID());
-        $userHint         = $permissions->isCurrentUserHasPermission()
-            ? $permissions->getDisabledCommandFor($userCommands)
-            : $permissions->getDisabledCommandFor($roleCommands);
-        $roots[]          = $this->processFileRoot(
+        $roots[] = $this->processFileRoot(
             $permissionByUser['path'],
             $permissions->currentUser()->display_name,
             $this->getUrlByPath($permissionByUser['path']),
-            $userHint
+            $permissions->getUserVolumeDisabledCommands()
         );
 
         return $roots;

@@ -4,6 +4,7 @@ import config, { getOptionVariable } from '@config/config'
 import { installAutoHeight, resolveInitialHeight } from '@lib/elfinder/autoHeight'
 import { elevateDialogLayers, injectDockStyles, watchForBottomTray } from '@lib/elfinder/dialogElevation'
 import registerEmailtoCommand from '@lib/elfinder/emailtoCommand'
+import bridgeElFinderNotifications from '@lib/elfinder/notificationBridge'
 import {
   applyAppendToBodyDefault,
   patchCodeMirror,
@@ -96,6 +97,7 @@ export default function configureElFinder(finderRef: RefObject<HTMLDivElement>):
   patchCodeMirror(finder)
   elevateDialogLayers(jq)
   injectDockStyles()
+  bridgeElFinderNotifications(finder)
   finder.bind('load', watchForBottomTray)
 
   // Intercept dblclick: open text/code files in the editor instead of downloading
