@@ -26,7 +26,7 @@ class PhpSyntaxChecker
     {
         $previousContent = file_get_contents($realFile);
 
-        // phpcs:disable WordPress.WP.AlternativeFunctions.file_system_operations_fopen, WordPress.WP.AlternativeFunctions.file_system_operations_fwrite, WordPress.WP.AlternativeFunctions.file_system_operations_fclose
+        // phpcs:disable WordPress.WP.AlternativeFunctions.file_system_operations_fopen, WordPress.WP.AlternativeFunctions.file_system_operations_fwrite, WordPress.WP.AlternativeFunctions.file_system_operations_fclose, WordPress.WP.AlternativeFunctions.file_system_operations_is_writable
         if (!is_writable($realFile)) {
             return new WP_Error('file_not_writable');
         }
