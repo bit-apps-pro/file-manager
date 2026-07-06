@@ -16,6 +16,23 @@ use WP_User;
 \defined('ABSPATH') || exit();
 class PermissionsProvider
 {
+    private const ALL_COMMANDS = [
+        'download', // file, zipdl
+        'cut',// only for frontend. send cmd as paste
+        'copy',// only for frontend. send cmd as paste
+        'edit', // put
+        'rm', // rm
+        'upload',// upload
+        'duplicate', // duplicate
+        'paste', // paste
+        'mkfile',// mkfile
+        'mkdir',// mkdir
+        'rename', // rename
+        'archive', // archive
+        'extract',// extract
+        'emailto', // client-only: open mailto link for selected file
+    ];
+
     public $permissions;
 
     public $users;
@@ -98,23 +115,6 @@ class PermissionsProvider
 
         return isset($users[$id]) ? $users[$id]->display_name : 'guest';
     }
-
-    private const ALL_COMMANDS = [
-        'download', // file, zipdl
-        'cut',// only for frontend. send cmd as paste
-        'copy',// only for frontend. send cmd as paste
-        'edit', // put
-        'rm', // rm
-        'upload',// upload
-        'duplicate', // duplicate
-        'paste', // paste
-        'mkfile',// mkfile
-        'mkdir',// mkdir
-        'rename', // rename
-        'archive', // archive
-        'extract',// extract
-        'emailto', // client-only: open mailto link for selected file
-    ];
 
     public function allCommands()
     {
