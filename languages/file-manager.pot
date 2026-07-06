@@ -7,27 +7,27 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-16T17:36:55+00:00\n"
+"POT-Creation-Date: 2026-07-06T11:32:56+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: file-manager\n"
 
-#: app/Config.php:252
+#: app/Config.php:265
 #: app/Views/Admin.php:346
 msgid "Support"
 msgstr ""
 
-#: app/Config.php:256
+#: app/Config.php:269
 #: app/Views/Admin.php:327
 msgid "Settings"
 msgstr ""
 
-#: app/Config.php:260
+#: app/Config.php:273
 #: app/Views/Admin.php:310
 msgid "Home"
 msgstr ""
 
-#: app/Http/Controllers/FileManagerController.php:122
+#: app/Http/Controllers/FileManagerController.php:118
 msgid "There is no readable volume. Please select an readable folder from settings"
 msgstr ""
 
@@ -64,7 +64,7 @@ msgid "Failed to update language"
 msgstr ""
 
 #: app/Http/Middleware/CapCheckerMiddleware.php:19
-msgid "You are not authorized to access this endpoint"
+msgid "You don't have permission to access this. Please contact your site administrator."
 msgstr ""
 
 #: app/Http/Middleware/NonceCheckerMiddleware.php:25
@@ -74,7 +74,7 @@ msgstr ""
 
 #: app/Http/Rules/ValidateCommandsRule.php:38
 #: app/Http/Rules/ValidateRolesRule.php:38
-#: app/Http/Rules/ValidPathRule.php:21
+#: app/Http/Rules/ValidPathRule.php:23
 msgid "Folder Path Must be within WordPress root directory"
 msgstr ""
 
@@ -90,7 +90,7 @@ msgstr ""
 msgid "User is not valid"
 msgstr ""
 
-#: app/Http/Rules/ValidPathRule.php:23
+#: app/Http/Rules/ValidPathRule.php:29
 msgid "Please provide a readable folder path"
 msgstr ""
 
@@ -98,26 +98,30 @@ msgstr ""
 msgid "UI option must be valid"
 msgstr ""
 
-#. translators: 1: elFInder Command
-#: app/Providers/AccessControlProvider.php:96
+#. translators: 1: human-readable action, e.g. "edit files"
+#: app/Providers/AccessControlProvider.php:110
 #, php-format
-msgid "You are not authorized to run this command [ %s ] on file manager"
+msgid "You don't have permission to %s here."
+msgstr ""
+
+#: app/Providers/AccessControlProvider.php:113
+msgid "You don't have permission to do that here."
 msgstr ""
 
 #. translators: 1: file name
-#: app/Providers/AccessControlProvider.php:184
+#: app/Providers/AccessControlProvider.php:197
 #, php-format
 msgid "This file %s type is not allowed"
 msgstr ""
 
 #. translators: 1: file name
-#: app/Providers/AccessControlProvider.php:203
+#: app/Providers/AccessControlProvider.php:216
 #, php-format
 msgid "Failed to process this file %s"
 msgstr ""
 
 #. translators: 1: file name
-#: app/Providers/AccessControlProvider.php:260
+#: app/Providers/AccessControlProvider.php:319
 #, php-format
 msgid "This file %s contains JS code. Please remove the code and try again. Or allow js mimetype"
 msgstr ""
@@ -130,7 +134,63 @@ msgstr ""
 msgid "Not Authorized to edit file"
 msgstr ""
 
-#: app/Providers/PermissionsProvider.php:156
+#: app/Providers/PermissionsProvider.php:136
+msgid "download files"
+msgstr ""
+
+#: app/Providers/PermissionsProvider.php:137
+msgid "move items"
+msgstr ""
+
+#: app/Providers/PermissionsProvider.php:138
+msgid "copy items"
+msgstr ""
+
+#: app/Providers/PermissionsProvider.php:139
+msgid "edit files"
+msgstr ""
+
+#: app/Providers/PermissionsProvider.php:140
+msgid "delete items"
+msgstr ""
+
+#: app/Providers/PermissionsProvider.php:141
+msgid "upload files"
+msgstr ""
+
+#: app/Providers/PermissionsProvider.php:142
+msgid "duplicate items"
+msgstr ""
+
+#: app/Providers/PermissionsProvider.php:143
+msgid "paste items"
+msgstr ""
+
+#: app/Providers/PermissionsProvider.php:144
+msgid "create files"
+msgstr ""
+
+#: app/Providers/PermissionsProvider.php:145
+msgid "create folders"
+msgstr ""
+
+#: app/Providers/PermissionsProvider.php:146
+msgid "rename items"
+msgstr ""
+
+#: app/Providers/PermissionsProvider.php:147
+msgid "create archives"
+msgstr ""
+
+#: app/Providers/PermissionsProvider.php:148
+msgid "extract archives"
+msgstr ""
+
+#: app/Providers/PermissionsProvider.php:149
+msgid "email files"
+msgstr ""
+
+#: app/Providers/PermissionsProvider.php:189
 msgid "please check root folder for file manager, from file manager settings"
 msgstr ""
 
@@ -142,7 +202,7 @@ msgstr ""
 msgid "An error occurred. Please try again later."
 msgstr ""
 
-#: app/Providers/PhpSyntaxChecker.php:115
+#: app/Providers/PhpSyntaxChecker.php:122
 msgid "Unable to communicate back with site to check for fatal errors, so the PHP change was reverted. You will need to upload your PHP file change by some other means, such as by using SFTP."
 msgstr ""
 
