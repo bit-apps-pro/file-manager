@@ -29,7 +29,6 @@ final class FileManagerController
     public function connector()
     {
         try {
-            Plugin::instance()->accessControl()->checkPermission(sanitize_key($_REQUEST['cmd']));
             $finderProvider = new FileManagerProvider($this->getFinderOptions());
             $finderProvider->getFinder()->run();
         } catch (Exception $th) {
@@ -52,12 +51,16 @@ final class FileManagerController
             ]
         );
 
+        // Bind the permission gate to the `*.pre` wildcard, not an explicit command list.
+        // elFinder only registers a `<cmd>.pre` handler when the request command matches,
+        // and it reads that command from $_POST alone — while dispatching from the merged
+        // $_GET+$_POST (and a php://input re-parse when max_input_vars is exceeded). A
+        // command supplied only via the query string / oversized body therefore skips
+        // registration yet still executes, bypassing the gate (arbitrary rm/file on the
+        // ABSPATH-rooted volume). A wildcard bind registers unconditionally, so the gate
+        // fires for every command regardless of how it was supplied.
         $finderOptions->setBind(
-            'get.pre put.pre file.pre archive.pre back.pre chmod.pre colwidth.pre copy.pre cut.pre duplicate.pre editor.pre
-             extract.pre forward.pre fullscreen.pre getfile.pre help.pre home.pre info.pre mkdir.pre mkfile.pre
-             netmount.pre netunmount.pre open.pre opendir.pre paste.pre places.pre quicklook.pre reload.pre
-             rename.pre resize.pre restore.pre rm.pre search.pre sort.pre up.pre upload.pre view.pre zipdl.pre
-             tree.pre parents.pre ls.pre tmb.pre size.pre dim.pre',
+            '*.pre',
             [
                 Plugin::instance()->accessControl(),
                 'checkPermission',

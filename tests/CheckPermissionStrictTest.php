@@ -75,6 +75,20 @@ class CheckPermissionStrictTest extends TestCase
         $this->assertTrue($access->isCommandAllowedForPaths('rm', [], $perms));
     }
 
+    /**
+     * The gate binds to `*.pre`, so it fires for every command; navigation/utility
+     * commands must short-circuit as allowed (return null) before any permission
+     * lookup — otherwise the wildcard would break browsing for restricted users.
+     */
+    public function testNavigationAndUtilityCommandsAreExempt(): void
+    {
+        $access = $this->accessControl();
+
+        foreach (['open', 'search', 'subdirs', 'url', 'abort', 'callback'] as $cmd) {
+            $this->assertNull($access->checkPermission($cmd), $cmd . ' must be exempt');
+        }
+    }
+
     /** elFinder stub whose getVolume() resolves any hash to "/resolved/{hash}". */
     private function elfinderStub(): object
     {
