@@ -75,7 +75,11 @@ class AccessControlProvider
 
     public function checkPermission($command, ...$args)
     {
-        if (\in_array($command, ['open', 'search'])) {
+        // Navigation/utility commands that read no file content and modify nothing.
+        // The gate now binds to `*.pre` (fires for every command), so these must be
+        // allowed explicitly or the wildcard would break tree/URL browsing for
+        // restricted users. `abort`/`callback` are request-control, not filesystem.
+        if (\in_array($command, ['open', 'search', 'subdirs', 'url', 'abort', 'callback'], true)) {
             return;
         }
 
