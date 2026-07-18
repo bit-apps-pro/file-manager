@@ -2,7 +2,7 @@
   display: inline-block;
   border-style: solid;
   border-radius: 50%;
-  border-top-color: hsla(0deg, 0%, 100%, 0%);
+  border-top-color: hsl(0deg, 0%, 100%, 0%);
 }
 
 .primary {

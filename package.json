@@ -21,6 +21,8 @@
     "pretty": "npx prettier ./frontend/src --check",
     "pretty:fix": "npx prettier ./frontend/src --check --write",
     "ts-check": "tsc",
+    "test": "vitest run",
+    "lint:css": "stylelint \"frontend/src/**/*.{css,scss}\"",
     "pre-commit": "lefthook run pre-commit"
   },
   "dependencies": {

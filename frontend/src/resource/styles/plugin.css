@@ -29,7 +29,7 @@
   display: inline-flex !important;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.12) !important;
+  background: rgb(255, 255, 255, 0.12) !important;
   border-radius: 4px !important;
   cursor: pointer;
   transition: background 0.15s ease;
@@ -37,7 +37,7 @@
 
 .ui-dialog.elfinder-dialog.elfinder-dialog-edit .ui-dialog-titlebar .elfinder-titlebar-button:hover,
 .ui-dialog.elfinder-dialog.elfinder-to-editing .ui-dialog-titlebar .elfinder-titlebar-button:hover {
-  background: rgba(255, 255, 255, 0.28) !important;
+  background: rgb(255, 255, 255, 0.28) !important;
 }
 
 .ui-dialog.elfinder-dialog.elfinder-dialog-edit .ui-dialog-titlebar .elfinder-titlebar-button .ui-icon,
@@ -118,7 +118,7 @@
   background-repeat: no-repeat;
 }
 
-.elfinder-button-icon-emailto:before {
+.elfinder-button-icon-emailto::before {
   content: '\2709';
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -144,10 +144,7 @@
 }
 
 .elfinder-to-editing.elfinder-dialog-edit.elfinder-maximized {
-  top: 20px !important;
-  left: 20px !important;
-  right: 20px !important;
-  bottom: 20px !important;
+  inset: 20px !important;
   width: calc(100vw - 40px) !important;
   max-width: calc(100vw - 40px) !important;
   height: calc(100vh - 40px) !important;
@@ -214,6 +211,7 @@
   left: 12px;
 }
 
+/* stylelint-disable-next-line selector-id-pattern -- third-party Ace editor DOM id */
 #ace_settingsmenu {
   top: 32px;
 }
@@ -230,10 +228,7 @@
 
 @media (max-width: 700px) {
   .elfinder-to-editing.elfinder-dialog-edit.elfinder-maximized {
-    top: 10px !important;
-    left: 10px !important;
-    right: 10px !important;
-    bottom: 10px !important;
+    inset: 10px !important;
     width: calc(100vw - 20px) !important;
     max-width: calc(100vw - 20px) !important;
     height: calc(100vh - 20px) !important;
@@ -290,7 +285,7 @@
 }
 
 .telemetry-popup .ant-steps-item-wait .ant-steps-item-icon span {
-  color: rgba(0, 0, 0, 0.65) !important;
+  color: rgb(0, 0, 0, 0.65) !important;
 }
 
 .telemetry-popup .ant-steps-item-finish .ant-steps-item-icon {
@@ -354,16 +349,16 @@
 
 /* --Telemetry-Popup-ant-modal-custom-css-- */
 
-/*--ant-header--*/
+/* --ant-header-- */
 
 .ant-layout-header {
   line-height: 10px !important;
   padding-top: 20px !important;
 }
 
-/*--ant-header--*/
+/* --ant-header-- */
 
-/*--bit-social-release-modal--*/
+/* --bit-social-release-modal-- */
 
 .bit-social-release-modal img {
   border-top-right-radius: 10px;
@@ -379,4 +374,4 @@
   color: black;
 }
 
-/*--bit-social-release-modal--*/
+/* --bit-social-release-modal-- */
