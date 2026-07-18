@@ -12,6 +12,13 @@ use Exception;
 
 class AccessControlProvider
 {
+    /**
+     * Navigation/utility commands that read no file content and mutate nothing.
+     * The gate binds to `*.pre` (fires for every command), so these are passed
+     * explicitly to keep tree/URL browsing working for restricted users.
+     */
+    public const EXEMPT_COMMANDS = ['open', 'search', 'subdirs', 'url', 'abort', 'callback'];
+
     public $settings;
 
     private $maliciousPatterns = [
@@ -75,11 +82,7 @@ class AccessControlProvider
 
     public function checkPermission($command, ...$args)
     {
-        // Navigation/utility commands that read no file content and modify nothing.
-        // The gate now binds to `*.pre` (fires for every command), so these must be
-        // allowed explicitly or the wildcard would break tree/URL browsing for
-        // restricted users. `abort`/`callback` are request-control, not filesystem.
-        if (\in_array($command, ['open', 'search', 'subdirs', 'url', 'abort', 'callback'], true)) {
+        if (\in_array($command, self::EXEMPT_COMMANDS, true)) {
             return;
         }
 

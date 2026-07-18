@@ -75,17 +75,26 @@ class CheckPermissionStrictTest extends TestCase
         $this->assertTrue($access->isCommandAllowedForPaths('rm', [], $perms));
     }
 
-    /**
-     * The gate binds to `*.pre`, so it fires for every command; navigation/utility
-     * commands must short-circuit as allowed (return null) before any permission
-     * lookup — otherwise the wildcard would break browsing for restricted users.
-     */
+    /** Navigation/utility commands must short-circuit as allowed (return null). */
     public function testNavigationAndUtilityCommandsAreExempt(): void
     {
         $access = $this->accessControl();
 
-        foreach (['open', 'search', 'subdirs', 'url', 'abort', 'callback'] as $cmd) {
+        // Independent oracle: a managed command must never leak into this list, or the
+        // `*.pre` gate would be bypassed for it. Iterating the const itself would pass
+        // tautologically, so pin it against a hardcoded expectation.
+        $expected = ['open', 'search', 'subdirs', 'url', 'abort', 'callback'];
+        $this->assertSame($expected, AccessControlProvider::EXEMPT_COMMANDS);
+
+        foreach ($expected as $cmd) {
             $this->assertNull($access->checkPermission($cmd), $cmd . ' must be exempt');
+        }
+    }
+
+    public function testManagedCommandsAreNotExempt(): void
+    {
+        foreach (['rm', 'put', 'get', 'upload', 'rename', 'chmod', 'mkdir', 'mkfile', 'extract', 'file', 'zipdl'] as $cmd) {
+            $this->assertNotContains($cmd, AccessControlProvider::EXEMPT_COMMANDS, $cmd . ' must not be exempt');
         }
     }
 

@@ -51,14 +51,11 @@ final class FileManagerController
             ]
         );
 
-        // Bind the permission gate to the `*.pre` wildcard, not an explicit command list.
-        // elFinder only registers a `<cmd>.pre` handler when the request command matches,
-        // and it reads that command from $_POST alone — while dispatching from the merged
-        // $_GET+$_POST (and a php://input re-parse when max_input_vars is exceeded). A
-        // command supplied only via the query string / oversized body therefore skips
-        // registration yet still executes, bypassing the gate (arbitrary rm/file on the
-        // ABSPATH-rooted volume). A wildcard bind registers unconditionally, so the gate
-        // fires for every command regardless of how it was supplied.
+        // Bind the gate to the `*.pre` wildcard, not an explicit command list: elFinder
+        // registers a `<cmd>.pre` handler only when the command arrives via $_POST, yet it
+        // dispatches from the merged $_GET+$_POST (plus a php://input re-parse past
+        // max_input_vars). A command sent only via query string / oversized body would skip
+        // registration but still execute, bypassing the gate. `*.pre` registers unconditionally.
         $finderOptions->setBind(
             '*.pre',
             [
@@ -71,8 +68,6 @@ final class FileManagerController
             'upload',
             [Plugin::instance()->mediaSyncs(), 'onFileUpload']
         );
-
-        // 'zipdl.pre file.pre rename.pre put.pre upload.pre',
 
         $finderOptions->setBind(
             'zipdl.pre file.pre rename.pre put.pre rm.pre chmod.pre mkdir.pre mkfile.pre extract.pre',
