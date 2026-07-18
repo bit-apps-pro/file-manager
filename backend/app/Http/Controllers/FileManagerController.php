@@ -29,6 +29,18 @@ final class FileManagerController
     public function connector()
     {
         try {
+            $command = isset($_REQUEST['cmd']) && \is_scalar($_REQUEST['cmd'])
+                ? sanitize_key((string) $_REQUEST['cmd'])
+                : '';
+
+            if ($command !== '') {
+                $permissionResult = Plugin::instance()->accessControl()->checkPermission($command);
+                if (\is_array($permissionResult) && !empty($permissionResult['preventexec'])) {
+                    echo wp_json_encode($permissionResult['results'] ?? ['error' => esc_html__("You don't have permission to do that here.", 'file-manager')]);
+                    wp_die();
+                }
+            }
+
             $finderProvider = new FileManagerProvider($this->getFinderOptions());
             $finderProvider->getFinder()->run();
         } catch (Exception $th) {
