@@ -33,10 +33,11 @@ final class FileManagerController
                 ? sanitize_key((string) $_REQUEST['cmd'])
                 : '';
 
-            if ($command !== '') {
-                $permissionResult = Plugin::instance()->accessControl()->checkPermission($command);
+            $accessControl = Plugin::instance()->accessControl();
+            if ($accessControl->isConnectorEnforceable($command)) {
+                $permissionResult = $accessControl->checkPermission($command);
                 if (\is_array($permissionResult) && !empty($permissionResult['preventexec'])) {
-                    echo wp_json_encode($permissionResult['results'] ?? ['error' => esc_html__("You don't have permission to do that here.", 'file-manager')]);
+                    echo wp_json_encode($permissionResult['results']);
                     wp_die();
                 }
             }
