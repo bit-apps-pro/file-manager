@@ -74,12 +74,12 @@
   /* Shadows */
   --focus-shadow: 0 0 0 2px var(--accent-color);
   --focus-shadow-danger: 0 0 0 2px var(--danger-txt);
-  --shadow-1: 0 4px 6px 0 hsla(200deg, 15%, 85%, 100%);
+  --shadow-1: 0 4px 6px 0 hsl(200deg, 15%, 85%, 100%);
   --shadow-10: 0 2px 5px 0 hsl(0deg, 0%, 65%);
   --shadow-20: 0 4px 12px 0 hsl(0deg, 0%, 70%);
   --shadow-30: 0 5px 20px 0 hsl(0deg, 0%, 90%);
   --shadow-menu:
-    0 3px 5px 0 rgba(0, 0, 0, 10%), 0 5px 8px 0 rgba(0, 0, 0, 10%), 0 8px 12px 0 rgba(0, 0, 0, 10%);
+    0 3px 5px 0 rgb(0, 0, 0, 10%), 0 5px 8px 0 rgb(0, 0, 0, 10%), 0 8px 12px 0 rgb(0, 0, 0, 10%);
 }
 
 :root [color-scheme='dark'] {
@@ -87,7 +87,7 @@
 
   /* --accent-color: hsl(339, 67%, 62%); */
   --accent-color: hsl(325deg, 55%, 67%);
-  --danger-bg: hsla(4deg, 90%, 16%, 13%);
+  --danger-bg: hsl(4deg, 90%, 16%, 13%);
   --danger-bg-5: hsl(4deg, 90%, 30%, 13%);
   --bg: hsl(274deg, 13%, 17%);
   --bg-5: hsl(274deg, 13%, 22%);
@@ -123,8 +123,8 @@
   --txt-5: hsl(273deg, 13%, 50%);
   --txt-1: hsl(273deg, 13%, 17%);
   --shadow-10: 0 2px 5px 0 rgb(0, 0, 0);
-  --shadow-20: 0 4px 12px 0 rgba(0, 0, 0, 12%);
-  --shadow-30: 0 5px 20px 0 rgba(0, 0, 0, 50%);
+  --shadow-20: 0 4px 12px 0 rgb(0, 0, 0, 12%);
+  --shadow-30: 0 5px 20px 0 rgb(0, 0, 0, 50%);
   --shadow-menu:
-    0 3px 5px 0 rgba(0, 0, 0, 20%), 0 5px 8px 0 rgba(0, 0, 0, 20%), 0 8px 12px 0 rgba(0, 0, 0, 20%);
+    0 3px 5px 0 rgb(0, 0, 0, 20%), 0 5px 8px 0 rgb(0, 0, 0, 20%), 0 8px 12px 0 rgb(0, 0, 0, 20%);
 }

@@ -9,7 +9,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizelegibility;
-  text-shadow: rgba(0, 0, 0, 1%) 0 0 1px;
+  text-shadow: rgb(0, 0, 0, 1%) 0 0 1px;
 }
 
 html,

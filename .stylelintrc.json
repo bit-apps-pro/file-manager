@@ -1,5 +1,4 @@
 {
-  "plugins": ["stylelint-scss"],
   "extends": [
     "stylelint-config-standard",
     "stylelint-config-css-modules",
@@ -7,14 +6,12 @@
   ],
   "rules": {
     "selector-class-pattern": "^(?:[A-Z][a-z0-9]*)+|(?:[a-z][a-z0-9]*)(?:-[a-z0-9]+)*",
-    "no-missing-end-of-source-newline": null,
     "color-function-notation": "legacy",
+    "media-feature-range-notation": "prefix",
     "selector-pseudo-class-no-unknown": [
       true,
       { "ignorePseudoClasses": ["export", "import", "global", "local"] }
     ],
     "property-no-unknown": [true, { "ignoreProperties": ["composes", "compose-with"] }]
-  },
-  "at-rule-no-unknown": [true, { "ignoreAtRules": ["keyframes", "value"] }],
-  "scss/at-if-no-null": [true, { "ignoreAtRules": ["keyframes"] }]
+  }
 }

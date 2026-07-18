@@ -7,6 +7,6 @@
 
 .reviewUs {
   border: 2px solid !important;
-  color: rgba(255, 149, 41, 100%) !important;
+  color: rgb(255, 149, 41, 100%) !important;
   padding: 8px 16px; /* Adjust padding as needed */
 }
