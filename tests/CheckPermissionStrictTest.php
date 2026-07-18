@@ -98,6 +98,24 @@ class CheckPermissionStrictTest extends TestCase
         }
     }
 
+    /**
+     * `file` (read) must be gated only by the `*.pre` bind, never by the argless
+     * connector pre-check — otherwise preview of an enabled file type by a user
+     * without download permission is wrongly blocked before run() resolves the target.
+     */
+    public function testConnectorDoesNotEnforceFileButEnforcesDestructiveCommands(): void
+    {
+        $access = $this->accessControl();
+
+        $this->assertFalse($access->isConnectorEnforceable('file'), 'file must defer to the *.pre bind');
+        $this->assertFalse($access->isConnectorEnforceable(''), 'empty command is a no-op');
+        $this->assertSame(['file'], AccessControlProvider::CONNECTOR_UNCHECKED_COMMANDS);
+
+        foreach (['rm', 'put', 'get', 'upload', 'rename', 'chmod', 'mkdir', 'mkfile', 'extract', 'zipdl'] as $cmd) {
+            $this->assertTrue($access->isConnectorEnforceable($cmd), $cmd . ' must be enforced at the connector');
+        }
+    }
+
     /** elFinder stub whose getVolume() resolves any hash to "/resolved/{hash}". */
     private function elfinderStub(): object
     {

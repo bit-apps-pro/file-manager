@@ -19,6 +19,14 @@ class AccessControlProvider
      */
     public const EXEMPT_COMMANDS = ['open', 'search', 'subdirs', 'url', 'abort', 'callback'];
 
+    /**
+     * Commands the connector-level backstop must NOT enforce. `file` (read) is
+     * authorized only by the `*.pre` bind: its allow rule (isFileAllowedToOpen)
+     * needs the resolved target volume, which does not exist until run() builds
+     * elFinder — a connector check that lacks those arguments can only wrongly deny it.
+     */
+    public const CONNECTOR_UNCHECKED_COMMANDS = ['file'];
+
     public $settings;
 
     private $maliciousPatterns = [
@@ -78,6 +86,19 @@ class AccessControlProvider
     public function validateName($name)
     {
         return ! (strpos($name, '.') === 0 && !$this->settings->isHiddenFolderAllowed());
+    }
+
+    /**
+     * Whether the connector may enforce this command before elFinder runs.
+     * The authoritative, argument-complete gate is the `*.pre` bind inside run().
+     *
+     * @param string $command
+     *
+     * @return bool
+     */
+    public function isConnectorEnforceable($command)
+    {
+        return $command !== '' && !\in_array($command, self::CONNECTOR_UNCHECKED_COMMANDS, true);
     }
 
     public function checkPermission($command, ...$args)
