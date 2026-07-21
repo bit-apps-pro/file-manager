@@ -14,7 +14,7 @@ Route::group(
     function () {
         Route::post('theme/update', [SettingsController::class, 'updateTheme']);
 
-        Route::get('language/get', [SettingsController::class, 'getLanguages']);
+        Route::get('language/get', [SettingsController::class, 'getLanguages'])->middleware('cap:can_access_fm_home');
         Route::post('language/update', [SettingsController::class, 'updateLanguage']);
 
         Route::post('logs/all', [LogController::class, 'all'])->middleware('cap:bitapps_fm_can_access_logs');
@@ -31,7 +31,7 @@ Route::group(
         Route::post('permissions/user/delete', [PermissionsController::class, 'deletePermissionByUser']);
 
         Route::post('telemetry/tryplugin', [TelemetryPopupController::class, 'tryPlugin']);
-        Route::post('telemetry_permission_handle', [TelemetryPopupController::class, 'handleTelemetryPermission']);
-        Route::get('telemetry_popup_disable_check', [TelemetryPopupController::class, 'isPopupDisabled']);
+        Route::post('telemetry_permission_handle', [TelemetryPopupController::class, 'handleTelemetryPermission'])->middleware('cap:can_access_fm_home');
+        Route::get('telemetry_popup_disable_check', [TelemetryPopupController::class, 'isPopupDisabled'])->middleware('cap:can_access_fm_home');
     }
 );

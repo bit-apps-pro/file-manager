@@ -35,6 +35,9 @@ class HookProvider
             && RequestType::is(RequestType::API)
         ) {
             $router = new Router(RequestType::API, Config::SLUG, 'v1');
+            // Without this, route-level `cap:`/`nonce:` middleware silently no-ops on the
+            // REST API (getRegisteredMiddleware() returns null → handleMiddleware() skips it).
+            $router->setMiddlewares(Plugin::instance()->middlewares());
 
             include_once $this->_pluginBackend . 'hooks' . DIRECTORY_SEPARATOR . 'api.php';
 
