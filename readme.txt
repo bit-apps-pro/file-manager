@@ -339,8 +339,8 @@ This plugin sends data to external services for certain features. Below is a sum
 == Changelog ==
 
 = 6.9.1 =
+- Security: Fix an arbitrary file deletion/read vulnerability in the file manager connector (could lead to remote code execution) that was exploitable by low-privileged users via a command request-source mismatch
 - Security: Enforce capability checks on REST API endpoints (logs, language list, telemetry) that could previously be reached without proper authorization
-- Security: Harden the file manager connector so file commands cannot bypass permission checks via the request source
 - Fix: Restore file preview for users who have view access but not the download permission
 
 = 6.9 =
