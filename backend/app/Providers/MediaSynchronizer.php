@@ -19,25 +19,37 @@ class MediaSynchronizer
     // Triggers when a file is uploaded and initiates the uploading process for single or batch files.
     public function onFileUpload($cmd, &$result, $args, $elfinder, $volume)
     {
-        $targetPath = $volume->getPath($args['target']);
+        if (!Plugin::instance()->preferences()->isWpMediaSyncEnabled() || empty($result['added'])) {
+            return;
+        }
 
-        if (
-            PermissionsProvider::realpathWithin($targetPath, $this->wpUploadBaseDirectory) !== null
-            && Plugin::instance()->preferences()->isWpMediaSyncEnabled()
-        ) {
-            $images = [];
-            for ($file = 0; $file < \count($args['FILES']['upload']['name']); $file++) {
-                $images[] = [
-                    'name' => $args['FILES']['upload']['name'][$file],
-                    'type' => wp_check_filetype($args['FILES']['upload']['name'][$file], null),
-                    'path' => trailingslashit($targetPath) . $args['FILES']['upload']['name'][$file],
-                    'url'  => $this->abs_path_to_url(
-                        trailingslashit($targetPath)
-                         . $args['FILES']['upload']['name'][$file]
-                    ),
-                ];
+        $images = [];
+        foreach ($result['added'] as $added) {
+            if (empty($added['hash']) || ($added['mime'] ?? '') === 'directory') {
+                continue; // folder-structure uploads also add dir stats; sync files only
             }
 
+            // Resolve the file elFinder actually saved (name basename-sanitized, collision-safe)
+            // from its own hash — never the raw client filename in $args, which can carry a `../`
+            // traversal. Confine on the FINAL path, not just the target directory.
+            $path = $volume->getPath($added['hash']);
+            if (
+                !\is_string($path) || $path === ''
+                || PermissionsProvider::realpathWithin($path, $this->wpUploadBaseDirectory) === null
+            ) {
+                continue;
+            }
+
+            $name     = wp_basename($path);
+            $images[] = [
+                'name' => $name,
+                'type' => wp_check_filetype($name, null),
+                'path' => $path,
+                'url'  => $this->abs_path_to_url($path),
+            ];
+        }
+
+        if (!empty($images)) {
             $this->addMedia($images);
         }
     }
