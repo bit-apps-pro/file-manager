@@ -5,7 +5,7 @@ Tags: file manager, wp file manager, wordpress file manager, files, ftp
 Requires at least: 5.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 6.9
+Stable tag: 6.9.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -337,6 +337,11 @@ This plugin sends data to external services for certain features. Below is a sum
 * Privacy: https://pixoeditor.com/privacy-policy/
 
 == Changelog ==
+
+= 6.9.1 =
+- Security: Enforce capability checks on REST API endpoints (logs, language list, telemetry) that could previously be reached without proper authorization
+- Security: Harden the file manager connector so file commands cannot bypass permission checks via the request source
+- Fix: Restore file preview for users who have view access but not the download permission
 
 = 6.9 =
 - New: Per-user permissions are now enforced per target path across all volumes, with clearer file-manager-only scope hints

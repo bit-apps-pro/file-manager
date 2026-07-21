@@ -8,7 +8,7 @@ if (! \defined('ABSPATH')) {
  * Plugin URI: https://bitapps.pro/bit-file-manager
  * Author:     File Manager by Bit Form Team
  * Author URI:  https://bitapps.pro
- * Version: 6.9
+ * Version: 6.9.1
  * Requires at least: 5.0
  * Requires PHP: 7.4
  * Text domain: file-manager
