@@ -33,10 +33,10 @@ class MediaSynchronizer
             // from its own hash — never the raw client filename in $args, which can carry a `../`
             // traversal. Confine on the FINAL path, not just the target directory.
             $path = $volume->getPath($added['hash']);
-            if (
-                !\is_string($path) || $path === ''
-                || PermissionsProvider::realpathWithin($path, $this->wpUploadBaseDirectory) === null
-            ) {
+            if (!\is_string($path) || $path === '') {
+                continue;
+            }
+            if (PermissionsProvider::realpathWithin($path, $this->wpUploadBaseDirectory) === null) {
                 continue;
             }
 
