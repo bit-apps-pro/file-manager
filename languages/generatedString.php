@@ -1,5 +1,8 @@
 <?php
 /* THIS IS A GENERATED FILE. DO NOT EDIT DIRECTLY. */
+if (!\defined('ABSPATH')) {
+    exit;
+}
 $i18n_strings = array(
     '404' => __('404', 'file-manager'),
 

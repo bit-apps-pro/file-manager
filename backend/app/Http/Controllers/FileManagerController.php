@@ -129,15 +129,32 @@ final class FileManagerController
             throw new PreCommandException(esc_html__('There is no readable volume. Please select an readable folder from settings', 'file-manager'));
         }
 
+        $accessControlProvider = Plugin::instance()->accessControl();
+
         foreach ($trashVolumes as $trashSeq => $trashDir) {
             if (!is_dir($trashDir)) {
                 wp_mkdir_p($trashDir);
+                if (\function_exists('bitapps_fm_harden_dir')) {
+                    \bitapps_fm_harden_dir($trashDir);
+                }
             }
 
             if (is_dir($trashDir)) {
                 $trashRoot = new FileRoot($trashDir, '', 'Trash', 'Trash');
                 // Explicitly set id so the volume hash is predictable: t{trashSeq}_Lw
                 $trashRoot->setOption('id', $trashSeq + 1);
+                // Trash lives under wp-content/uploads (web-served). Block the commands that
+                // author new file *content* so a write-granted user cannot plant a .php here
+                // (RCE), while keeping `paste`/`rm`/`mkdir`/`rename`: elFinder implements
+                // move-to-trash and restore as a cross-volume `paste`, which calls the trash
+                // volume's `mkdir` (for folders) and `rename` (name-collision resolution) — so
+                // disabling those would break trashing folders. `mkdir`/`rename` write no file
+                // content; the residual rename-to-.php is covered by the dir .htaccess (E-1).
+                // Do NOT add an upload MIME deny-list — it would block trashing an existing
+                // .php/.js/.css file.
+                $trashRoot->setAccessControl([$accessControlProvider, 'control']);
+                $trashRoot->setAcceptedName([$accessControlProvider, 'validateName']);
+                $trashRoot->setDisabled(['upload', 'put', 'mkfile', 'duplicate', 'archive', 'extract']);
                 $finderOptions->setRoot($trashRoot);
             }
         }
