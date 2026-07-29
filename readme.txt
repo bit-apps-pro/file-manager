@@ -9,6 +9,7 @@ Stable tag: 6.9.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
+Manage WordPress files and folders from your dashboard with a built-in code editor: upload, edit, delete, move, rename, and archive, no FTP needed.
 
 == Description ==
 
