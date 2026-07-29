@@ -39,6 +39,8 @@ function bitapps_fm_activate()
  * These dirs live under wp-content/uploads (web-served), so deny direct PHP execution
  * and directory listing as defense-in-depth against a planted script — the .htaccess
  * applies recursively, so lazily-created user_/role_ subdirs are covered too.
+ *
+ * @param mixed $dir
  */
 function bitapps_fm_harden_dir($dir)
 {

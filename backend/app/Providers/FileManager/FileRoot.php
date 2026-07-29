@@ -844,7 +844,7 @@ class FileRoot
         // `imgLib=auto` shells out to ImageMagick's `convert` binary when no PHP image
         // extension is present; pin to imagick/gd, and to 'none' when neither is loaded
         // ('gd' would itself fall through to the convert CLI in elFinder's detection).
-        $options['imgLib']             = extension_loaded('imagick')
+        $options['imgLib']             = \extension_loaded('imagick')
             ? 'imagick'
             : (\function_exists('gd_info') ? 'gd' : 'none');
         $options['id']                 = $this->getOption('_id');
