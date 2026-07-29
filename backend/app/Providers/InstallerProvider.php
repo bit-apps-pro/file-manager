@@ -48,8 +48,8 @@ class InstallerProvider
     public static function migration()
     {
         $migrations = [
-            'BFMLogsTableMigration',
-            'BFMPluginOptions',
+            'BitAppsFMLogsTableMigration',
+            'BitAppsFMPluginOptions',
         ];
 
         return [
@@ -66,8 +66,8 @@ class InstallerProvider
     public static function drop()
     {
         $migrations = [
-            'BFMLogsTableMigration',
-            'BFMPluginOptions',
+            'BitAppsFMLogsTableMigration',
+            'BitAppsFMPluginOptions',
         ];
 
         return [
