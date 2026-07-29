@@ -135,7 +135,7 @@ final class FileManagerController
             if (!is_dir($trashDir)) {
                 wp_mkdir_p($trashDir);
                 if (\function_exists('bitapps_fm_harden_dir')) {
-                    \bitapps_fm_harden_dir($trashDir);
+                    bitapps_fm_harden_dir($trashDir);
                 }
             }
 

@@ -241,7 +241,7 @@ class PermissionsProvider
         ) {
             wp_mkdir_p($rootPath);
             if (\function_exists('bitapps_fm_harden_dir')) {
-                \bitapps_fm_harden_dir($rootPath);
+                bitapps_fm_harden_dir($rootPath);
             }
         }
 
