@@ -240,6 +240,9 @@ class PermissionsProvider
             && fileSystemAdapter()->is_writable($defaultPath)
         ) {
             wp_mkdir_p($rootPath);
+            if (\function_exists('bitapps_fm_harden_dir')) {
+                \bitapps_fm_harden_dir($rootPath);
+            }
         }
 
         if (!fileSystemAdapter()->exists($rootPath) || !fileSystemAdapter()->is_dir($rootPath) || !fileSystemAdapter()->is_readable($rootPath)) {
@@ -633,6 +636,20 @@ class PermissionsProvider
 
     public function updatePermissionSetting($permissions)
     {
+        // Validated by_user/by_role entries carry only the outer key allow-list; reduce each
+        // entry to the two fields actually consumed (path, commands) so no arbitrary sub-key
+        // is persisted into the option blob.
+        foreach (['by_user', 'by_role'] as $scope) {
+            if (!empty($permissions[$scope]) && \is_array($permissions[$scope])) {
+                foreach ($permissions[$scope] as $key => $entry) {
+                    $permissions[$scope][$key] = [
+                        'path'     => \is_array($entry) && isset($entry['path']) ? $entry['path'] : '',
+                        'commands' => \is_array($entry) && isset($entry['commands']) && \is_array($entry['commands']) ? $entry['commands'] : [],
+                    ];
+                }
+            }
+        }
+
         return Config::updateOption('permissions', $permissions, 'yes');
     }
 
@@ -644,7 +661,12 @@ class PermissionsProvider
             $action = sanitize_key($_REQUEST['action']);
         }
 
-        return is_user_logged_in() && $action === 'bitapps_fm_connector';
+        // The dashboard volume is rooted at the site root, so it must require the same
+        // capability as the admin File Manager screen. A valid wp_rest nonce is held by
+        // every logged-in user and is not authorization, so gate on the capability too.
+        return is_user_logged_in()
+            && $action === 'bitapps_fm_connector'
+            && Capabilities::filter('bitapps_fm_can_access_home', 'manage_options');
     }
 
     public function isRequestForShortcode()

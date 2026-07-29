@@ -25,6 +25,8 @@ sass
 submodule
 svn-assets
 testing
+tests
+phpunit.xml.dist
 tools
 tsconfig.json
 tsconfig.node.json

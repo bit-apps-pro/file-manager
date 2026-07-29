@@ -21,7 +21,7 @@ class AccessControlProvider
 
     /**
      * Commands the connector-level backstop must NOT enforce. `file` (read) is
-     * authorized only by the `*.pre` bind: its allow rule (isFileAllowedToOpen)
+     * authorized only by the `*.pre` bind: its path-aware `download`-grant check
      * needs the resolved target volume, which does not exist until run() builds
      * elFinder — a connector check that lacks those arguments can only wrongly deny it.
      */
@@ -140,10 +140,6 @@ class AccessControlProvider
                     )
                     : __("You don't have permission to do that here.", 'file-manager');
             }
-        }
-
-        if ($command == 'file' && $this->isFileAllowedToOpen($args)) {
-            $error = '';
         }
 
         try {
@@ -308,26 +304,6 @@ class AccessControlProvider
         }
 
         return true;
-    }
-
-    private function isFileAllowedToOpen($args)
-    {
-        if (isset($args[1]) && $args[1] instanceof elFinder) {
-            $volume         = $args[1]->getVolume($args[0]['target']);
-            $file           = $volume->getPath($args[0]['target']);
-            $fileName       = wp_basename($file);
-            $fileTypeAndExt = wp_check_filetype_and_ext($file, $fileName);
-            if (isset($fileTypeAndExt['ext'], $fileTypeAndExt['type'])) {
-                $fileType        = str_replace('/' . $fileTypeAndExt['ext'], '', $fileTypeAndExt['type']);
-                $enabledFileType = Plugin::instance()->permissions()->getEnabledFileType();
-
-                if (\in_array($fileType, $enabledFileType)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 
     private function scanForPattern($content, $fileName)

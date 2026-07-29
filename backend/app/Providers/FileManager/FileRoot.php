@@ -840,6 +840,13 @@ class FileRoot
         // root, leaking downscaled copies past the permission gate. '' not null —
         // null is isset()-false, so elFinder falls back to its '.tmb' default.
         $options['tmbPath']            = '';
+        // Force the in-process image library (never the `convert` CLI). elFinder's default
+        // `imgLib=auto` shells out to ImageMagick's `convert` binary when no PHP image
+        // extension is present; pin to imagick/gd, and to 'none' when neither is loaded
+        // ('gd' would itself fall through to the convert CLI in elFinder's detection).
+        $options['imgLib']             = extension_loaded('imagick')
+            ? 'imagick'
+            : (\function_exists('gd_info') ? 'gd' : 'none');
         $options['id']                 = $this->getOption('_id');
         $options['alias']              = $this->getOption('_alias');
         $options['driver']             = $this->getOption('_driver');

@@ -461,8 +461,11 @@ class PreferenceProvider
         $defaultPath = Capabilities::check('manage_options')
          ? ABSPATH : $this->permissions()->getDefaultPublicRootPath();
 
+        // Return the raw stored path — it is validated on write (setRootPath()->realPath()
+        // and ValidPathRule at the request boundary). esc_attr() here would entity-encode a
+        // legal '&'/'\''/'<' in the path and break the volume; escaping belongs at HTML output.
         return isset($this->preferences['root_folder_path'])
-        ? esc_attr($this->preferences['root_folder_path']) : $defaultPath;
+        ? $this->preferences['root_folder_path'] : $defaultPath;
     }
 
     public function realPath($path)
