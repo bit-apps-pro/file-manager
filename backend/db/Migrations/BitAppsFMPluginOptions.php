@@ -8,7 +8,7 @@ if (!\defined('ABSPATH')) {
     exit;
 }
 
-final class BFMPluginOptions extends Migration
+final class BitAppsFMPluginOptions extends Migration
 {
     public function up()
     {
