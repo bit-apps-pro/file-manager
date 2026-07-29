@@ -339,9 +339,12 @@ This plugin sends data to external services for certain features. Below is a sum
 == Changelog ==
 
 = 6.9.1 =
-- Security: Fix an arbitrary file deletion/read vulnerability in the file manager connector (could lead to remote code execution) that was exploitable by low-privileged users via a command request-source mismatch
-- Security: Enforce capability checks on REST API endpoints (logs, language list, telemetry) that could previously be reached without proper authorization
-- Fix: Restore file preview for users who have view access but not the download permission
+- Security: Fixed an arbitrary file read/deletion vulnerability (Subscriber and above) in the file manager connector that could lead to remote code execution. Props to daroo (Wordfence) and Artus KG (WPScan).
+- Security: The connector no longer serves the site-root volume to low-privileged users. Props to JING QIAN (WPScan).
+- Security: Enforced capability checks on REST API endpoints; the activity log is no longer readable unauthenticated. Props to Farid Narimanov (WPScan).
+- Security: File download now always requires the download permission; trash and upload folders hardened against executable files.
+- Fix: Restore file preview for users with view access but not the download permission.
+- Fix: Activity log now installs correctly on new sites.
 
 = 6.9 =
 - New: Per-user permissions are now enforced per target path across all volumes, with clearer file-manager-only scope hints
