@@ -16,6 +16,7 @@ const NEWLINE = '\n'
 const args = process.argv.slice(2)
 const fileHeader = [
     '<?php',
+    "if (!\\defined('ABSPATH')) {exit;}",
     '/* THIS IS A GENERATED FILE. DO NOT EDIT DIRECTLY. */',
     '$i18n_strings = array(',
 ].join(NEWLINE) + NEWLINE
