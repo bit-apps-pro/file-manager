@@ -40,7 +40,7 @@
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-focus-bounder": "^1.1.6",
-    "react-router-dom": "^7.15.0"
+    "react-router-dom": "^7.18.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.0.1",
@@ -94,7 +94,6 @@
     "onchange": "^7.1.0",
     "postcss-csso": "^6.0.1",
     "prettier": "^3.8.3",
-    "react-router-dom": "^6.21.3",
     "recursive-copy": "^2.0.14",
     "stylelint": "^17.11.1",
     "stylelint-config-css-modules": "^4.6.0",
@@ -102,7 +101,7 @@
     "stylelint-config-standard-scss": "^17.0.0",
     "typescript": "^6.0.3",
     "typescript-plugin-css-modules": "^5.2.0",
-    "vite": "^8.0.13",
+    "vite": "^8.0.16",
     "vite-plugin-babel": "^1.7.0",
     "vite-plugin-pwa": "^1.3.0",
     "vite-plugin-static-copy": "^4.1.0",

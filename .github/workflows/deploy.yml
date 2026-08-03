@@ -95,7 +95,6 @@ jobs:
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
           BUILD_DIR: '${{ github.workspace }}/build/${{ env.PLUGIN_SLUG }}'
           SLUG: ${{ env.PLUGIN_SLUG }}
-          ASSETS_DIR: '${{ github.workspace }}/svn-assets'
 
       - name: Upload release asset
         if: steps.build-plugin.outputs.free_exists == 'true'

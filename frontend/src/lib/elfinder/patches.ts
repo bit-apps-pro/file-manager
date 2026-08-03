@@ -153,6 +153,24 @@ export function patchCodeMirror(finder: FinderWithDialog): void {
 
 const BITFM_PATCHED = Symbol('bitfmPatched')
 
+type GetElFinderFn = ((...args: unknown[]) => unknown) & { [BITFM_PATCHED]?: boolean }
+
+// Every DOM-based fm lookup in elFinder funnels through $.fn.getElFinder (via
+// $(node).elfinder('instance')). It returns undefined once a dialog or overlay
+// is elevated into <body> (outside `.elfinder`), so the dialog/overlay plugins
+// then call fm.trigger()/fm.toFront() on undefined and the edit command crashes.
+// Fall back to the known finder when the DOM walk finds nothing.
+export function patchGetElFinder(finder: FinderWithDialog, jq: JQueryWithUi): void {
+  const jqAny = jq as JQueryWithUi & { fn: Record<string, GetElFinderFn> }
+  const orig = jqAny.fn.getElFinder
+  if (typeof orig !== 'function' || orig[BITFM_PATCHED]) return
+  const patched: GetElFinderFn = function patchedGetElFinder(this: unknown, ...args) {
+    return orig.apply(this, args) ?? finder
+  }
+  patched[BITFM_PATCHED] = true
+  jqAny.fn.getElFinder = patched
+}
+
 type ElfinderdialogFn = ((...args: unknown[]) => unknown) & {
   defaults?: unknown
   [BITFM_PATCHED]?: boolean

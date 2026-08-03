@@ -10,6 +10,7 @@ import {
   patchCodeMirror,
   patchElfinderDialogPlugin,
   patchFmDialog,
+  patchGetElFinder,
   patchToFront
 } from '@lib/elfinder/patches'
 import { type FinderWithDialog, type JQueryWithUi } from '@lib/elfinder/types'
@@ -92,6 +93,7 @@ export default function configureElFinder(finderRef: RefObject<HTMLDivElement>):
   })[0].elfinder as FinderWithDialog
 
   patchToFront(finder)
+  patchGetElFinder(finder, jq)
   patchFmDialog(finder, jq)
   patchElfinderDialogPlugin(jq)
   patchCodeMirror(finder)
