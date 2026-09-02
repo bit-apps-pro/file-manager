@@ -33,7 +33,7 @@
     "bitapps/wp-database": "^1.11",
     "bitapps/wp-telemetry": "^0.0.9",
     "typisttech/imposter-plugin": "^0.6.2",
-    "studio-42/elfinder": "^2.1"
+    "studio-42/elfinder": "^2.1.70"
   },
   "extra": {
     "imposter": {

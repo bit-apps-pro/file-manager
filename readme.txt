@@ -5,7 +5,7 @@ Tags: file manager, wp file manager, wordpress file manager, files, ftp
 Requires at least: 5.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 6.9.1
+Stable tag: 6.9.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -338,6 +338,9 @@ This plugin sends data to external services for certain features. Below is a sum
 * Privacy: https://pixoeditor.com/privacy-policy/
 
 == Changelog ==
+
+= 6.9.2 =
+- Security: Updated elFinder to 2.1.70 to fix an SSRF vulnerability.
 
 = 6.9.1 =
 - Security: Fixed an arbitrary file read/deletion vulnerability (Subscriber and above) in the file manager connector that could lead to remote code execution. Props to daroo (Wordfence) and Artus KG (WPScan).
