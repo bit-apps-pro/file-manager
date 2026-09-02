@@ -1,10 +1,10 @@
 const copy = require('recursive-copy');
+const { mkdirSync } = require('node:fs');
 const path = require('node:path');
 
 // Copy files
 const options = {
     overwrite: true,
-    expand: true,
     filter: [
         // '**/*',
         'assets/**/*',
@@ -20,7 +20,10 @@ const options = {
     ]
 };
 
-copy('.', path.join('build', 'file-manager'), options)
+const buildPath = path.join('build', 'file-manager');
+mkdirSync(buildPath, { recursive: true });
+
+copy('.', buildPath, options)
     .on(copy.events.COPY_FILE_START, (copyOperation) => {
         console.info(`Copying file ${copyOperation.src}...`);
     })
@@ -33,4 +36,7 @@ copy('.', path.join('build', 'file-manager'), options)
     .then((results) => {
         console.info(`${results.length} file(s) copied`);
     })
-    .catch((error) => console.error(`Copy failed: ${error}`));
+    .catch((error) => {
+        console.error(`Copy failed: ${error}`);
+        process.exitCode = 1;
+    });
