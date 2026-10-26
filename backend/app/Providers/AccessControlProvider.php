@@ -44,7 +44,7 @@ class AccessControlProvider
     }
 
     /**
-     * Handles hidden file/folder access
+     * Per-path elFinder attribute callback: hidden-file policy, then the file_access filter.
      *
      * @param string    $attr    attribute name (read|write|locked|hidden)
      * @param string    $path    absolute file path
@@ -57,22 +57,14 @@ class AccessControlProvider
      */
     public function control($attr, $path, $data, $volume, $isDir, $relPath)
     {
-        $isAccessAllowed = null;
-        if (strpos(basename($path), '.') !== 0 || \strlen($relPath) === 1 || $attr === 'locked') {
-            return $isAccessAllowed;
-        }
-
-        $isAccessAllowed = true;
-
-        if ($this->settings->getVisibilityOfHiddenFile() && $attr === 'hidden') {
-            $isAccessAllowed = false;
-        }
-
-        if ($isAccessAllowed && !$this->settings->isHiddenFolderAllowed() && $attr == 'write') {
-            $isAccessAllowed = false;
-        }
-
-        return $isAccessAllowed;
+        return Plugin::instance()->permissions()->applyContextFilter(
+            'file_access',
+            $this->hiddenFileAccess($attr, $path, $relPath),
+            $attr,
+            $path,
+            $relPath,
+            $isDir
+        );
     }
 
     /**
@@ -101,51 +93,34 @@ class AccessControlProvider
         return $command !== '' && !\in_array($command, self::CONNECTOR_UNCHECKED_COMMANDS, true);
     }
 
+    /**
+     * Command gate for `*.pre` (args: cmd args, elFinder) and the argless connector backstop; returns a preventexec payload on denial.
+     *
+     * @param string $command
+     */
     public function checkPermission($command, ...$args)
     {
         if (\in_array($command, self::EXEMPT_COMMANDS, true)) {
             return;
         }
 
-        $error              = '';
         $permissionProvider = Plugin::instance()->permissions();
-        $cmd                = $command;
-        if ($command === 'file' || $command === 'zipdl') {
-            $cmd = 'download';
-        } elseif ($command === 'put' || $command === 'get') {
-            $cmd = 'edit';
-        }
+        $cmd                = $this->normalizeCommand($command);
+        $paths              = $this->resolvePathsFromArgs($args);
 
-        if ($this->isNotRequiredCommandForAllPermission($cmd, $permissionProvider)) {
-            $elfinder = isset($args[1])    && $args[1] instanceof elFinder ? $args[1] : null;
-            $paths    = $elfinder !== null && isset($args[0]) && \is_array($args[0])
-                ? $this->resolveInvolvedPaths($args[0], $elfinder)
-                : [];
+        $authorized = (bool) $permissionProvider->applyContextFilter(
+            'can_run_command',
+            $this->isAuthorizedBySettings($cmd, $paths, $permissionProvider),
+            $cmd,
+            $paths,
+            $permissionProvider->currentUser()
+        );
 
-            if (!empty($paths) && \in_array($cmd, $permissionProvider->allCommands(), true)) {
-                // Path-aware check is authoritative for managed commands when targets resolve.
-                $authorized = $this->isCommandAllowedForPaths($cmd, $paths, $permissionProvider);
-            } else {
-                // Non-managed command or no resolvable target: coarse union (admin + capability filter).
-                $authorized = $permissionProvider->currentUserCanRun($cmd);
-            }
-
-            if (!$authorized) {
-                $action = $permissionProvider->commandLabel($cmd);
-                $error  = $action !== ''
-                    ? wp_sprintf(
-                        // translators: 1: human-readable action, e.g. "edit files"
-                        __("You don't have permission to %s here.", 'file-manager'),
-                        $action
-                    )
-                    : __("You don't have permission to do that here.", 'file-manager');
-            }
+        if (!$authorized) {
+            return (new PreCommandException($this->deniedMessage($cmd, $permissionProvider)))->getError();
         }
 
         try {
-            if (!empty($error)) {
-                throw new PreCommandException($error);
-            }
             $this->scanFile($command, $args);
         } catch (PreCommandException $th) {
             return $th->getError();
@@ -304,6 +279,84 @@ class AccessControlProvider
         }
 
         return true;
+    }
+
+    /**
+     * Hidden (dot) file policy from settings; null defers to elFinder's default.
+     */
+    private function hiddenFileAccess(string $attr, string $path, string $relPath): ?bool
+    {
+        if (strpos(basename($path), '.') !== 0 || \strlen($relPath) === 1 || $attr === 'locked') {
+            return null;
+        }
+
+        if ($attr === 'hidden') {
+            return !$this->settings->getVisibilityOfHiddenFile();
+        }
+
+        return $attr !== 'write' || $this->settings->isHiddenFolderAllowed();
+    }
+
+    /**
+     * Maps elFinder commands onto the permission names they are governed by.
+     */
+    private function normalizeCommand(string $command): string
+    {
+        if ($command === 'file' || $command === 'zipdl') {
+            return 'download';
+        }
+
+        if ($command === 'put' || $command === 'get') {
+            return 'edit';
+        }
+
+        return $command;
+    }
+
+    /**
+     * Absolute target paths from `*.pre` args; empty when called without elFinder context.
+     */
+    private function resolvePathsFromArgs(array $args): array
+    {
+        if (!isset($args[0], $args[1]) || !\is_array($args[0]) || !$args[1] instanceof elFinder) {
+            return [];
+        }
+
+        return $this->resolveInvolvedPaths($args[0], $args[1]);
+    }
+
+    /**
+     * The plugin's own verdict from permission settings, before the can_run_command filter.
+     */
+    private function isAuthorizedBySettings(string $cmd, array $paths, PermissionsProvider $permissionProvider): bool
+    {
+        if (!$this->isNotRequiredCommandForAllPermission($cmd, $permissionProvider)) {
+            return true;
+        }
+
+        if (!empty($paths) && \in_array($cmd, $permissionProvider->allCommands(), true)) {
+            // Path-aware check is authoritative for managed commands when targets resolve.
+            return $this->isCommandAllowedForPaths($cmd, $paths, $permissionProvider);
+        }
+
+        // Non-managed command or no resolvable target: coarse union (admin + capability filter).
+        return $permissionProvider->currentUserCanRun($cmd);
+    }
+
+    /**
+     * User-facing error for a denied command.
+     */
+    private function deniedMessage(string $cmd, PermissionsProvider $permissionProvider): string
+    {
+        $action = $permissionProvider->commandLabel($cmd);
+
+        return $action !== ''
+            ? wp_sprintf(
+                // translators: 1: human-readable action, e.g. "edit files"
+                __("You don't have permission to %s here.", 'file-manager'),
+                $action
+            )
+            : __("You don't have permission to do that here.", 'file-manager');
     }
 
     private function scanForPattern($content, $fileName)

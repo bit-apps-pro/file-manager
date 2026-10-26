@@ -52,8 +52,19 @@ class Shortcode
         Plugin::instance()->registerAssets();
     }
 
+    /**
+     * Renders the [file-manager] shortcode, or a notice when frontend access is denied.
+     */
     public function shortCodeView()
     {
+        $permissions = Plugin::instance()->permissions();
+        if (!$permissions->canAccessFrontend()) {
+            return \sprintf(
+                '<p class="bitapps-fm-access-denied">%s</p>',
+                esc_html($permissions->frontendAccessDeniedMessage())
+            );
+        }
+
         ob_start();
         view('finder');
 

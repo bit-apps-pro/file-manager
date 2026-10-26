@@ -285,6 +285,18 @@ Yes, file/folder permission can be changed like cPanel and other hosting managem
 
 Yes, It is possible to edit writeable files in the wordpress directory using code editor. This plugin includes multiple code editing like "Ace Editor", "CodeMirror" and Text Editor.
 
+= How do I restrict the frontend file manager to specific users or folders? =
+
+Add a small PHP snippet (theme `functions.php` or a code snippets plugin) using these filters. Each one can both grant and deny, and each receives `string $context` (`'frontend'` or `'admin'`) as its last argument.
+
+* `bitapps_fm_can_access_frontend( bool $allowed, WP_User $user, string $context )`: whether the visitor may use the `[file-manager]` shortcode at all.
+* `bitapps_fm_file_roots( FileRoot[] $roots, WP_User $user, string $context )`: the folders guests and non-admin users see; any path is allowed.
+* `bitapps_fm_can_run_command( bool $authorized, string $cmd, string[] $paths, WP_User $user, string $context )`: final say on every command (upload, download, delete, ...).
+* `bitapps_fm_file_access( ?bool $result, string $attr, string $path, string $relPath, ?bool $isDir, string $context )`: per-file read/write/locked/hidden attributes.
+* `bitapps_fm_toolbar_commands( string[] $commands, WP_User $user, string $context )`: which toolbar and context-menu buttons are shown.
+
+The full reference, the gotchas and a complete example (a board-members-only "Archief" folder) are at https://github.com/Bit-Apps-Pro/file-manager/blob/main/docs/hooks.md
+
 == Screenshots ==
 
 1. Overall View
@@ -338,6 +350,10 @@ This plugin sends data to external services for certain features. Below is a sum
 * Privacy: https://pixoeditor.com/privacy-policy/
 
 == Changelog ==
+
+= Unreleased =
+- New: Developer filters to control the frontend file manager from a snippet: `bitapps_fm_can_access_frontend`, `bitapps_fm_file_roots`, `bitapps_fm_can_run_command`, `bitapps_fm_file_access` and `bitapps_fm_toolbar_commands`. See the FAQ.
+- Change: Allowed file types, upload size limit and hidden-file rules now also apply to the guest volume.
 
 = 6.9.2 =
 - Security: Updated elFinder to 2.1.70 to fix an SSRF vulnerability.

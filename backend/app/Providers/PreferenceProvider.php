@@ -679,13 +679,14 @@ class PreferenceProvider
         $options->setOption('lang', $this->getLangCode());
         $options->setOption('width', $this->getWidth());
         $options->setOption('height', $this->getHeight());
-        $options->setOption('commands', $this->permissions()->getEnabledCommand());
-        $disabledCommands = array_diff($this->permissions()->allCommands(), $this->permissions()->getEnabledCommand());
+        $toolbarCommands = $this->toolbarCommands();
+        $options->setOption('commands', $toolbarCommands);
+        $disabledCommands = $this->permissions()->getDisabledCommandFor($toolbarCommands);
         if (\in_array('download', $disabledCommands)) {
             $disabledCommands[] = 'dblclick';
         }
 
-        $options->setOption('disabled', array_values($disabledCommands));
+        $options->setOption('disabled', $disabledCommands);
         $options->setOption('commandsOptions', $this->finderCommandsOptions());
         $options->setOption('rememberLastDir', $this->getRememberLastDir());
         $options->setOption('reloadClearHistory', $this->getClearHistoryOnReload());
@@ -694,11 +695,21 @@ class PreferenceProvider
         // $options->setOption('resizable', true);
         $options->setOption(
             'contextmenu',
-            $this->finderContextMenu()
+            $this->finderContextMenu($toolbarCommands)
         );
         $options->setOption('cdns', $this->finderCdns());
 
         return $options->getOptions();
+    }
+
+    /**
+     * Toolbar commands for the current user, passed through the toolbar_commands filter.
+     */
+    public function toolbarCommands(): array
+    {
+        $permissions = $this->permissions();
+
+        return $permissions->applyListFilter('toolbar_commands', $permissions->getEnabledCommand(), 'is_string', 'strings');
     }
 
     public function finderCdns()
@@ -733,7 +744,10 @@ class PreferenceProvider
         ];
     }
 
-    public function finderContextMenu()
+    /**
+     * elFinder context menu; guests get only download, and only when the toolbar has any command.
+     */
+    public function finderContextMenu(array $toolbarCommands)
     {
         $contextMenu = [
             // 'commands' => ['*'],
@@ -746,7 +760,7 @@ class PreferenceProvider
                 'cwd'    => ['reload', 'back', 'sort'],
                 'files'  => [],
             ];
-            if (\count($this->permissions()->getEnabledCommand())) {
+            if (\count($toolbarCommands)) {
                 $contextMenu['files'] = ['download'];
             }
         }

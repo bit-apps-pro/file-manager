@@ -98,13 +98,14 @@ class FileCommandEscapeHatchTest extends TestCase
     {
         $mock = $this->getMockBuilder(PermissionsProvider::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['currentUserCanRun', 'allCommands', 'commandLabel', 'getEnabledFileType'])
+            ->onlyMethods(['currentUserCanRun', 'allCommands', 'commandLabel', 'getEnabledFileType', 'requestContext'])
             ->getMock();
 
         $mock->method('currentUserCanRun')->willReturn($canDownload);
         $mock->method('allCommands')->willReturn([]);
         $mock->method('commandLabel')->willReturn('');
         $mock->method('getEnabledFileType')->willReturn($enabledFileTypes);
+        $mock->method('requestContext')->willReturn(PermissionsProvider::CONTEXT_FRONTEND);
 
         return $mock;
     }

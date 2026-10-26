@@ -162,15 +162,30 @@ final class FileManagerController
         return $finderOptions;
     }
 
+    /**
+     * Volumes for the current request: the admin dashboard root, or filtered guest/user volumes.
+     */
     public function getFileRoots()
     {
-        if (!is_user_logged_in()) {
-            return $this->guestVolume();
-        } elseif (is_user_logged_in() && Plugin::instance()->permissions()->isRequestForAdminArea() && Plugin::instance()->permissions()->isDisabledForAdmin()) {
+        $permissions = Plugin::instance()->permissions();
+        if ($permissions->isDashboardRequest()) {
             return $this->getDashboardVolumes();
         }
 
-        return $this->getUserVolumes();
+        $roots = $permissions->applyListFilter(
+            'file_roots',
+            is_user_logged_in() ? $this->getUserVolumes() : $this->guestVolume(),
+            static function ($root) {
+                return $root instanceof FileRoot;
+            },
+            FileRoot::class
+        );
+        foreach ($roots as $root) {
+            $this->setAllowedFileType($root);
+            $this->applySecurityPolicy($root);
+        }
+
+        return $roots;
     }
 
     public function getUrlByPath($path)
@@ -226,12 +241,30 @@ final class FileManagerController
         $volume->setUploadAllow($allowedMimes);
     }
 
+    /**
+     * Sets access-control, name-validation and owner options; must run after any setAllowedFileType().
+     */
+    private function applySecurityPolicy(FileRoot $volume)
+    {
+        $accessControlProvider = Plugin::instance()->accessControl();
+
+        $volume->setAccessControl([$accessControlProvider, 'control']);
+        $volume->setAcceptedName([$accessControlProvider, 'validateName']);
+        $volume->setWinHashFix(DIRECTORY_SEPARATOR !== '/');
+
+        // Lifts the upload size cap that setAllowedFileType() applies.
+        if (Capabilities::filter(Config::VAR_PREFIX . 'user_can_manage_options')) {
+            $volume->setAllowChmodReadOnly(true);
+            $volume->setStatOwner(true);
+            $volume->setUploadMaxSize(0);
+        }
+    }
+
     private function getDashboardVolumes()
     {
-        $mimes                 = Plugin::instance()->mimes()->getTypes();
-        $preferences           = Plugin::instance()->preferences();
-        $accessControlProvider = Plugin::instance()->accessControl();
-        $permissions           = Plugin::instance()->permissions();
+        $mimes       = Plugin::instance()->mimes()->getTypes();
+        $preferences = Plugin::instance()->preferences();
+        $permissions = Plugin::instance()->permissions();
 
         $baseRoot = new FileRoot(
             $preferences->getRootPath(),
@@ -245,16 +278,8 @@ final class FileManagerController
             $this->setAllowedFileType($baseRoot);
         }
 
-        $baseRoot->setAccessControl([$accessControlProvider, 'control']);
-        $baseRoot->setAcceptedName([$accessControlProvider, 'validateName']);
         $baseRoot->setDisabled([]);
-        $baseRoot->setWinHashFix(DIRECTORY_SEPARATOR !== '/');
-
-        if (Capabilities::filter(Config::VAR_PREFIX . 'user_can_manage_options')) {
-            $baseRoot->setAllowChmodReadOnly(true);
-            $baseRoot->setStatOwner(true);
-            $baseRoot->setUploadMaxSize(0);
-        }
+        $this->applySecurityPolicy($baseRoot);
 
         $roots[] = $baseRoot;
 
@@ -324,25 +349,11 @@ final class FileManagerController
      */
     private function processFileRoot($path, $alias, $url, ?array $disabledCommands = null)
     {
-        $permissions           = Plugin::instance()->permissions();
-        $accessControlProvider = Plugin::instance()->accessControl();
+        $permissions = Plugin::instance()->permissions();
 
-        $volume = new FileRoot(
-            $path,
-            Plugin::instance()->permissions()->currentUserCanRun('download') ? $url : '', // If a URL is provided, the file will be downloaded regardless of whether the download feature is disabled or not.
-            $alias
-        );
-        $this->setAllowedFileType($volume);
-        $volume->setAccessControl([$accessControlProvider, 'control']);
-        $volume->setAcceptedName([$accessControlProvider, 'validateName']);
+        // With a URL set, files download directly regardless of the download permission.
+        $volume = new FileRoot($path, $permissions->currentUserCanRun('download') ? $url : '', $alias);
         $volume->setDisabled($disabledCommands ?? $permissions->getDisabledCommand());
-        $volume->setWinHashFix(DIRECTORY_SEPARATOR !== '/');
-
-        if (Capabilities::filter(Config::VAR_PREFIX . 'user_can_manage_options')) {
-            $volume->setAllowChmodReadOnly(true);
-            $volume->setStatOwner(true);
-            $volume->setUploadMaxSize(0);
-        }
 
         return $volume;
     }

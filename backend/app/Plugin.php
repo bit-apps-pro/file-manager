@@ -10,6 +10,7 @@ use function BitApps\FM\Functions\fileSystemAdapter;
 use function BitApps\FM\Functions\view;
 
 use BitApps\FM\Http\Middleware\CapCheckerMiddleware;
+use BitApps\FM\Http\Middleware\FrontendAccessMiddleware;
 use BitApps\FM\Http\Middleware\NonceCheckerMiddleware;
 
 use BitApps\FM\Providers\AccessControlProvider;
@@ -63,8 +64,9 @@ final class Plugin
     public function middlewares()
     {
         return [
-            'nonce' => NonceCheckerMiddleware::class,
-            'cap'   => CapCheckerMiddleware::class,
+            'nonce'           => NonceCheckerMiddleware::class,
+            'cap'             => CapCheckerMiddleware::class,
+            'frontend_access' => FrontendAccessMiddleware::class,
         ];
     }
 

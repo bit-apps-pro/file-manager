@@ -5,3 +5,5 @@ declare(strict_types=1);
 require_once __DIR__ . '/../vendor/autoload.php';
 
 WP_Mock::bootstrap();
+
+require_once __DIR__ . '/../backend/functions/common.php';

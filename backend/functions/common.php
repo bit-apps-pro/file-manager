@@ -34,3 +34,19 @@ function fileSystemAdapter()
 
     return $wp_filesystem;
 }
+
+/**
+ * Flags a plugin filter callback that returned a value of the wrong type.
+ *
+ * @param string $hook     filter name
+ * @param string $expected human-readable description of the expected return value
+ */
+function reportInvalidFilterReturn(string $hook, string $expected)
+{
+    _doing_it_wrong(
+        esc_html($hook),
+        // translators: 1: description of the expected return value, e.g. "an array"
+        esc_html(wp_sprintf(__('Callbacks must return %s; invalid values are ignored.', 'file-manager'), $expected)),
+        esc_html(Config::VERSION)
+    );
+}

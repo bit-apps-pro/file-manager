@@ -6,9 +6,11 @@ use BitApps\FM\Config;
 use BitApps\FM\Exception\PreCommandException;
 
 use function BitApps\FM\Functions\fileSystemAdapter;
+use function BitApps\FM\Functions\reportInvalidFilterReturn;
 
 use BitApps\FM\Plugin;
 use BitApps\FM\Vendor\BitApps\WPKit\Helpers\Arr;
+use BitApps\FM\Vendor\BitApps\WPKit\Http\RequestType;
 use BitApps\FM\Vendor\BitApps\WPKit\Utils\Capabilities;
 
 use WP_User;
@@ -16,6 +18,10 @@ use WP_User;
 \defined('ABSPATH') || exit();
 class PermissionsProvider
 {
+    public const CONTEXT_FRONTEND = 'frontend';
+
+    public const CONTEXT_ADMIN = 'admin';
+
     private const ALL_COMMANDS = [
         'download', // file, zipdl
         'cut',// only for frontend. send cmd as paste
@@ -52,6 +58,13 @@ class PermissionsProvider
      * @var PreferenceProvider
      */
     private $_preferences;
+
+    /**
+     * Memoized requestContext() result
+     *
+     * @var string|null
+     */
+    private $_requestContext;
 
     public function __construct()
     {
@@ -171,7 +184,7 @@ class PermissionsProvider
 
     public function getPath()
     {
-        if ($this->isRequestForAdminArea() && $this->isDisabledForAdmin()) {
+        if ($this->isDashboardRequest()) {
             return $this->_preferences->getRootPath();
         }
 
@@ -194,7 +207,7 @@ class PermissionsProvider
 
     public function getURL()
     {
-        if ($this->isRequestForAdminArea() && $this->isDisabledForAdmin()) {
+        if ($this->isDashboardRequest()) {
             return $this->_preferences->getRootUrl();
         }
 
@@ -419,6 +432,14 @@ class PermissionsProvider
             && \boolval($this->permissions['do_not_use_for_admin']);
     }
 
+    /**
+     * Whether this is an admin File Manager request served by the unrestricted dashboard volume.
+     */
+    public function isDashboardRequest(): bool
+    {
+        return $this->isRequestForAdminArea() && $this->isDisabledForAdmin();
+    }
+
     public function getFolderOption()
     {
         return isset($this->permissions['folder_options']) ? $this->permissions['folder_options'] : 'common';
@@ -522,7 +543,7 @@ class PermissionsProvider
 
     public function getEnabledCommand()
     {
-        if ($this->isRequestForAdminArea() && $this->isDisabledForAdmin()) {
+        if ($this->isDashboardRequest()) {
             return ['*'];
         }
 
@@ -539,7 +560,7 @@ class PermissionsProvider
 
     public function getDisabledCommand()
     {
-        if ($this->isRequestForAdminArea() && $this->isDisabledForAdmin()) {
+        if ($this->isDashboardRequest()) {
             return [];
         }
 
@@ -681,6 +702,66 @@ class PermissionsProvider
     }
 
     /**
+     * Whether the current visitor may use the frontend (shortcode) file manager.
+     */
+    public function canAccessFrontend(): bool
+    {
+        return (bool) $this->applyContextFilter('can_access_frontend', true, $this->currentUser());
+    }
+
+    /**
+     * Applies a snippet-facing plugin filter with the request context appended as its last argument.
+     *
+     * @param mixed $value
+     * @param mixed ...$args
+     *
+     * @return mixed
+     */
+    public function applyContextFilter(string $name, $value, ...$args)
+    {
+        $args[] = $this->requestContext();
+
+        // Core call, not the Hooks facade: file_access runs for every attribute of every listed file.
+        return apply_filters(Config::withPrefix($name), $value, ...$args);
+    }
+
+    /**
+     * Applies a list filter (default, user, context), dropping entries that fail $isValidEntry and reporting bad returns.
+     */
+    public function applyListFilter(string $name, array $default, callable $isValidEntry, string $expected): array
+    {
+        $list = $this->applyContextFilter($name, $default, $this->currentUser());
+        if (!\is_array($list)) {
+            reportInvalidFilterReturn(Config::withPrefix($name), 'an array');
+
+            return [];
+        }
+
+        $valid = array_filter($list, $isValidEntry);
+        if (\count($valid) !== \count($list)) {
+            reportInvalidFilterReturn(Config::withPrefix($name), 'an array of ' . $expected);
+        }
+
+        return array_values($valid);
+    }
+
+    /**
+     * UI the current request comes from (CONTEXT_FRONTEND or CONTEXT_ADMIN), memoized per request.
+     */
+    public function requestContext(): string
+    {
+        return $this->_requestContext ??= $this->detectRequestContext();
+    }
+
+    /**
+     * User-facing notice shown when the frontend file manager is denied.
+     */
+    public function frontendAccessDeniedMessage(): string
+    {
+        return __("You don't have permission to access the file manager.", 'file-manager');
+    }
+
+    /**
      * Returns all users who are in the permission by_user list
      *
      * @return array<int, WP_User>
@@ -731,5 +812,31 @@ class PermissionsProvider
         }
 
         return $processedUsers;
+    }
+
+    /**
+     * Whether the current request is served by the WordPress REST API.
+     */
+    protected function isRestRequest(): bool
+    {
+        return (bool) RequestType::is(RequestType::API);
+    }
+
+    /**
+     * Computes the uncached requestContext() value.
+     */
+    private function detectRequestContext(): string
+    {
+        // Every plugin REST route is an admin screen API, yet REST requests report is_admin() false.
+        if ($this->isRestRequest()) {
+            return self::CONTEXT_ADMIN;
+        }
+
+        // admin-ajax always reports is_admin() true, so the shortcode connector is told apart by its action.
+        if (wp_doing_ajax()) {
+            return $this->isRequestForShortcode() ? self::CONTEXT_FRONTEND : self::CONTEXT_ADMIN;
+        }
+
+        return is_admin() ? self::CONTEXT_ADMIN : self::CONTEXT_FRONTEND;
     }
 }
