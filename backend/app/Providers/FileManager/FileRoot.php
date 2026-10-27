@@ -514,9 +514,9 @@ class FileRoot
      * @param string      $path
      * @param string      $url
      * @param null|string $alias
-     * @param string      $driver LocalFileSystem | MySQL | FTP
+     * @param string      $driver LocalFileSystemDriver::DRIVER (default) | LocalFileSystem | MySQL | FTP
      */
-    public function __construct($path, $url, $alias = null, $driver = 'LocalFileSystem')
+    public function __construct($path, $url, $alias = null, $driver = LocalFileSystemDriver::DRIVER)
     {
         $this->_path   = $path;
         $this->_URL    = $url;

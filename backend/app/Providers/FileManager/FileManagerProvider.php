@@ -23,6 +23,7 @@ class FileManagerProvider
 
     public function getFinder()
     {
+        LocalFileSystemDriver::register();
         $finder = new elFinder($this->_finderOptions->getOptions());
 
         return new FinderConnector($finder);

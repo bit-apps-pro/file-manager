@@ -5,7 +5,7 @@ Tags: file manager, wp file manager, wordpress file manager, files, ftp
 Requires at least: 5.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 6.9.2
+Stable tag: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -351,9 +351,15 @@ This plugin sends data to external services for certain features. Below is a sum
 
 == Changelog ==
 
-= Unreleased =
-- New: Developer filters to control the frontend file manager from a snippet: `bitapps_fm_can_access_frontend`, `bitapps_fm_file_roots`, `bitapps_fm_can_run_command`, `bitapps_fm_file_access` and `bitapps_fm_toolbar_commands`. See the FAQ.
+= 7.0 =
+- New: Developer filters to restrict or extend the file manager from a snippet, e.g. a members-only folder. Each one can grant or deny and receives the request context (`frontend` or `admin`). See the FAQ.
+- New: `bitapps_fm_can_access_frontend` filter decides whether a visitor may use the `[file-manager]` shortcode.
+- New: `bitapps_fm_file_roots` filter sets the folders guests and non-admin users see.
+- New: `bitapps_fm_can_run_command` filter has the final say on every command (upload, download, delete, ...).
+- New: `bitapps_fm_file_access` filter controls per-file read, write, locked and hidden attributes.
+- New: `bitapps_fm_toolbar_commands` filter picks which toolbar and context-menu buttons are shown.
 - Change: Allowed file types, upload size limit and hidden-file rules now also apply to the guest volume.
+- Fix: Downloading a large folder as a zip uses far less memory, so it no longer fails with an error on hosts with a low PHP memory limit.
 
 = 6.9.2 =
 - Security: Updated elFinder to 2.1.70 to fix an SSRF vulnerability.
