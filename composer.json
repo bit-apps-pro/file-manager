@@ -16,9 +16,9 @@
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^3.10",
     "sirbrillig/phpcs-variable-analysis": "*",
-    "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
+    "dealerdirect/phpcodesniffer-composer-installer": "^1.2",
     "phpcompatibility/phpcompatibility-wp": "*",
-    "phpunit/phpunit": "^13.1",
+    "phpunit/phpunit": "^13.4",
     "10up/wp_mock": "^0.4.2"
   },
   "config": {
@@ -28,10 +28,10 @@
     }
   },
   "require": {
-    "bitapps/wp-validator": "^1.2.3",
-    "bitapps/wp-kit": "^2.2",
+    "bitapps/wp-validator": "^1.2.4",
+    "bitapps/wp-kit": "^2.4",
     "bitapps/wp-database": "^1.11",
-    "bitapps/wp-telemetry": "^0.0.9",
+    "bitapps/wp-telemetry": "^1.0",
     "typisttech/imposter-plugin": "^0.6.2",
     "studio-42/elfinder": "^2.1.70"
   },

@@ -109,8 +109,7 @@ export default function configureElFinder(finderRef: RefObject<HTMLDivElement>):
       const hash = data?.file
       if (hash) {
         const file = finder.file(hash) as unknown as
-          | { mime: string; name: string; hash: string; [key: string]: unknown }
-          | undefined
+          { mime: string; name: string; hash: string; [key: string]: unknown } | undefined
         const mime: string = file?.mime ?? ''
         const editable =
           mime.startsWith('text/') ||
