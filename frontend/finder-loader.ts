@@ -6,6 +6,7 @@ import {
   patchCodeMirror,
   patchElfinderDialogPlugin,
   patchFmDialog,
+  patchGetElFinder,
   patchToFront
 } from '@lib/elfinder/patches'
 import { type BitappsFmGlobals, type FinderWithDialog, type JQueryWithUi } from '@lib/elfinder/types'
@@ -66,6 +67,7 @@ w.jQuery(document).ready(() => {
   if (!fm) return
 
   patchToFront(fm)
+  patchGetElFinder(fm, jq)
   patchFmDialog(fm, jq)
   patchElfinderDialogPlugin(jq)
   patchCodeMirror(fm)

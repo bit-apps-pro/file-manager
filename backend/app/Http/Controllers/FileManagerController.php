@@ -12,6 +12,7 @@ use BitApps\FM\Exception\PreCommandException;
 use function BitApps\FM\Functions\fileSystemAdapter;
 
 use BitApps\FM\Plugin;
+use BitApps\FM\Providers\FileManager\DownloadNotifyCookie;
 use BitApps\FM\Providers\FileManager\FileManagerProvider;
 use BitApps\FM\Providers\FileManager\FileRoot;
 use BitApps\FM\Providers\FileManager\Options;
@@ -91,6 +92,8 @@ final class FileManagerController
             'upload',
             [Plugin::instance()->logger(), 'logUpload']
         );
+
+        $finderOptions->setBind('file.pre', [new DownloadNotifyCookie(), 'onFilePre']);
 
         if (fileSystemAdapter()->is_writable(Config::uploadBaseDir() . '/.tmp/')) {
             $finderOptions->setCommonTempPath(Config::uploadBaseDir() . '/.tmp/');
