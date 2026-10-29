@@ -77,7 +77,7 @@ jobs:
           pnpm production
           pnpm build:copy
 
-          if [ -d "${{ github.workspace }}/build/${{ env.PLUGIN_SLUG }}" ]; then
+          if [ -d "${{ github.workspace }}/build/stage/${{ env.PLUGIN_SLUG }}" ]; then
             echo "free_exists=true" >> "${GITHUB_OUTPUT}"
           else
             echo "free_exists=false" >> "${GITHUB_OUTPUT}"
@@ -93,7 +93,7 @@ jobs:
         env:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
-          BUILD_DIR: '${{ github.workspace }}/build/${{ env.PLUGIN_SLUG }}'
+          BUILD_DIR: '${{ github.workspace }}/build/stage/${{ env.PLUGIN_SLUG }}'
           SLUG: ${{ env.PLUGIN_SLUG }}
 
       - name: Upload release asset

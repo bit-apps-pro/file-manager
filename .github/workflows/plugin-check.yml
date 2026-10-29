@@ -67,7 +67,7 @@ jobs:
       - name: WordPress Plugin Check
         uses: wordpress/plugin-check-action@v1
         with:
-          build-dir: './build/${{ env.PLUGIN_SLUG }}'
+          build-dir: './build/stage/${{ env.PLUGIN_SLUG }}'
           exclude-directories: |
             vendor
             node_modules
