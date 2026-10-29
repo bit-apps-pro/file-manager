@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e781a167e10fbbd6e965d6711376e072",
+    "content-hash": "d3a3dc654cb6e2a3c0b1cc63cd20630b",
     "packages": [
         {
             "name": "bitapps/wp-database",
@@ -64,16 +64,16 @@
         },
         {
             "name": "bitapps/wp-kit",
-            "version": "2.4.0",
+            "version": "2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bit-apps-pro/wp-kit.git",
-                "reference": "a17210323f8021634ee168a5a32f79ec5204c080"
+                "reference": "2637391ae74b0c800a0a5b25434361e1cddbf60b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bit-apps-pro/wp-kit/zipball/a17210323f8021634ee168a5a32f79ec5204c080",
-                "reference": "a17210323f8021634ee168a5a32f79ec5204c080",
+                "url": "https://api.github.com/repos/bit-apps-pro/wp-kit/zipball/2637391ae74b0c800a0a5b25434361e1cddbf60b",
+                "reference": "2637391ae74b0c800a0a5b25434361e1cddbf60b",
                 "shasum": ""
             },
             "require": {
@@ -87,7 +87,7 @@
                 "friendsofphp/php-cs-fixer": "^3.10",
                 "phpcompatibility/phpcompatibility-wp": "*",
                 "phpunit/phpunit": "^9.6",
-                "rector/rector": "^2.5",
+                "rector/rector": "2.7.0",
                 "sirbrillig/phpcs-variable-analysis": "*"
             },
             "type": "library",
@@ -113,9 +113,9 @@
             ],
             "support": {
                 "issues": "https://github.com/bit-apps-pro/wp-kit/issues",
-                "source": "https://github.com/bit-apps-pro/wp-kit/tree/2.4.0"
+                "source": "https://github.com/bit-apps-pro/wp-kit/tree/2.5.0"
             },
-            "time": "2026-09-05T11:56:28+00:00"
+            "time": "2026-10-28T11:36:12+00:00"
         },
         {
             "name": "bitapps/wp-telemetry",
