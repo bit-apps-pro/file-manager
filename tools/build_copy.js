@@ -1,5 +1,5 @@
 const copy = require('recursive-copy');
-const { mkdirSync } = require('node:fs');
+const { mkdirSync, rmSync } = require('node:fs');
 const path = require('node:path');
 
 // Copy files
@@ -20,7 +20,10 @@ const options = {
     ]
 };
 
-const buildPath = path.join('build', 'file-manager');
+// Staged under its slug folder so the zip nests it and WordPress upload replaces the installed plugin.
+const stagePath = path.join('build', 'stage');
+const buildPath = path.join(stagePath, 'file-manager');
+rmSync(stagePath, { recursive: true, force: true });
 mkdirSync(buildPath, { recursive: true });
 
 copy('.', buildPath, options)
