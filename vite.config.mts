@@ -9,7 +9,7 @@ import { type Alias, type Plugin } from 'vite'
 import { defineConfig, normalizePath } from 'vite'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 
-import * as tsconfig from './tsconfig.json'
+import tsconfig from './tsconfig.json' with { type: 'json' }
 
 // const nextId = incstr.idGenerator()
 let chunkCount = 0
@@ -24,7 +24,7 @@ function readAliasFromTsConfig(): Alias[] {
     const find = fromPaths.replace(pathReplaceRegex, '')
     // @ts-ignore
     const toPath = toPaths[0].replace(pathReplaceRegex, '')
-    const replacement = path.resolve(__dirname, toPath)
+    const replacement = path.resolve(import.meta.dirname, toPath)
     aliases.push({ find, replacement })
     return aliases
   }, [] as Alias[])
@@ -48,12 +48,12 @@ export default defineConfig(({ mode }) => {
       resolve: { alias: readAliasFromTsConfig() },
       build: {
         lib: {
-          entry: path.resolve(__dirname, 'frontend/finder-loader.ts'),
+          entry: path.resolve(import.meta.dirname, 'frontend/finder-loader.ts'),
           name: 'BitappsFmLoader',
           formats: ['iife'],
           fileName: () => 'finder-loader.js'
         },
-        outDir: path.resolve(__dirname, 'assets/js'),
+        outDir: path.resolve(import.meta.dirname, 'assets/js'),
         emptyOutDir: false,
         rollupOptions: {
           external: ['jquery'],
@@ -79,11 +79,11 @@ export default defineConfig(({ mode }) => {
       viteStaticCopy({
         targets: [
           {
-            src: normalizePath(path.resolve(__dirname, 'frontend/style')),
+            src: normalizePath(path.resolve(import.meta.dirname, 'frontend/style')),
             dest: '../../assets'
           },
           {
-            src: normalizePath(path.resolve(__dirname, 'frontend/libs')),
+            src: normalizePath(path.resolve(import.meta.dirname, 'frontend/libs')),
             dest: '../../assets'
           }
         ]
@@ -91,8 +91,11 @@ export default defineConfig(({ mode }) => {
       {
         name: 'generate-elfinder-editors',
         writeBundle() {
-          const src = path.resolve(__dirname, 'vendor/studio-42/elfinder/js/extras/editors.default.min.js')
-          const dest = path.resolve(__dirname, 'assets/js/elfinder-editors.js')
+          const src = path.resolve(
+            import.meta.dirname,
+            'vendor/studio-42/elfinder/js/extras/editors.default.min.js'
+          )
+          const dest = path.resolve(import.meta.dirname, 'assets/js/elfinder-editors.js')
           const content = fs.readFileSync(src, 'utf8')
           fs.writeFileSync(dest, `(function($){${content}})(jQuery);`)
         }
@@ -122,7 +125,7 @@ export default defineConfig(({ mode }) => {
       emptyOutDir: true,
       // assetsDir: './',
       rollupOptions: {
-        input: path.resolve(__dirname, 'frontend/src/main.tsx'),
+        input: path.resolve(import.meta.dirname, 'frontend/src/main.tsx'),
         output: {
           entryFileNames: `main.${getVersion()}.js`,
           manualChunks(id: string) {
@@ -229,7 +232,7 @@ function setDevServerConfig(): Plugin {
   }
 }
 
-const portFile = path.resolve(__dirname, './port')
+const portFile = path.resolve(import.meta.dirname, './port')
 
 function getStoredPort() {
   let port = 0
