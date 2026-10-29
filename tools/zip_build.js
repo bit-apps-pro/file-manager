@@ -1,6 +1,6 @@
-const { mkdirSync, readFileSync } = require('node:fs');
+const { execFileSync } = require('node:child_process');
+const { mkdirSync, readFileSync, rmSync } = require('node:fs');
 const path = require('node:path');
-const make_zip = require('zip-local');
 
 const ROOT = path.resolve(__dirname, '..');
 const PLUGIN_SLUG = 'file-manager';
@@ -18,13 +18,15 @@ function pluginVersion() {
   return match[1];
 }
 
-/** Zips build/stage (holding <slug>/) into build/<slug>-<version>/<slug>.zip, so entries nest under <slug>/. */
+/** Zips build/stage/<slug> into build/<slug>-<version>/<slug>.zip with the system zip CLI, so entries nest under <slug>/. */
 function zipBuild() {
   const outDir = path.join(BUILD_DIR, `${PLUGIN_SLUG}-${pluginVersion()}`);
   const outFile = path.join(outDir, `${PLUGIN_SLUG}.zip`);
 
   mkdirSync(outDir, { recursive: true });
-  make_zip.sync.zip(STAGE_DIR).compress().save(outFile);
+  // zip updates an existing archive in place, which would keep files deleted since the last build.
+  rmSync(outFile, { force: true });
+  execFileSync('zip', ['-r', '-q', '-X', outFile, PLUGIN_SLUG], { cwd: STAGE_DIR, stdio: 'inherit' });
   console.log(`Zipped to ${path.relative(ROOT, outFile)}`);
 }
 

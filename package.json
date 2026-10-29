@@ -107,8 +107,7 @@
     "vite-plugin-babel": "^1.7.3",
     "vite-plugin-pwa": "^2.0.0",
     "vite-plugin-static-copy": "^4.1.1",
-    "vitest": "^5.0.5",
-    "zip-local": "^0.3.5"
+    "vitest": "^5.0.5"
   },
   "packageManager": "pnpm@11.1.1",
   "engines": {
