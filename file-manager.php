@@ -10,7 +10,7 @@ if (! \defined('ABSPATH')) {
  * Author URI:  https://bitapps.pro
  * Version: 7.0
  * Requires at least: 5.0
- * Requires PHP: 7.4
+ * Requires PHP: 8.0
  * Text domain: file-manager
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html

@@ -4,7 +4,7 @@ Contributors: bitpressadmin, akaioum, aihimel
 Tags: file manager, wp file manager, wordpress file manager, files, ftp
 Requires at least: 5.0
 Tested up to: 7.1
-Requires PHP: 7.4
+Requires PHP: 8.0
 Stable tag: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -360,6 +360,7 @@ This plugin sends data to external services for certain features. Below is a sum
 - New: `bitapps_fm_toolbar_commands` filter picks which toolbar and context-menu buttons are shown.
 - Change: Allowed file types, upload size limit and hidden-file rules now also apply to the guest volume.
 - Fix: Downloading a large folder as a zip uses far less memory, so it no longer fails with an error on hosts with a low PHP memory limit.
+- Change: Requires PHP 8.0 or later.
 
 = 6.9.2 =
 - Security: Updated elFinder to 2.1.70 to fix an SSRF vulnerability.

@@ -11,7 +11,7 @@
     "test": "phpunit",
     "lint": "./vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php",
     "unused:variable": "phpcs -p --standard=VariableAnalysis backend",
-    "compat": "./vendor/bin/phpcs -p ./backend --standard=PHPCompatibilityWP --runtime-set testVersion 7.4-"
+    "compat": "./vendor/bin/phpcs -p ./backend --standard=PHPCompatibilityWP --runtime-set testVersion 8.0-"
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^3.10",
